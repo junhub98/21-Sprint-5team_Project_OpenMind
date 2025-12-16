@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import styles from './SubjectsListPage.module.scss';
 import styled from 'styled-components';
 import SubjectsListPageNav from '../components/SubjectsListPageNav';
 import CustomSelect from '../components/CustomSelect';
@@ -7,12 +6,39 @@ import SubjectsList from '../components/SubjectsList';
 import { getSubjectsList } from '../utils/getSubjectsApi';
 import useSearchParam from '../hooks/useSearchParam';
 import Pagination from '../components/Pagination';
+import media from '../utils/media';
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
+
+const TitleBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px 0;
+
+  ${media.mobile`
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0 24px;
+  `}
+`;
+
+const TitleSpan = styled.span`
+  font-family: 'pretendard';
+  font-size: 40px;
+  font-weight: 400;
+  color: var(--gray-60);
+
+  ${media.mobile`
+    font-size: 24px;
+  `}
+`;
+
 export default function QuestionsListPage() {
   const [subjects, setSubjects] = useState([]);
   const [pageSize, setPageSize] = useState(8);
@@ -33,6 +59,21 @@ export default function QuestionsListPage() {
   ];
 
   useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width <= 863) {
+        //863px은 questionCard가 width 186px보다 작아지는 윈도우넓이
+        setPageSize(6);
+      } else {
+        setPageSize(8);
+      }
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
     async function loadSubjects() {
       try {
         const data = await getSubjectsList(currentPage, pageSize, orderBy);
@@ -50,9 +91,10 @@ export default function QuestionsListPage() {
     <div>
       <SubjectsListPageNav />
       <Container>
-        <span className={styles.title}> 누구에게 질문할까요? </span>
-        <CustomSelect sortOptions={sortOptions} />
-
+        <TitleBox>
+          <TitleSpan> 누구에게 질문할까요? </TitleSpan>
+          <CustomSelect sortOptions={sortOptions} />
+        </TitleBox>
         <SubjectsList subjects={subjects} />
 
         <Pagination totalPages={totalPages} />
