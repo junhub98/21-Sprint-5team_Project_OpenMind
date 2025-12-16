@@ -1,0 +1,35 @@
+.sortOptions {
+  border: 1px solid var(--gray-40);
+  width: 79px;
+  height: 34px;
+  border: 1px solid var(--gray-40);
+  border-radius: 8px;
+  padding: 0 0 0 11px;
+  background-color: var(--gray-10);
+  font-family: 'pretendard';
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--gray-40);
+  text-align: start;
+
+  &:hover {
+    border: 1px solid var(--gray-60);
+    color: var(--gray-60);
+  }
+}
+
+.active {
+  border: 1px solid var(--gray-60);
+  color: var(--gray-60);
+}
+
+.positionBox {
+  position: relative;
+}
+
+ul {
+  position: absolute;
+  background-color: #ffffff;
+  border-radius: 12px;
+  top: 38px;
+}

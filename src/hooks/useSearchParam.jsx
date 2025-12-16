@@ -6,21 +6,22 @@ export default function useSearchParam() {
   const [searchParams, setSearchParams] = useSearchParams({
     //관리할 상태 초기값 선언
     currentPage: 1,
-    search: '',
+    orderBy: 'time',
   });
   // Url 표현돼야하는 상태들 관리
-  const initKeyword = searchParams.get('search');
+
   const initPage = searchParams.get('currentPage');
+  const initOrder = searchParams.get('orderBy');
   const [currentPage, setCurrentPage] = useState(initPage || 1);
-  const [search, setSearch] = useState(initKeyword || '');
+  const [orderBy, setOrderBy] = useState(initOrder || 'time');
 
   // Url 표현돼야 하는 상태들 재선언 (searchParam 바뀔때)
   useEffect(() => {
     const pageFromUrl = Number(searchParams.get('currentPage')) || 1;
-    const keywordFromUrl = searchParams.get('search') || '';
+    const orderFromUrl = searchParams.get('orderBy') || 'time';
 
     setCurrentPage(pageFromUrl);
-    setSearch(keywordFromUrl);
+    setOrderBy(orderFromUrl);
   }, [searchParams]);
 
   // 필요한곳에서 가져다 쓰기
@@ -29,7 +30,7 @@ export default function useSearchParam() {
     setSearchParams,
     currentPage,
     setCurrentPage,
-    search,
-    setSearch,
+    orderBy,
+    setOrderBy,
   };
 }
