@@ -1,21 +1,9 @@
 import styled, { keyframes } from 'styled-components';
 import media from '../utils/media';
-
-//스켈레톤 에니메이션
-const shimmer = keyframes`
-  0% { background-position: -400px 0; }
-  100% { background-position: 400px 0; }
-`;
+import Skeleton from '../utils/skeleton';
 
 //스켈레톤 base
-const Skeleton = styled.div`
-  width: ${({ $w }) => $w || '100%'};
-  height: ${({ $h }) => $h || '16px'};
-  border-radius: ${({ $r }) => $r || '8px'};
-  background: linear-gradient(90deg, var(--gray-20) 25%, var(--brown-10) 37%, var(--gray-20) 63%);
-  background-size: 400px 100%;
-  animation: ${shimmer} 1.4s ease infinite;
-
+const MySkeleton = styled(Skeleton)`
   ${({ $mobile }) =>
     $mobile &&
     media.mobile`
@@ -60,13 +48,13 @@ export default function SubjectLoadingCard() {
   return (
     <CardSkeleton>
       <Column>
-        <Skeleton $w="60px" $h="60px" $r="50%" $mobile />
-        <Skeleton $w="120px" $h="20px" />
+        <MySkeleton $w="60px" $h="60px" $r="50%" $mobile />
+        <MySkeleton $w="120px" $h="20px" />
       </Column>
 
       <Row>
-        <Skeleton $w="56px" $h="16px" />
-        <Skeleton $w="32px" $h="16px" />
+        <MySkeleton $w="56px" $h="16px" />
+        <MySkeleton $w="32px" $h="16px" />
       </Row>
     </CardSkeleton>
   );
