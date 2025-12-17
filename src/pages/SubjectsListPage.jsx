@@ -4,7 +4,6 @@ import SubjectsListPageNav from '../components/SubjectsListPageNav';
 import CustomSelect from '../components/CustomSelect';
 import SubjectsList from '../components/SubjectsList';
 import { getSubjectsList } from '../utils/getSubjectsApi';
-import useSearchParam from '../hooks/useSearchParam';
 import useSortParam from '../hooks/useSortParam';
 import usePaginationParam from '../hooks/usePaginationParam';
 import Pagination from '../components/Pagination';
@@ -49,18 +48,6 @@ export default function QuestionsListPage() {
   const { orderBy } = useSortParam();
   const { currentPage } = usePaginationParam();
 
-  const sortOptions = [
-    {
-      name: '이름순',
-      value: 'name',
-    },
-
-    {
-      name: '최신순',
-      value: 'time',
-    },
-  ];
-
   useEffect(() => {
     console.log('currentPage changed:', currentPage);
   }, [currentPage]);
@@ -103,7 +90,7 @@ export default function QuestionsListPage() {
       <Container>
         <TitleBox>
           <TitleSpan> 누구에게 질문할까요? </TitleSpan>
-          <CustomSelect sortOptions={sortOptions} />
+          <CustomSelect />
         </TitleBox>
         <SubjectsList subjects={subjects} isLoading={isLoading} pageSize={pageSize} />
 

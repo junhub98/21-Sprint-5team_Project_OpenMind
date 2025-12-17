@@ -35,11 +35,21 @@ const ArrowDown = styled.img`
 `;
 const ArrowUp = styled(ArrowDown)``;
 
-export default function CustomSelect({ sortOptions }) {
+export default function CustomSelect() {
   const [isOpen, setIsOpen] = useState(false);
-  const [sortOption, setSortOption] = useState('최신순');
-  const { setOrderBy } = useSortParam();
+  const { orderBy, setOrderBy } = useSortParam();
 
+  const sortOptions = [
+    {
+      name: '이름순',
+      value: 'name',
+    },
+
+    {
+      name: '최신순',
+      value: 'time',
+    },
+  ];
   return (
     <div className={styles.positionBox}>
       <div className={styles.positionBox}>
@@ -48,7 +58,7 @@ export default function CustomSelect({ sortOptions }) {
           type="button"
           onClick={() => setIsOpen((prev) => !prev)}
         >
-          {sortOption}
+          {sortOptions.map((option) => option.value == orderBy && option.name)}
         </button>
         {isOpen ? <ArrowUp src={arrowUpIC} /> : <ArrowDown src={arrowDownIC} />}
       </div>
@@ -62,7 +72,6 @@ export default function CustomSelect({ sortOptions }) {
               key={option.value}
               onClick={() => {
                 setOrderBy(option.value);
-                setSortOption(option.name);
                 setIsOpen(false);
               }}
             >
