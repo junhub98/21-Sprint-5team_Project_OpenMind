@@ -18,14 +18,17 @@ const Button = styled.button`
   font-size: 20px;
   font-weight: 400;
   background-color: var(--gray-20);
-
   color: ${({ $active }) => ($active ? 'var(--brown-40)' : 'var(--gray-40)')};
+  cursor: ${({ $active }) => ($active ? 'default' : 'pointer')};
+  transition:
+    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
-  /*background: ${({ $active }) =>
-    $active ? 'linear-gradient(to right, #1e6fff, #3692ff)' : '#ffffff'}; */
-
-  &:hover {
-    color: ${({ $active }) => ($active ? 'var(--brown-40)' : 'var(--brown-30)')};
+  @media (hover: hover) {
+    &:hover {
+      transform: ${({ $active }) => ($active ? 'none' : 'translateY(-2px)')};
+      color: ${({ $active }) => ($active ? 'var(--brown-40)' : 'var(--brown-30)')};
+    }
   }
 `;
 
@@ -33,6 +36,22 @@ const ArrowButton = styled(Button)`
   &:disabled {
     color: var(--gray-30);
     cursor: not-allowed;
+  }
+`;
+
+const ArrowButtonRight = styled(ArrowButton)`
+  @media (hover: hover) {
+    &:hover {
+      transform: ${({ disabled }) => (disabled ? 'none' : 'translateX(2px)')};
+    }
+  }
+`;
+
+const ArrowButtonLeft = styled(ArrowButton)`
+  @media (hover: hover) {
+    &:hover {
+      transform: ${({ disabled }) => (disabled ? 'none' : 'translateX(-2px)')};
+    }
   }
 `;
 
@@ -53,7 +72,7 @@ function Pagination({ totalPages, currentPage, setCurrentPage }) {
 
   return (
     <PageBox>
-      <ArrowButton
+      <ArrowButtonLeft
         disabled={currentPage == 1}
         onClick={() => {
           setCurrentPage((currentPage) => currentPage - 1);
@@ -61,7 +80,7 @@ function Pagination({ totalPages, currentPage, setCurrentPage }) {
         }}
       >
         &lt;
-      </ArrowButton>
+      </ArrowButtonLeft>
 
       {pages.slice(startIndex, endIndex).map((page) => (
         <Button
@@ -76,7 +95,7 @@ function Pagination({ totalPages, currentPage, setCurrentPage }) {
         </Button>
       ))}
 
-      <ArrowButton
+      <ArrowButtonRight
         disabled={currentPage == totalPages}
         onClick={() => {
           setCurrentPage((currentPage) => currentPage + 1);
@@ -84,7 +103,7 @@ function Pagination({ totalPages, currentPage, setCurrentPage }) {
         }}
       >
         &gt;
-      </ArrowButton>
+      </ArrowButtonRight>
     </PageBox>
   );
 }

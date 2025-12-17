@@ -1,6 +1,13 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import messagesIC from '../assets/QuestionsListPage/Messages.png';
 import media from '../utils/media';
+
+//스켈레톤 에니메이션
+const pop = keyframes`
+  0% { position: absolute; }
+
+  100% { position: absolute;  }
+`;
 
 const Card = styled.div`
   width: 100%;
@@ -17,6 +24,17 @@ const Card = styled.div`
   ${media.mobile`
     padding: 16px;
   `}
+  transition:
+    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  @media (hover: hover) {
+    &:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+      border: 1.5px solid var(--brown-30);
+    }
+  }
 `;
 
 const UserBox = styled.div`

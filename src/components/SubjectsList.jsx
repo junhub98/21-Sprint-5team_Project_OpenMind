@@ -35,6 +35,9 @@ const Container = styled.div`
     margin-top: 16px;
     
   `}
+  &:hover {
+    overflow: visible;
+  }
 `;
 
 export default function SubjectsList({ subjects, isLoading, pageSize }) {

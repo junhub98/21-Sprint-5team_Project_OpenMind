@@ -43,6 +43,11 @@ const Button = styled.button`
     padding: 0 17px 0 0;
     font-size: 14px;
   `}
+
+  &:hover {
+    background-color: var(--brown-15);
+    border: 1px solid var(--brown-50);
+  }
 `;
 
 const Arrow = styled.img`
