@@ -33,6 +33,7 @@ const UserBox = styled.div`
 
   ${media.mobile`
     font-size: 18px;
+    height: 84px;
   `}
 `;
 
@@ -63,7 +64,7 @@ const InfoBox = styled.div`
   `}
 `;
 
-const FlexDiv = styled(InfoBox)`
+const Row = styled(InfoBox)`
   width: 82px;
   height: 22px;
 
@@ -89,10 +90,10 @@ export default function SubjectCard({ subject }) {
       </UserBox>
 
       <InfoBox>
-        <FlexDiv>
+        <Row>
           <QuestionImg src={messagesIC} />
           받은 질문
-        </FlexDiv>
+        </Row>
         {subject.questionCount}개
       </InfoBox>
     </Card>

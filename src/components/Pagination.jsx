@@ -36,8 +36,8 @@ const ArrowButton = styled(Button)`
   }
 `;
 
-function Pagination({ totalPages }) {
-  const { setSearchParams, currentPage, setCurrentPage } = useSearchParam();
+function Pagination({ totalPages, currentPage, setCurrentPage }) {
+  const { setSearchParams } = useSearchParam();
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
   const pageGroup = Math.ceil(currentPage / 5 - 1);
   const [startPage, endPage] = [pageGroup * 5 + 1, pageGroup * 5 + 5];

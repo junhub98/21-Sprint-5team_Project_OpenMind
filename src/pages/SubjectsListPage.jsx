@@ -40,11 +40,11 @@ const TitleSpan = styled.span`
 `;
 
 export default function QuestionsListPage() {
+  const [isLoading, setIsLoading] = useState(false);
   const [subjects, setSubjects] = useState([]);
   const [pageSize, setPageSize] = useState(8);
   const [totalPages, setTotalPages] = useState(50);
-
-  const { currentPage, orderBy } = useSearchParam();
+  const { currentPage, orderBy, setCurrentPage } = useSearchParam();
 
   const sortOptions = [
     {
@@ -76,11 +76,14 @@ export default function QuestionsListPage() {
   useEffect(() => {
     async function loadSubjects() {
       try {
+        setIsLoading(true);
         const data = await getSubjectsList(currentPage, pageSize, orderBy);
         setSubjects(data.results);
         setTotalPages(Math.ceil(data.count / pageSize));
       } catch (err) {
         console.log(err);
+      } finally {
+        setIsLoading(false);
       }
     }
 
@@ -95,9 +98,13 @@ export default function QuestionsListPage() {
           <TitleSpan> 누구에게 질문할까요? </TitleSpan>
           <CustomSelect sortOptions={sortOptions} />
         </TitleBox>
-        <SubjectsList subjects={subjects} />
+        <SubjectsList subjects={subjects} isLoading={isLoading} pageSize={pageSize} />
 
-        <Pagination totalPages={totalPages} />
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          setCurrentPage={setCurrentPage}
+        />
       </Container>
     </div>
   );

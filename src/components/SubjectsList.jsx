@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import SubjectCard from './SubjectCard';
 import media from '../utils/media';
+import SubjectLoadingCard from './SubjectLoadingCard';
 
 const Container = styled.div`
   width: 940px;
@@ -36,12 +37,12 @@ const Container = styled.div`
   `}
 `;
 
-export default function SubjectsList({ subjects }) {
+export default function SubjectsList({ subjects, isLoading, pageSize }) {
   return (
     <Container>
-      {subjects.map((subject, index) => (
-        <SubjectCard key={index} subject={subject} />
-      ))}
+      {isLoading
+        ? Array.from({ length: pageSize }).map((_, index) => <SubjectLoadingCard key={index} />)
+        : subjects.map((subject, index) => <SubjectCard key={index} subject={subject} />)}
     </Container>
   );
 }
