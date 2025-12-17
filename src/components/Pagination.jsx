@@ -1,6 +1,5 @@
 import styled from 'styled-components';
-import { useEffect } from 'react';
-import useSearchParam from '../hooks/useSearchParam';
+import usePaginationParam from '../hooks/usePaginationParam';
 
 const PageBox = styled.div`
   margin-top: 40px;
@@ -55,20 +54,12 @@ const ArrowButtonLeft = styled(ArrowButton)`
   }
 `;
 
-function Pagination({ totalPages, currentPage, setCurrentPage }) {
-  const { setSearchParams } = useSearchParam();
+function Pagination({ totalPages, currentPage }) {
+  const { setCurrentPage } = usePaginationParam();
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
   const pageGroup = Math.ceil(currentPage / 5 - 1);
   const [startPage, endPage] = [pageGroup * 5 + 1, pageGroup * 5 + 5];
   const [startIndex, endIndex] = [startPage - 1, endPage];
-
-  function handlePageClick(page) {
-    setSearchParams(
-      (pre) =>
-        page ? { ...Object.fromEntries(pre), currentPage: page } : { ...Object.fromEntries(pre) },
-      { replace: false },
-    );
-  }
 
   return (
     <PageBox>
@@ -76,7 +67,6 @@ function Pagination({ totalPages, currentPage, setCurrentPage }) {
         disabled={currentPage == 1}
         onClick={() => {
           setCurrentPage((currentPage) => currentPage - 1);
-          handlePageClick(currentPage - 1);
         }}
       >
         &lt;
@@ -88,7 +78,6 @@ function Pagination({ totalPages, currentPage, setCurrentPage }) {
           key={page}
           onClick={() => {
             setCurrentPage(page);
-            handlePageClick(page);
           }}
         >
           {page}
@@ -99,7 +88,6 @@ function Pagination({ totalPages, currentPage, setCurrentPage }) {
         disabled={currentPage == totalPages}
         onClick={() => {
           setCurrentPage((currentPage) => currentPage + 1);
-          handlePageClick(currentPage + 1);
         }}
       >
         &gt;

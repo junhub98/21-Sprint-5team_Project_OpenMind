@@ -3,7 +3,7 @@ import styles from './CustomSelect.module.scss';
 import styled from 'styled-components';
 import arrowDownIC from '../assets/QuestionsListPage/arrow-down.png';
 import arrowUpIC from '../assets/QuestionsListPage/arrow-up.png';
-import useSearchParam from '../hooks/useSearchParam';
+import useSortParam from '../hooks/useSortParam';
 
 const Li = styled.li`
   width: 79px;
@@ -38,17 +38,7 @@ const ArrowUp = styled(ArrowDown)``;
 export default function CustomSelect({ sortOptions }) {
   const [isOpen, setIsOpen] = useState(false);
   const [sortOption, setSortOption] = useState('최신순');
-  const { setOrderBy, setSearchParams } = useSearchParam();
-
-  const handleClick = (option) => {
-    setSearchParams(
-      (pre) =>
-        option
-          ? { ...Object.fromEntries(pre), orderBy: option.value }
-          : { ...Object.fromEntries(pre) },
-      { replace: false },
-    );
-  };
+  const { setOrderBy } = useSortParam();
 
   return (
     <div className={styles.positionBox}>
@@ -74,7 +64,6 @@ export default function CustomSelect({ sortOptions }) {
                 setOrderBy(option.value);
                 setSortOption(option.name);
                 setIsOpen(false);
-                handleClick(option);
               }}
             >
               {option.name}

@@ -5,6 +5,8 @@ import CustomSelect from '../components/CustomSelect';
 import SubjectsList from '../components/SubjectsList';
 import { getSubjectsList } from '../utils/getSubjectsApi';
 import useSearchParam from '../hooks/useSearchParam';
+import useSortParam from '../hooks/useSortParam';
+import usePaginationParam from '../hooks/usePaginationParam';
 import Pagination from '../components/Pagination';
 import media from '../utils/media';
 
@@ -44,7 +46,8 @@ export default function QuestionsListPage() {
   const [subjects, setSubjects] = useState([]);
   const [pageSize, setPageSize] = useState(8);
   const [totalPages, setTotalPages] = useState(50);
-  const { currentPage, orderBy, setCurrentPage } = useSearchParam();
+  const { orderBy } = useSortParam();
+  const { currentPage } = usePaginationParam();
 
   const sortOptions = [
     {
@@ -57,6 +60,10 @@ export default function QuestionsListPage() {
       value: 'time',
     },
   ];
+
+  useEffect(() => {
+    console.log('currentPage changed:', currentPage);
+  }, [currentPage]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -100,11 +107,7 @@ export default function QuestionsListPage() {
         </TitleBox>
         <SubjectsList subjects={subjects} isLoading={isLoading} pageSize={pageSize} />
 
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          setCurrentPage={setCurrentPage}
-        />
+        <Pagination currentPage={currentPage} totalPages={totalPages} />
       </Container>
     </div>
   );
