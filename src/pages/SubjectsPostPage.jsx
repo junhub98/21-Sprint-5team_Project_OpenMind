@@ -1,8 +1,6 @@
-import { useState, useEffect } from 'react';
-import styled from 'styled-components';
 import ProfileHeader from '../components/ProfileHeader';
 import QuestionSection from '../components/QuestionSection';
-
+import WriteQuestion from '../components/WriteQuestion';
 
 
 export default function PostPage() {
@@ -11,6 +9,7 @@ export default function PostPage() {
     <div>
       <ProfileHeader />
       <QuestionSection />
+      <WriteQuestion />
     </div>
   );
 };

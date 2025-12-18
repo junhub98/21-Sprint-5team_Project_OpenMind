@@ -1,0 +1,22 @@
+/* 질문 작성하기 버튼 */
+
+/* 위치 조정 문제 */
+.write-Question-Wrapper {
+  display: flex;
+  justify-content: end;
+}
+
+.write-Question {
+  background-color: #542f1a;
+  border: none;
+  color: #ffffff;
+  padding: 12px 24px;
+  text-align: center;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  border-radius: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 400;
+  font-size: 20;
+}

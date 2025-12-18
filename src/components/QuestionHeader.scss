@@ -1,0 +1,33 @@
+// .write-Question-Wrapper {
+//   display: flex;
+//   justify-content: end;
+// }
+
+/* 질문하기 헤더 부분 */
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.container {
+  width: 100%;
+  max-width: 720px;      
+  height: 260px;        
+  background-color: #F7F2ED;
+  border-radius: 16px;
+  border: 1px solid #E5D8CC;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 48px;
+  color: #E4D5C9;
+};
+
+.text {
+  font-size: 20px;
+  font-weight: 400;
+  color: 542F1A;
+}
+
