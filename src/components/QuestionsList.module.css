@@ -1,0 +1,28 @@
+.questionListContainer {
+  display: flex;
+  flex-direction: column;
+  width: 716px;
+  height: 1138px;
+  background-color: #f5f1ee;
+  padding: 16px;
+  margin: 220px auto 0;
+  text-align: center;
+  border: 1px solid #c7bbb5;
+  border-radius: 16px;
+  gap: 12px;
+}
+
+.countTextSection {
+  text-align: center;
+}
+
+.countText {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: 'Actor';
+  font-weight: 400;
+  font-size: 20px;
+  color: #542f1a;
+}

@@ -1,13 +1,13 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import MainPage from './pages/MainPage';
+import FeedPage from './pages/FeedPage';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/">
-          <Route index element={<MainPage />} />
-        </Route>
+        <Route index element={<MainPage />} />
+        <Route path="/FeedPage" element={<FeedPage />} />
       </Routes>
     </BrowserRouter>
   );
