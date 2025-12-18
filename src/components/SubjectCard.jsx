@@ -32,7 +32,7 @@ const Card = styled.div`
     &:hover {
       transform: translateY(-6px);
       box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
-      border: 1.5px solid var(--brown-30);
+      border: 1.5px solid var(--brown-40);
     }
   }
 `;

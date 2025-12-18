@@ -66,7 +66,7 @@ function Pagination({ totalPages, currentPage }) {
       <ArrowButtonLeft
         disabled={currentPage == 1}
         onClick={() => {
-          setCurrentPage((currentPage) => currentPage - 1);
+          setCurrentPage(currentPage - 1);
         }}
       >
         &lt;
@@ -87,7 +87,7 @@ function Pagination({ totalPages, currentPage }) {
       <ArrowButtonRight
         disabled={currentPage == totalPages}
         onClick={() => {
-          setCurrentPage((currentPage) => currentPage + 1);
+          setCurrentPage(currentPage + 1);
         }}
       >
         &gt;

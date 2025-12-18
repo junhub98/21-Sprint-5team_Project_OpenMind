@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import SubjectsListPageNav from '../components/SubjectsListPageNav';
 import CustomSelect from '../components/CustomSelect';
 import SubjectsList from '../components/SubjectsList';
-import { getSubjectsList } from '../utils/getSubjectsApi';
+import { getSubjectsList } from '../utils/getDataApi';
 import useSortParam from '../hooks/useSortParam';
 import usePaginationParam from '../hooks/usePaginationParam';
 import Pagination from '../components/Pagination';
