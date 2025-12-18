@@ -1,0 +1,40 @@
+@import url('./reset.css');
+
+:root {
+  --gray-10: #ffffff;
+  --gray-20: #f9f9f9;
+  --gray-30: #cfcfcf;
+  --gray-40: #818181;
+  --gray-50: #515151;
+  --gray-60: #000000;
+
+  --brown-10: #f5f1ee;
+  --brown-20: #e4d5c9;
+  --brown-30: #c7bbb5;
+  --brown-40: #542f1a;
+  --brown-50: #341909;
+
+  --red-50: #b93333;
+  --yellow-50: #fee500;
+  --blue-50: #1877f2;
+}
+
+/*---------------font------------*/
+
+@font-face {
+  font-family: 'pretendard';
+  font-weight: 400;
+  src: url('../fonts/Pretendard-Regular.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'pretendard';
+  font-weight: 500;
+  src: url('../fonts/Pretendard-Medium.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'pretendard';
+  font-weight: 700;
+  src: url('../fonts/Pretendard-Bold.woff') format('woff');
+}

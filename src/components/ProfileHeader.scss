@@ -1,0 +1,64 @@
+/* 프로필 헤더 */
+.profile-header {
+  width: 100%;
+  position: relative;
+  
+
+  /* 프로필 커버 */
+  .profile-cover {
+    position: relative;
+    height: 260px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+
+    .cover-illustration {
+      position: absolute;
+      width: 1200px;
+      max-width: none;
+      object-fit: contain;
+    }
+
+    .cover-logo {
+      position: absolute;
+      top: 30px;
+      transform: translateX(-50%);
+      display: inline-block;
+    }
+
+    .cover-logo-link {
+      cursor: pointer;
+    }
+
+  }
+
+  /* 프로필 정보 */
+  .profile-info {
+    position: absolute;
+    left: 50%;
+    top: 110px;
+    transform: translateX(-50%);
+    text-align: center;
+
+    .profile-avatar {
+      width: 136px;
+      height: 136px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .profile-name {
+      margin-top: 12px;
+      font-size: 20px;
+      font-weight: 600;
+    }
+  }
+
+  /* 프로필 소셜 서비스 */
+  .profile-social {
+    margin-top: 24px;
+    display: flex;
+    justify-content: center;
+  }
+}
