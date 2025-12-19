@@ -1,75 +1,98 @@
 import FeedHeader from '../components/FeedHeader';
-import { getQuestionsList, getSubjectsList } from '../utils/getDataApi';
+import { getQuestionsList, getSubjectById } from '../utils/getDataApi';
 import QuestionsList from '../components/QuestionsList';
 import { useEffect, useRef, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import CreateQuestionButton from '../components/CreateQuestionButton';
 
-function sleep(ms) {
-  return new Promise((r) => setTimeout(r, ms));
-}
-
-async function withRetry(fn, { retries = 3, baseDelay = 400 } = {}) {
-  let lastErr;
-  for (let i = 0; i <= retries; i += 1) {
-    try {
-      return await fn();
-    } catch (e) {
-      lastErr = e;
-      const status = e?.response?.status;
-      if (status !== 429 || i === retries) throw e;
-      await sleep(baseDelay * 2 ** i);
-    }
-  }
-  throw lastErr;
-}
-
-function chunkArray(arr, size) {
-  const out = [];
-  for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
-  return out;
-}
-
 export default function FeedPage() {
-  const [allQuestions, setAllQuestions] = useState([]);
-  const didRun = useRef(false);
+  const [searchParams] = useSearchParams();
+  const subjectId = searchParams.get('subjectId');
+
+  const BATCH = 3;
+
+  const [questions, setQuestions] = useState([]);
+  const [subjectName, setSubjectName] = useState('익명');
+
+  const offsetRef = useRef(0);
+  const hasMoreRef = useRef(true);
+  const inFlightRef = useRef(false);
+  const didInitRef = useRef(false);
+
+  const loadMore = async () => {
+    if (!subjectId) return;
+    if (!hasMoreRef.current) return;
+    if (inFlightRef.current) return;
+
+    inFlightRef.current = true;
+
+    const res = await getQuestionsList(subjectId, offsetRef.current, BATCH);
+    const list = res?.results ?? res?.list ?? [];
+
+    if (list.length === 0) {
+      hasMoreRef.current = false;
+      inFlightRef.current = false;
+      return;
+    }
+
+    list.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+    setQuestions((prev) => [...prev, ...list.map((q) => ({ ...q, subjectName }))]);
+
+    offsetRef.current += list.length;
+    hasMoreRef.current = Boolean(res?.next);
+
+    inFlightRef.current = false;
+  };
 
   useEffect(() => {
-    if (didRun.current) return;
-    didRun.current = true;
+    if (!subjectId) return;
+    if (didInitRef.current) return;
+    didInitRef.current = true;
 
     (async () => {
-      const res = await withRetry(() => getSubjectsList(1, 50, 'name'));
-      const subjects = (res?.results ?? []).slice(0, 15);
+      const subject = await getSubjectById(subjectId);
+      const name = subject?.name ?? '익명';
+      setSubjectName(name);
 
-      setAllQuestions([]);
+      setQuestions([]);
+      offsetRef.current = 0;
+      hasMoreRef.current = true;
+      inFlightRef.current = false;
 
-      const groups = chunkArray(subjects, 3);
-
-      for (const group of groups) {
-        const results = await Promise.all(
-          group.map(async (subject) => {
-            const subjectId = subject.id;
-            const subjectName = subject.name ?? '익명';
-            const qRes = await withRetry(() => getQuestionsList(subjectId, 0, 10));
-            const list = qRes?.results ?? [];
-            return list.map((q) => ({ ...q, subjectName }));
-          }),
-        );
-
-        const merged = results.flat();
-        if (merged.length > 0) {
-          setAllQuestions((prev) => [...prev, ...merged]);
-        }
-
-        await sleep(20);
-      }
+      await loadMore();
+      window.scrollTo({ top: 0, behavior: 'auto' });
     })();
-  }, []);
+  }, [subjectId]);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const nearBottom =
+        window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 300;
+
+      if (nearBottom) loadMore();
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [subjectId, subjectName]);
+
+  if (!subjectId) {
+    return (
+      <>
+        <FeedHeader />
+        <div style={{ textAlign: 'center', marginTop: 40 }}>
+          <code>/FeedPage?subjectId=숫자</code> 로 접근해주세요
+        </div>
+        <CreateQuestionButton />
+      </>
+    );
+  }
 
   return (
     <>
       <FeedHeader />
-      <QuestionsList questions={allQuestions} />
+      <QuestionsList questions={questions} />
       <CreateQuestionButton />
     </>
   );
