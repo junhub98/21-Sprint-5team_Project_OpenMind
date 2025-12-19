@@ -25,6 +25,11 @@
   color: #542f1a;
 }
 
+.answerStatus span.notAnswered {
+  border: 1px solid #818181;
+  color: #818181;
+}
+
 .questionItems {
   display: flex;
   justify-content: flex-start;
@@ -79,6 +84,13 @@
   margin: 0;
 }
 
+.answerTime {
+  margin-left: 5px;
+  font-weight: 500;
+  font-size: 14px;
+  color: #818181;
+}
+
 .answerContent {
   font-weight: 400;
   font-size: 16px;
@@ -91,4 +103,41 @@
 hr {
   width: 620px;
   border: 1px solid #cfcfcf;
+  margin: 20px 0;
+}
+
+.reactionContainer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 10px 0;
+}
+
+.reactionButton {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #8c8c8c;
+  gap: 6px;
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+  color: currentColor;
+}
+
+.likeActive {
+  color: #1877f2;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.dislikeActive {
+  color: #b93333;
+  font-weight: 600;
 }

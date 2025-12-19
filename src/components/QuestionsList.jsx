@@ -16,11 +16,7 @@ export default function QuestionsList({ questions }) {
 
       <div className={styles.list}>
         {list.map((question) => (
-          <QuestionCard
-            key={`${question.id}-${question.subjectName}`}
-            question={question}
-            subjectName={question.subjectName}
-          />
+          <QuestionCard key={question.id} question={question} subjectName={question.subjectName} />
         ))}
       </div>
     </div>

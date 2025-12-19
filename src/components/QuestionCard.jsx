@@ -1,6 +1,8 @@
 import styles from './QuestionCard.module.css';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import profileImage from '../assets/profileImage.svg';
+import ThumbsUp from '../assets/thumbsUp.svg?react';
+import ThumbsDown from '../assets/thumbsDown.svg?react';
 
 function QuestionDate(dateString) {
   if (!dateString) return '';
@@ -14,15 +16,52 @@ function QuestionDate(dateString) {
   return `${months}개월 전`;
 }
 
-export default function QuestionCard({ question, subjectName }) {
-  const navigate = useNavigate();
+function QuestionCard({ question, subjectName }) {
   const isAnswered = Boolean(question.answer);
+  const [liked, setLiked] = useState(false);
+  const [disliked, setDisliked] = useState(false);
+  const [likeCount, setLikeCount] = useState(question.like || 0);
+  const [dislikeCount, setDislikeCount] = useState(question.dislike || 0);
+
+  const handleLike = () => {
+    if (liked) {
+      setLiked(false);
+      setLikeCount((prev) => prev - 1);
+      return;
+    }
+
+    setLiked(true);
+    setLikeCount((prev) => prev + 1);
+
+    if (disliked) {
+      setDisliked(false);
+      setDislikeCount((prev) => prev - 1);
+    }
+  };
+
+  const handleDislike = () => {
+    if (disliked) {
+      setDisliked(false);
+      setDislikeCount((prev) => prev - 1);
+      return;
+    }
+
+    setDisliked(true);
+    setDislikeCount((prev) => prev + 1);
+
+    if (liked) {
+      setLiked(false);
+      setLikeCount((prev) => prev - 1);
+    }
+  };
 
   return (
     <div className={styles.questionCard}>
       <div className={styles.questionList}>
         <div className={styles.answerStatus}>
-          <span>{isAnswered ? '답변 완료' : '미답변'}</span>
+          <span className={!isAnswered ? styles.notAnswered : undefined}>
+            {isAnswered ? '답변 완료' : '미답변'}
+          </span>
         </div>
 
         <div className={styles.questionItems}>
@@ -40,6 +79,10 @@ export default function QuestionCard({ question, subjectName }) {
           <div className={styles.questionLabel}>
             <div className={styles.metaLine}>
               <span className={styles.nickName}>{subjectName}</span>
+
+              {isAnswered && (
+                <span className={styles.answerTime}>{QuestionDate(question.answer.createdAt)}</span>
+              )}
             </div>
 
             {isAnswered && <p className={styles.answerContent}>{question.answer.content}</p>}
@@ -49,10 +92,27 @@ export default function QuestionCard({ question, subjectName }) {
         <hr />
 
         <div className={styles.reactionContainer}>
-          <div>좋아요 {question.like ?? 0}</div>
-          <div>싫어요 {question.dislike ?? 0}</div>
+          <button
+            type="button"
+            onClick={handleLike}
+            className={`${styles.reactionButton} ${liked ? styles.likeActive : ''}`}
+          >
+            <ThumbsUp className={styles.icon} />
+            좋아요 {likeCount}
+          </button>
+
+          <button
+            type="button"
+            onClick={handleDislike}
+            className={`${styles.reactionButton} ${disliked ? styles.dislikeActive : ''}`}
+          >
+            <ThumbsDown className={styles.icon} />
+            싫어요 {dislikeCount}
+          </button>
         </div>
       </div>
     </div>
   );
 }
+
+export default React.memo(QuestionCard);
