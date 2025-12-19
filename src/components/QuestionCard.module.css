@@ -1,10 +1,16 @@
 .questionCard {
   width: 684px;
+  height: auto;
   padding: 16px;
   background-color: #ffffff;
   text-align: left;
   box-shadow: 0px 4px 4px rgba(140, 140, 140, 0.25);
   border-radius: 16px;
+}
+
+.questionList {
+  width: 620px;
+  margin: 0 auto;
 }
 
 .answerStatus span {
@@ -26,8 +32,14 @@
   margin-top: 20px;
   gap: 2px;
 }
+.question {
+  display: flex;
+  gap: 5px;
+}
 
-.questionText {
+.questionText,
+.timeText,
+.dot {
   font-weight: 500;
   font-size: 14px;
   color: #818181;
@@ -54,4 +66,29 @@
 .questionLabel {
   display: flex;
   flex-direction: column;
+}
+
+.metaLine {
+  display: flex;
+  align-items: center;
+}
+
+.nickName {
+  font-weight: 400;
+  font-size: 18px;
+  margin: 0;
+}
+
+.answerContent {
+  font-weight: 400;
+  font-size: 16px;
+  margin: 0;
+  line-height: 1.5;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+hr {
+  width: 620px;
+  border: 1px solid #cfcfcf;
 }

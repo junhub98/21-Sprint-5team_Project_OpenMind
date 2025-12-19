@@ -2,7 +2,7 @@ import styles from './QuestionsList.module.css';
 import QuestionCard from './QuestionCard';
 import QuestionIcon from '../assets/questionIcon.svg';
 
-export default function QuestionsList({ questions, subjectName }) {
+export default function QuestionsList({ questions }) {
   const list = Array.isArray(questions) ? questions : [];
 
   return (
@@ -16,7 +16,11 @@ export default function QuestionsList({ questions, subjectName }) {
 
       <div className={styles.list}>
         {list.map((question) => (
-          <QuestionCard key={question.id} question={question} subjectName={subjectName ?? '익명'} />
+          <QuestionCard
+            key={`${question.id}-${question.subjectName}`}
+            question={question}
+            subjectName={question.subjectName}
+          />
         ))}
       </div>
     </div>

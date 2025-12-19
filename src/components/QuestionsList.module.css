@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   width: 716px;
-  height: 1138px;
+  height: auto;
   background-color: #f5f1ee;
   padding: 16px;
   margin: 220px auto 0;
@@ -25,4 +25,10 @@
   font-weight: 400;
   font-size: 20px;
   color: #542f1a;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }

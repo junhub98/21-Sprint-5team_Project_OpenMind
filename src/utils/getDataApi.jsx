@@ -12,7 +12,7 @@ export async function getSubjectsList(currentPage = 1, pageSize = 8, orderBy = '
 
 // 상기와 같은 형식으로 아래에 하나씩 작성해서 사용하시면 될것같습니다.
 
-export async function getSubject(subjectId) {
+export async function getSubjectById(subjectId) {
   const response = await axios.get(`/subjects/${subjectId}/`);
   return response.data;
 }
