@@ -9,17 +9,17 @@ export const Page = styled.main`
   justify-content: space-between;
   position: relative;
   background-image: url(${BackgroundImage});
-  background-size: clamp(520px, 90vw, 1200px) auto;
+  background-size: 1200px auto;
   background-position: center bottom;
   background-repeat: no-repeat;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 
   ${media.tablet`
-    background-size: clamp(420px, 110vw, 900px) auto;
+    background-size: 900px auto;
   `}
 
   ${media.mobile`
-    background-size: clamp(320px, 130vw, 520px) auto;
+    background-size: 520px auto;
   `}
 `;
 
@@ -29,8 +29,16 @@ export const Content = styled.section`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: clamp(12px, 3.5vh, 28px);
+  gap: 28px;
   padding: 0 16px;
+
+  ${media.tablet`
+    gap: 20px;
+  `}
+
+  ${media.mobile`
+    gap: 12px;
+  `}
 `;
 
 

@@ -22,7 +22,7 @@ export const Header = styled.header`
     top: auto;
     right: auto;
     z-index: auto;
-    width: 100%;
+    width: 320px;
     justify-content: center;
   `}
 `;

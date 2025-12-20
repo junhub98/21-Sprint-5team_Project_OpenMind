@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState, useCallback, memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PersonImage from '../../assets/Images/Person.png';
 import { createSubject } from '../../getDataApi';
@@ -10,15 +10,25 @@ import {
   SubmitButton,
 } from './CreateFeedForm.styles';
 
+// InputIcon을 메모이제이션된 컴포넌트로 분리 -> 함수 재생성 방지
+const MemoizedInputIcon = memo(() => (
+  <InputIcon
+    src={PersonImage}
+    alt="이름 입력 아이콘"
+  />
+));
+
+MemoizedInputIcon.displayName = 'MemoizedInputIcon';
+
 export default function CreateFeedForm() {
-  const [name, setName] = useState('');
+  const nameInputRef = useRef(null);
   const [isCreating, setIsCreating] = useState(false);
   const navigate = useNavigate();
 
-  const handleCreateFeed = async (event) => {
+  const handleCreateFeed = useCallback(async (event) => {
     event.preventDefault();
 
-    const trimmedName = name.trim();
+    const trimmedName = nameInputRef.current?.value.trim() || '';
     if (!trimmedName) {
       alert('이름을 입력해 주세요.');
       return;
@@ -35,21 +45,17 @@ export default function CreateFeedForm() {
     } finally {
       setIsCreating(false);
     }
-  };
+  }, [navigate]);
 
   return (
     <Form onSubmit={handleCreateFeed}>
       <InputWrapper>
-        <InputIcon
-          src={PersonImage}
-          alt="이름 입력 아이콘"
-        />
+        <MemoizedInputIcon />
         <NameInput
+          ref={nameInputRef}
           id="name"
           type="text"
           placeholder="이름을 입력해주세요"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
         />
       </InputWrapper>
       <SubmitButton

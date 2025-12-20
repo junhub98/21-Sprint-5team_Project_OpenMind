@@ -2,8 +2,7 @@ import styled from 'styled-components';
 import media from '../../media';
 
 export const Form = styled.form`
-  width: 100%;
-  max-width: min(420px, 92vw);
+  width: 420px;
   padding: 28px 24px 32px;
   border-radius: 16px;
   background-color: #ffffff;
@@ -12,12 +11,15 @@ export const Form = styled.form`
   flex-direction: column;
   gap: 16px;
 
+  ${media.tablet`
+    width: 380px;
+  `}
+
   ${media.mobile`
+    width: 320px;
     padding: 22px 18px 24px;
     border-radius: 14px;
   `}
-
-  
 `;
 
 export const InputWrapper = styled.div`
