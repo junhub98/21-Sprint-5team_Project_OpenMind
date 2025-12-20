@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import SubjectCard from './SubjectCard';
-import media from '../utils/media';
+import media from '../../utils/media';
 import SubjectLoadingCard from './SubjectLoadingCard';
 
 const Container = styled.div`

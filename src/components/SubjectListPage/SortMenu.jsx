@@ -1,11 +1,12 @@
-import { useState } from 'react';
-import styles from './CustomSelect.module.scss';
+import { useState, useRef, useEffect } from 'react';
+import styles from './SortMenu.module.scss';
 import styled from 'styled-components';
-import arrowDownIC from '../assets/QuestionsListPage/arrow-down.png';
-import arrowUpIC from '../assets/QuestionsListPage/arrow-up.png';
-import useSortParam from '../hooks/useSortParam';
+import arrowDownIC from '../../assets/SubjectsListPage/arrow-down.png';
+import arrowUpIC from '../../assets/SubjectsListPage/arrow-up.png';
+import useSortParam from '../../hooks/useSortParam';
+import { memo } from 'react';
 
-const Li = styled.li`
+const SortOption = styled.li`
   width: 79px;
   height: 34px;
   font-family: 'pretendard';
@@ -27,6 +28,14 @@ const Li = styled.li`
   }
 `;
 
+const SortOptions = styled.ul`
+  position: absolute;
+  background-color: #ffffff;
+  border-radius: 12px;
+  top: 38px;
+  z-index: 40;
+`;
+
 const ArrowDown = styled.img`
   position: absolute;
   right: 11px;
@@ -35,9 +44,10 @@ const ArrowDown = styled.img`
 `;
 const ArrowUp = styled(ArrowDown)``;
 
-export default function CustomSelect() {
+export default function SortMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const { orderBy, setOrderBy } = useSortParam();
+  const sortMenu = useRef(null);
 
   const sortOptions = [
     {
@@ -50,8 +60,29 @@ export default function CustomSelect() {
       value: 'time',
     },
   ];
+
+  //sortMenu 외부 클릭시 닫힘
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleClick = (e) => {
+      if (!sortMenu?.current.contains(e.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    window.addEventListener('click', handleClick);
+    return () => window.removeEventListener('click', handleClick);
+  }, [isOpen]);
+
+  const handleOptionClick = (value) => {
+    if (orderBy == value) return;
+    setOrderBy(value);
+    setIsOpen(false);
+  };
+
   return (
-    <div className={styles.positionBox}>
+    <div className={styles.positionBox} ref={sortMenu}>
       <div className={styles.positionBox}>
         <button
           className={`${styles.sortOptions} ${isOpen ? styles.active : ''}`} // 버튼 오픈 시 active
@@ -64,21 +95,20 @@ export default function CustomSelect() {
       </div>
 
       {isOpen && (
-        <ul>
+        <SortOptions>
           {sortOptions.map((option, index) => (
-            <Li
+            <SortOption
               $firstOption={index == 0}
               $lastOption={index == sortOptions.length - 1}
               key={option.value}
               onClick={() => {
-                setOrderBy(option.value);
-                setIsOpen(false);
+                handleOptionClick(option.value);
               }}
             >
               {option.name}
-            </Li>
+            </SortOption>
           ))}
-        </ul>
+        </SortOptions>
       )}
     </div>
   );

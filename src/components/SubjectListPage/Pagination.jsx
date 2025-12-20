@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import usePaginationParam from '../hooks/usePaginationParam';
+import usePaginationParam from '../../hooks/usePaginationParam';
+import { memo } from 'react';
 
 const PageBox = styled.div`
   margin-top: 40px;
@@ -54,7 +55,7 @@ const ArrowButtonLeft = styled(ArrowButton)`
   }
 `;
 
-function Pagination({ totalPages, currentPage }) {
+const Pagination = memo(function Pagination({ totalPages, currentPage }) {
   const { setCurrentPage } = usePaginationParam();
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
   const pageGroup = Math.ceil(currentPage / 5 - 1);
@@ -94,6 +95,6 @@ function Pagination({ totalPages, currentPage }) {
       </ArrowButtonRight>
     </PageBox>
   );
-}
+});
 
 export default Pagination;

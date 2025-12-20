@@ -1,6 +1,6 @@
 import styled, { keyframes } from 'styled-components';
-import messagesIC from '../assets/QuestionsListPage/Messages.png';
-import media from '../utils/media';
+import messagesIC from '../../assets/SubjectsListPage/Messages.png';
+import media from '../../utils/media';
 
 //스켈레톤 에니메이션
 const pop = keyframes`

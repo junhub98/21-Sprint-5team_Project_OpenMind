@@ -1,6 +1,6 @@
 import styled, { keyframes } from 'styled-components';
-import media from '../utils/media';
-import Skeleton from '../utils/skeleton';
+import media from '../../utils/media';
+import Skeleton from '../../utils/skeleton';
 
 //스켈레톤 base
 const MySkeleton = styled(Skeleton)`

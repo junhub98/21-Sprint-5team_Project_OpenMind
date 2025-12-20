@@ -1,7 +1,8 @@
 import styled from 'styled-components';
-import logoImg from '../assets/QuestionsListPage/logo.png';
-import arrowRight from '../assets/QuestionsListPage/arrow-right.png';
-import media from '../utils/media';
+import logoImg from '../../assets/SubjectsListPage/logo.png';
+import arrowRight from '../../assets/SubjectsListPage/arrow-right.png';
+import media from '../../utils/media';
+import { memo } from 'react';
 
 const Header = styled.div`
   width: 100%;
@@ -23,6 +24,8 @@ const Header = styled.div`
     gap: 20px 0;
   `}
 `;
+
+const LogoImg = styled.img``;
 
 const Button = styled.button`
   position: relative;
@@ -61,14 +64,16 @@ const Arrow = styled.img`
   `}
 `;
 
-export default function SubjectsListPageNav() {
+const SubjectsListPageNav = memo(function SubjectsListPageNav() {
   return (
     <Header>
-      <img src={logoImg} />
+      <LogoImg src={logoImg} />
       <Button>
         답변하러가기
         <Arrow src={arrowRight} />
       </Button>
     </Header>
   );
-}
+});
+
+export default SubjectsListPageNav;

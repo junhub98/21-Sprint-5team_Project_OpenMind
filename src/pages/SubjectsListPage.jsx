@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import SubjectsListPageNav from '../components/SubjectsListPageNav';
-import CustomSelect from '../components/CustomSelect';
-import SubjectsList from '../components/SubjectsList';
+import SubjectsListPageNav from '../components/SubjectListPage/SubjectsListPageNav';
+import SortMenu from '../components/SubjectListPage/SortMenu';
+import SubjectsList from '../components/SubjectListPage/SubjectsList';
 import { getSubjectsList } from '../utils/getDataApi';
 import useSortParam from '../hooks/useSortParam';
 import usePaginationParam from '../hooks/usePaginationParam';
-import Pagination from '../components/Pagination';
-import media from '../utils/media';
+import Pagination from '../components/SubjectListPage/Pagination';
 
+import media from '../utils/media';
 //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ    styled-components   ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
@@ -19,7 +19,7 @@ const Container = styled.div`
   align-items: center;
 `;
 
-const TitleBox = styled.div`
+const SortBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -43,18 +43,17 @@ const TitleSpan = styled.span`
     font-size: 24px;
   `}
 `;
-
 //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ    react-component   ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 
-export default function QuestionsListPage() {
-  const [isLoading, setIsLoading] = useState(false);
+export default function SubjectsListPage() {
   const [subjects, setSubjects] = useState([]);
   const [pageSize, setPageSize] = useState(8);
   const [totalPages, setTotalPages] = useState(50);
   const { orderBy } = useSortParam();
   const { currentPage } = usePaginationParam();
+  const isLoading = subjects.length == 0 ? true : false;
 
   useEffect(() => {
     const sixGridMedia = window.matchMedia('(max-width: 863px)');
@@ -72,14 +71,15 @@ export default function QuestionsListPage() {
   useEffect(() => {
     async function loadSubjects() {
       try {
-        setIsLoading(true);
         const data = await getSubjectsList(currentPage, pageSize, orderBy);
         setSubjects(data.results);
-        setTotalPages(Math.ceil(data.count / pageSize));
+
+        const nextTotalPages = Math.ceil(data.count / pageSize);
+        if (totalPages != nextTotalPages) {
+          setTotalPages(nextTotalPages);
+        }
       } catch (err) {
         console.log(err);
-      } finally {
-        setIsLoading(false);
       }
     }
 
@@ -90,10 +90,10 @@ export default function QuestionsListPage() {
     <div>
       <SubjectsListPageNav />
       <Container>
-        <TitleBox>
+        <SortBox>
           <TitleSpan> 누구에게 질문할까요? </TitleSpan>
-          <CustomSelect />
-        </TitleBox>
+          <SortMenu />
+        </SortBox>
         <SubjectsList subjects={subjects} isLoading={isLoading} pageSize={pageSize} />
 
         <Pagination currentPage={currentPage} totalPages={totalPages} />
