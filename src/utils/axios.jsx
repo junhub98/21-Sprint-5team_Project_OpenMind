@@ -1,7 +1,7 @@
 import Axios from 'axios';
 
 const axios = Axios.create({
-  baseURL: 'https://openmind-api.vercel.app/21-5',
+  baseURL: 'https://openmind-api.vercel.app/19-1',
 });
 
 export default axios;

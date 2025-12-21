@@ -1,7 +1,7 @@
 import axios from './axios';
 
 export async function getSubjectsList(currentPage = 1, pageSize = 8, orderBy = 'name') {
-  const offset = (currentPage - 1) * 8;
+  const offset = (currentPage - 1) * pageSize;
   const params = { limit: pageSize, offset, sort: orderBy };
 
   const response = await axios.get('/subjects/', { params }); // 각 불러올 항목 주소로입력 param은 api 확인

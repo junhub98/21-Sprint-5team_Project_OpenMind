@@ -121,8 +121,8 @@ const UserTag = styled.span`
 //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 
 export default function SubjectCard({ subject }) {
-  const userName = subject.name.split('#tag:')[0];
-  const userTag = subject.name.split('#tag:')[1];
+  const userName = subject?.name?.split('#tag:')[0];
+  const userTag = subject?.name?.split('#tag:')[1];
   return (
     <Card>
       <UserBox>

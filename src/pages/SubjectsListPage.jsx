@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import SubjectsListPageNav from '../components/SubjectListPage/SubjectsListPageNav';
 import SortMenu from '../components/SubjectListPage/SortMenu';
@@ -43,17 +43,43 @@ const TitleSpan = styled.span`
     font-size: 24px;
   `}
 `;
+
+const ScrollLoading = styled.span`
+  width: 100%;
+  height: 150px;
+  background-color: black;
+  color: white;
+`;
 //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ    react-component   ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 
 export default function SubjectsListPage() {
+  const [isScrollLoading, setIsScrollLoading] = useState(false);
+  const [scrollPage, setScrollPage] = useState(1);
+  const [hasNextScroll, setHasNextScroll] = useState(true);
+  const [scrollPageParams, setScrollPageParams] = useState([1]);
+  const [isScrollMode, setIsScrollMode] = useState(true);
   const [subjects, setSubjects] = useState([]);
   const [pageSize, setPageSize] = useState(8);
   const [totalPages, setTotalPages] = useState(50);
   const { orderBy } = useSortParam();
   const { currentPage } = usePaginationParam();
   const isLoading = subjects.length == 0 ? true : false;
+
+  const scrollRef = useRef();
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && hasNextScroll != null && !isScrollLoading) {
+        setScrollPage((prev) => prev + 1);
+      }
+    });
+    if (scrollRef.current) observer.observe(scrollRef.current);
+    return () => {
+      if (scrollRef.current) observer.unobserve(scrollRef.current);
+    };
+  }, [hasNextScroll, isScrollLoading]);
 
   useEffect(() => {
     const sixGridMedia = window.matchMedia('(max-width: 863px)');
@@ -68,23 +94,44 @@ export default function SubjectsListPage() {
     return () => sixGridMedia.removeEventListener('change', sixGridHandleChange);
   }, []);
 
-  useEffect(() => {
-    async function loadSubjects() {
-      try {
-        const data = await getSubjectsList(currentPage, pageSize, orderBy);
-        setSubjects(data.results);
+  async function loadSubjects() {
+    try {
+      const data = await getSubjectsList(currentPage, pageSize, orderBy);
+      setSubjects(data.results);
 
-        const nextTotalPages = Math.ceil(data.count / pageSize);
-        if (totalPages != nextTotalPages) {
-          setTotalPages(nextTotalPages);
-        }
-      } catch (err) {
-        console.log(err);
+      const nextTotalPages = Math.ceil(data.count / pageSize);
+      if (totalPages != nextTotalPages) {
+        setTotalPages(nextTotalPages);
       }
+    } catch (err) {
+      console.log(err);
     }
+  }
+  console.log('렌더링');
+  async function loadSubjectsScroll() {
+    if (scrollPageParams.includes(scrollPage)) {
+      return;
+    }
+    setIsScrollLoading(true);
+    console.log(scrollPageParams);
+    console.log(scrollPage);
+    console.log(scrollPageParams.includes(scrollPage));
+    try {
+      setScrollPageParams((prev) => [...prev, scrollPage]);
+      const data = await getSubjectsList(scrollPage, 3, orderBy);
+      setSubjects((prev) => [...prev, ...data.results]);
+      setHasNextScroll(data?.next);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsScrollLoading(false);
+    }
+  }
 
-    loadSubjects();
-  }, [currentPage, orderBy, pageSize]);
+  useEffect(() => {
+    if (isScrollMode) loadSubjectsScroll();
+    else loadSubjects();
+  }, [currentPage, orderBy, pageSize, scrollPage]);
 
   return (
     <div>
@@ -96,7 +143,11 @@ export default function SubjectsListPage() {
         </SortBox>
         <SubjectsList subjects={subjects} isLoading={isLoading} pageSize={pageSize} />
 
-        <Pagination currentPage={currentPage} totalPages={totalPages} />
+        {isScrollMode ? (
+          <ScrollLoading ref={scrollRef}>로딩중</ScrollLoading>
+        ) : (
+          <Pagination currentPage={currentPage} totalPages={totalPages} />
+        )}
       </Container>
     </div>
   );

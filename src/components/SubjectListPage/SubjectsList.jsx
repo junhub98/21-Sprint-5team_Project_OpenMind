@@ -5,7 +5,7 @@ import SubjectLoadingCard from './SubjectLoadingCard';
 
 const Container = styled.div`
   width: 940px;
-  height: 394px;
+  //height: 394px;
   display: grid;
   margin-top: 30px;
   grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -22,7 +22,7 @@ const Container = styled.div`
 
   ${media.sixCardsList`
     grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
+    
     overflow: hidden;
   `}
 
@@ -30,7 +30,7 @@ const Container = styled.div`
     width: clamp(327px, 87vw ,700px);
     height: 536px;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
+    
     gap: 16px;
     margin-top: 16px;
     
