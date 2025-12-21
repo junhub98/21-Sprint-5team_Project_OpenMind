@@ -10,12 +10,10 @@ export const LogoImage = styled.img`
   width: 456px;
   height: auto;
 
-  ${media.tablet`
-    width: 380px;
-  `}
+
 
   ${media.mobile`
-    width: 220px;
+    width: 248px;
   `}
 `;
 

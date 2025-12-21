@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback, memo } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PersonImage from '../../assets/Images/Person.png';
 import { createSubject } from '../../getDataApi';
@@ -10,22 +10,12 @@ import {
   SubmitButton,
 } from './CreateFeedForm.styles';
 
-// InputIcon을 메모이제이션된 컴포넌트로 분리 -> 함수 재생성 방지
-const MemoizedInputIcon = memo(() => (
-  <InputIcon
-    src={PersonImage}
-    alt="이름 입력 아이콘"
-  />
-));
-
-MemoizedInputIcon.displayName = 'MemoizedInputIcon';
-
 export default function CreateFeedForm() {
   const nameInputRef = useRef(null);
   const [isCreating, setIsCreating] = useState(false);
   const navigate = useNavigate();
 
-  const handleCreateFeed = useCallback(async (event) => {
+  const handleCreateFeed = async (event) => {
     event.preventDefault();
 
     const trimmedName = nameInputRef.current?.value.trim() || '';
@@ -38,6 +28,8 @@ export default function CreateFeedForm() {
       setIsCreating(true);
 
       const created = await createSubject(trimmedName);
+      // 응답으로 받은 id를 로컬스토리지에 저장
+      localStorage.setItem('subjectId', created.id.toString());
       navigate(`/post/${created.id}/answer`);
     } catch (error) {
       console.error(error);
@@ -45,12 +37,15 @@ export default function CreateFeedForm() {
     } finally {
       setIsCreating(false);
     }
-  }, [navigate]);
+  };
 
   return (
     <Form onSubmit={handleCreateFeed}>
       <InputWrapper>
-        <MemoizedInputIcon />
+        <InputIcon
+          src={PersonImage}
+          alt="이름 입력 아이콘"
+        />
         <NameInput
           ref={nameInputRef}
           id="name"

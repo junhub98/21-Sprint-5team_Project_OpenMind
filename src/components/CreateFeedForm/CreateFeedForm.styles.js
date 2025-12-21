@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import media from '../../media';
+import media from '../../utils/media';
 
 export const Form = styled.form`
   width: 420px;
