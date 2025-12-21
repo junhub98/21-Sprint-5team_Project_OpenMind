@@ -65,7 +65,7 @@ export default function SubjectsListPage() {
   const [pageSize, setPageSize] = useState(8);
   const [totalPages, setTotalPages] = useState(50);
   const { orderBy } = useSortParam();
-  const { currentPage } = usePaginationParam();
+  const { currentPage, setCurrentPage } = usePaginationParam();
   const isLoading = subjects.length == 0 ? true : false;
 
   const scrollArgs = {
@@ -129,6 +129,10 @@ export default function SubjectsListPage() {
     if (isScrollMode) loadSubjectsScroll();
     else loadSubjects();
   }, [currentPage, orderBy, pageSize, scrollPage, isScrollMode]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [isScrollMode]);
 
   const scrollRef = useIntersectionObserver(scrollArgs);
   return (

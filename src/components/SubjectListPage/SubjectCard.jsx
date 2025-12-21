@@ -15,7 +15,7 @@ const pop = keyframes`
 
 const Card = styled.div`
   width: 100%;
-  height: 100%;
+  height: 187px;
   border: 1px solid var(--gray-40);
   border-radius: 16px;
   background-color: var(--gray-10);
@@ -27,6 +27,7 @@ const Card = styled.div`
 
   ${media.mobile`
     padding: 16px;
+    height: 168px;
   `}
   transition:
     transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),

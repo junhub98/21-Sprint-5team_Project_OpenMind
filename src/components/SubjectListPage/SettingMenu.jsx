@@ -44,13 +44,11 @@ export default function SettingMenu({
   setScrollPageParams,
 }) {
   const [isOn, setIsOn] = useState(false);
-  const { setCurrentPage } = usePaginationParam();
 
   const handleClick = () => {
     setIsScrollMode((prev) => !prev);
     setScrollPage(1);
     setScrollPageParams([]);
-    setCurrentPage(1);
   };
 
   return (

@@ -4,7 +4,6 @@ export default function ({ callback, isScrollLoading, hasNextScroll, isScrollMod
   const ref = useRef();
 
   useEffect(() => {
-    console.log(isScrollMode);
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting && hasNextScroll != null && !isScrollLoading) {
         callback();
