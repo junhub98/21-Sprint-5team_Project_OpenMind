@@ -1,0 +1,39 @@
+[33m5dd8da1[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/feature/listPage_addScrollMode[m[33m, [m[1;32mfeature/listPage_addScrollMode[m[33m)[m HEAD@{0}: reset: moving to HEAD@{0}
+[33m5dd8da1[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/feature/listPage_addScrollMode[m[33m, [m[1;32mfeature/listPage_addScrollMode[m[33m)[m HEAD@{1}: merge feature/listPage_addScrollMode: Fast-forward
+[33m22488fc[m[33m ([m[1;31morigin/주평안[m[33m, [m[1;31morigin/박지현[m[33m, [m[1;31morigin/김민성[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32m주평안[m[33m, [m[1;32m박지현[m[33m, [m[1;32m김민성[m[33m)[m HEAD@{2}: checkout: moving from feature/listPage_addScrollMode to main
+[33m5dd8da1[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/feature/listPage_addScrollMode[m[33m, [m[1;32mfeature/listPage_addScrollMode[m[33m)[m HEAD@{3}: commit: add: add infiniteScrollMode
+[33mf488c8d[m[33m ([m[1;31morigin/김준석[m[33m, [m[1;32m김준석[m[33m)[m HEAD@{4}: checkout: moving from 김준석 to feature/listPage_addScrollMode
+[33mf488c8d[m[33m ([m[1;31morigin/김준석[m[33m, [m[1;32m김준석[m[33m)[m HEAD@{5}: checkout: moving from feature/mainPage+listPage to 김준석
+[33mf488c8d[m[33m ([m[1;31morigin/김준석[m[33m, [m[1;32m김준석[m[33m)[m HEAD@{6}: checkout: moving from 김준석 to feature/mainPage+listPage
+[33mf488c8d[m[33m ([m[1;31morigin/김준석[m[33m, [m[1;32m김준석[m[33m)[m HEAD@{7}: commit: feat: 무한스크롤 옵션 기능구현, 스타일은 아직 안입힘
+[33m39bf887[m HEAD@{8}: commit: feat: 무한스크롤 도입 작업중
+[33mfe21a20[m[33m ([m[1;31morigin/feature/listPage_기본구현_pre_1.0[m[33m, [m[1;32mfeature/listPage_기본구현_pre_1.0[m[33m)[m HEAD@{9}: reset: moving to HEAD
+[33mfe21a20[m[33m ([m[1;31morigin/feature/listPage_기본구현_pre_1.0[m[33m, [m[1;32mfeature/listPage_기본구현_pre_1.0[m[33m)[m HEAD@{10}: checkout: moving from feature/listPage_기본구현_pre_1.0 to 김준석
+[33mfe21a20[m[33m ([m[1;31morigin/feature/listPage_기본구현_pre_1.0[m[33m, [m[1;32mfeature/listPage_기본구현_pre_1.0[m[33m)[m HEAD@{11}: checkout: moving from 김준석 to feature/listPage_기본구현_pre_1.0
+[33mfe21a20[m[33m ([m[1;31morigin/feature/listPage_기본구현_pre_1.0[m[33m, [m[1;32mfeature/listPage_기본구현_pre_1.0[m[33m)[m HEAD@{12}: checkout: moving from feature/listPage_기본구현_pre_1.0 to 김준석
+[33mfe21a20[m[33m ([m[1;31morigin/feature/listPage_기본구현_pre_1.0[m[33m, [m[1;32mfeature/listPage_기본구현_pre_1.0[m[33m)[m HEAD@{13}: checkout: moving from 김준석 to feature/listPage_기본구현_pre_1.0
+[33mfe21a20[m[33m ([m[1;31morigin/feature/listPage_기본구현_pre_1.0[m[33m, [m[1;32mfeature/listPage_기본구현_pre_1.0[m[33m)[m HEAD@{14}: commit: feat: tag출력기능 추가
+[33m60b5167[m HEAD@{15}: commit: refactor: 문서구조 변경 및 ux 경험 개선
+[33mc8e8d6e[m HEAD@{16}: commit: refactor: 페이지 사이즈 별 아이템 갯수 logic을 matchMedia로 변경
+[33m5e4f87e[m HEAD@{17}: commit: fix: pagination 화살표버튼 클릭 시 버그 수정
+[33m7f75190[m HEAD@{18}: commit: fix: sort메뉴 param관련 버그 해결
+[33m62ff1ea[m HEAD@{19}: commit: feat: UrlSearchParam 관련 커스텀HOOK 생성 및 개선
+[33mb94dc75[m HEAD@{20}: commit: feat: subjectCard와 pagination hover시 애니메이션 적용
+[33m3cf8964[m HEAD@{21}: commit: refactor: 스켈레톤 애니메이션 재사용성을 위한 함수분리
+[33m463684f[m HEAD@{22}: commit: feat: subjectCard 로딩중일 땐 스켈레톤 UI 추가
+[33m5465b55[m HEAD@{23}: commit: Feat: SubjectsListPage 반응형 웹사이트 제작
+[33m2947e5e[m HEAD@{24}: commit: Feat: Add SubjectListPage UI 및 Logic 구현
+[33m22488fc[m[33m ([m[1;31morigin/주평안[m[33m, [m[1;31morigin/박지현[m[33m, [m[1;31morigin/김민성[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32m주평안[m[33m, [m[1;32m박지현[m[33m, [m[1;32m김민성[m[33m)[m HEAD@{25}: checkout: moving from main to 김준석
+[33m22488fc[m[33m ([m[1;31morigin/주평안[m[33m, [m[1;31morigin/박지현[m[33m, [m[1;31morigin/김민성[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32m주평안[m[33m, [m[1;32m박지현[m[33m, [m[1;32m김민성[m[33m)[m HEAD@{26}: commit: 웹후크 테스트
+[33m077b09e[m HEAD@{27}: reset: moving to HEAD~1
+[33m2fa25f7[m HEAD@{28}: reset: moving to HEAD~1
+[33m56e8d04[m HEAD@{29}: commit: test
+[33m2fa25f7[m HEAD@{30}: commit: Feat: 디스코드 웹후크 기능 추가
+[33m077b09e[m HEAD@{31}: reset: moving to HEAD~1
+[33m8a912d2[m HEAD@{32}: commit: Feat: 디스코드 웹 훅 기능 추가
+[33m077b09e[m HEAD@{33}: reset: moving to HEAD~1
+[33md2789e0[m HEAD@{34}: commit: Feat: 디스코드 웹 훅 기능 추가
+[33m077b09e[m HEAD@{35}: checkout: moving from 김준석 to main
+[33m077b09e[m HEAD@{36}: checkout: moving from main to 김준석
+[33m077b09e[m HEAD@{37}: Branch: renamed refs/heads/master to refs/heads/main
+[33m077b09e[m HEAD@{39}: commit (initial): Initial Commit: React Project Set
