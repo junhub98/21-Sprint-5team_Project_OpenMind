@@ -3,6 +3,7 @@ import logoImg from '../../assets/SubjectsListPage/logo.png';
 import arrowRight from '../../assets/SubjectsListPage/arrow-right.png';
 import media from '../../utils/media';
 import { memo } from 'react';
+import SettingMenu from './SettingMenu';
 
 const Header = styled.div`
   width: 100%;
@@ -64,7 +65,12 @@ const Arrow = styled.img`
   `}
 `;
 
-const SubjectsListPageNav = memo(function SubjectsListPageNav() {
+const SubjectsListPageNav = memo(function SubjectsListPageNav({
+  setIsScrollMode,
+  isScrollMode,
+  setScrollPage,
+  setScrollPageParams,
+}) {
   return (
     <Header>
       <LogoImg src={logoImg} />
@@ -72,6 +78,12 @@ const SubjectsListPageNav = memo(function SubjectsListPageNav() {
         답변하러가기
         <Arrow src={arrowRight} />
       </Button>
+      <SettingMenu
+        setIsScrollMode={setIsScrollMode}
+        isScrollMode={isScrollMode}
+        setScrollPage={setScrollPage}
+        setScrollPageParams={setScrollPageParams}
+      />
     </Header>
   );
 });

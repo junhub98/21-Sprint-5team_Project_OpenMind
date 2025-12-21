@@ -7,7 +7,7 @@ import { getSubjectsList } from '../utils/getDataApi';
 import useSortParam from '../hooks/useSortParam';
 import usePaginationParam from '../hooks/usePaginationParam';
 import Pagination from '../components/SubjectListPage/Pagination';
-
+import useIntersectionObserver from '../hooks/useIntersectionObserver';
 import media from '../utils/media';
 //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ    styled-components   ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
@@ -58,8 +58,9 @@ export default function SubjectsListPage() {
   const [isScrollLoading, setIsScrollLoading] = useState(false);
   const [scrollPage, setScrollPage] = useState(1);
   const [hasNextScroll, setHasNextScroll] = useState(true);
-  const [scrollPageParams, setScrollPageParams] = useState([1]);
+  const [scrollPageParams, setScrollPageParams] = useState([]);
   const [isScrollMode, setIsScrollMode] = useState(true);
+
   const [subjects, setSubjects] = useState([]);
   const [pageSize, setPageSize] = useState(8);
   const [totalPages, setTotalPages] = useState(50);
@@ -67,19 +68,14 @@ export default function SubjectsListPage() {
   const { currentPage } = usePaginationParam();
   const isLoading = subjects.length == 0 ? true : false;
 
-  const scrollRef = useRef();
+  const scrollArgs = {
+    callback: () => setScrollPage((prev) => prev + 1),
+    isScrollLoading,
+    hasNextScroll,
+    isScrollMode,
+  };
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && hasNextScroll != null && !isScrollLoading) {
-        setScrollPage((prev) => prev + 1);
-      }
-    });
-    if (scrollRef.current) observer.observe(scrollRef.current);
-    return () => {
-      if (scrollRef.current) observer.unobserve(scrollRef.current);
-    };
-  }, [hasNextScroll, isScrollLoading]);
+  // 반응형 그리드
 
   useEffect(() => {
     const sixGridMedia = window.matchMedia('(max-width: 863px)');
@@ -94,6 +90,8 @@ export default function SubjectsListPage() {
     return () => sixGridMedia.removeEventListener('change', sixGridHandleChange);
   }, []);
 
+  // API 호출 함수
+
   async function loadSubjects() {
     try {
       const data = await getSubjectsList(currentPage, pageSize, orderBy);
@@ -107,20 +105,19 @@ export default function SubjectsListPage() {
       console.log(err);
     }
   }
-  console.log('렌더링');
+
   async function loadSubjectsScroll() {
     if (scrollPageParams.includes(scrollPage)) {
       return;
     }
     setIsScrollLoading(true);
-    console.log(scrollPageParams);
-    console.log(scrollPage);
-    console.log(scrollPageParams.includes(scrollPage));
+    console.log(hasNextScroll);
+
     try {
-      setScrollPageParams((prev) => [...prev, scrollPage]);
-      const data = await getSubjectsList(scrollPage, 3, orderBy);
+      const data = await getSubjectsList(scrollPage, 8, orderBy);
       setSubjects((prev) => [...prev, ...data.results]);
       setHasNextScroll(data?.next);
+      setScrollPageParams((prev) => [...prev, scrollPage]);
     } catch (err) {
       console.log(err);
     } finally {
@@ -131,11 +128,17 @@ export default function SubjectsListPage() {
   useEffect(() => {
     if (isScrollMode) loadSubjectsScroll();
     else loadSubjects();
-  }, [currentPage, orderBy, pageSize, scrollPage]);
+  }, [currentPage, orderBy, pageSize, scrollPage, isScrollMode]);
 
+  const scrollRef = useIntersectionObserver(scrollArgs);
   return (
     <div>
-      <SubjectsListPageNav />
+      <SubjectsListPageNav
+        setIsScrollMode={setIsScrollMode}
+        isScrollMode={isScrollMode}
+        setScrollPage={setScrollPage}
+        setScrollPageParams={setScrollPageParams}
+      />
       <Container>
         <SortBox>
           <TitleSpan> 누구에게 질문할까요? </TitleSpan>

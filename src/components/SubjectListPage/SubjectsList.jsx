@@ -5,7 +5,7 @@ import SubjectLoadingCard from './SubjectLoadingCard';
 
 const Container = styled.div`
   width: 940px;
-  //height: 394px;
+
   display: grid;
   margin-top: 30px;
   grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -28,7 +28,7 @@ const Container = styled.div`
 
   ${media.mobile`
     width: clamp(327px, 87vw ,700px);
-    height: 536px;
+   
     grid-template-columns: 1fr 1fr;
     
     gap: 16px;
