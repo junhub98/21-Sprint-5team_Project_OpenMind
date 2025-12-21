@@ -2,6 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import settingIc from '../../assets/SubjectsListPage/setting.png';
 import Toggle from '../../utils/Toggle';
+import media from '../../utils/media';
 
 const SettingImg = styled.img`
   width: 30px;
@@ -10,6 +11,15 @@ const SettingImg = styled.img`
   top: 53px;
   right: 320px;
   cursor: pointer;
+
+  ${media.tabletBig`
+    right: 240px;
+  `}
+
+  ${media.mobile`
+    right: 20px;
+    top: 25px;
+  `}
 `;
 
 const SettingBox = styled.div`
@@ -28,6 +38,16 @@ const SettingBox = styled.div`
   background-color: var(--gray-10);
   border: 1px solid var(--gray-50);
   border-radius: 16px;
+
+  ${media.tabletBig`
+    right: 293px;
+  `}
+
+  ${media.mobile`
+    width: 90px;
+    right: 20px;
+    top: 70px;
+  `}
 `;
 
 const SettingOption = styled.li`
@@ -36,7 +56,15 @@ const SettingOption = styled.li`
   align-items: center;
   padding: 0 25px 0 25px;
   gap: 0 20px;
+
   height: 46px;
+  ${media.mobile`
+    flex-direction: column;
+    justify-content: space-evenly;
+    right: 20px;
+    top: 70px;
+    padding: 0 0;
+  `}
 `;
 
 export default function SettingMenu({

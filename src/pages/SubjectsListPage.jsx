@@ -147,6 +147,7 @@ export default function SubjectsListPage() {
     else loadSubjects();
   }, [currentPage, orderBy, pageSize, scrollPage, isScrollMode]);
 
+  // 스크롤 감지할 DOM에 연결 할 useRef 반환
   const scrollRef = useIntersectionObserver(scrollArgs);
   return (
     <div>
