@@ -4,6 +4,7 @@ import arrowRight from '../../assets/SubjectsListPage/arrow-right.png';
 import media from '../../utils/media';
 import { memo } from 'react';
 import SettingMenu from './SettingMenu';
+import { Link } from 'react-router-dom';
 
 const Header = styled.div`
   width: 100%;
@@ -67,20 +68,20 @@ const Arrow = styled.img`
 
 const SubjectsListPageNav = memo(function SubjectsListPageNav({
   setIsScrollMode,
-  isScrollMode,
   setScrollPage,
   setScrollPageParams,
 }) {
   return (
     <Header>
-      <LogoImg src={logoImg} />
+      <Link to="/">
+        <LogoImg src={logoImg} />
+      </Link>
       <Button>
         답변하러가기
         <Arrow src={arrowRight} />
       </Button>
       <SettingMenu
         setIsScrollMode={setIsScrollMode}
-        isScrollMode={isScrollMode}
         setScrollPage={setScrollPage}
         setScrollPageParams={setScrollPageParams}
       />

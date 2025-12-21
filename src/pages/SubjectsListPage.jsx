@@ -9,6 +9,8 @@ import usePaginationParam from '../hooks/usePaginationParam';
 import Pagination from '../components/SubjectListPage/Pagination';
 import useIntersectionObserver from '../hooks/useIntersectionObserver';
 import media from '../utils/media';
+import LoadingBar from '../utils/LoadingBar';
+
 //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ    styled-components   ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
@@ -44,12 +46,19 @@ const TitleSpan = styled.span`
   `}
 `;
 
-const ScrollLoading = styled.span`
+const EndMessage = styled.span`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
-  height: 150px;
-  background-color: black;
-  color: white;
+  height: 100px;
+  background-color: var(--gray-20);
+  font-family: 'pretendard';
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--gray-50);
 `;
+
 //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ    react-component   ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
@@ -73,8 +82,12 @@ export default function SubjectsListPage() {
     isScrollLoading,
     hasNextScroll,
     isScrollMode,
-    setSubjects,
   };
+
+  useEffect(() => {
+    setSubjects([]);
+    setCurrentPage(1);
+  }, [isScrollMode]);
 
   // 반응형 그리드
 
@@ -91,7 +104,7 @@ export default function SubjectsListPage() {
     return () => sixGridMedia.removeEventListener('change', sixGridHandleChange);
   }, []);
 
-  // API 호출 함수
+  // API 호출 함수 for pagination
 
   async function loadSubjects() {
     try {
@@ -106,18 +119,18 @@ export default function SubjectsListPage() {
       console.log(err);
     }
   }
-
+  // API 호출 함수 for infinite scroll
   async function loadSubjectsScroll() {
     if (scrollPageParams.includes(scrollPage)) {
       return;
     }
-    console.log('api호출함수실행');
+
     setIsScrollLoading(true);
-    setScrollPageParams((prev) => [...prev, scrollPage]);
+
     try {
       const data = await getSubjectsList(scrollPage, 8, orderBy);
-      console.log('서브젝트업데이트');
 
+      setScrollPageParams((prev) => [...prev, scrollPage]);
       setSubjects((prev) => [...prev, ...data.results]);
       setHasNextScroll(data?.next);
     } catch (err) {
@@ -127,21 +140,18 @@ export default function SubjectsListPage() {
     }
   }
 
+  // api 호출 실행
+
   useEffect(() => {
     if (isScrollMode) loadSubjectsScroll();
     else loadSubjects();
   }, [currentPage, orderBy, pageSize, scrollPage, isScrollMode]);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [isScrollMode]);
 
   const scrollRef = useIntersectionObserver(scrollArgs);
   return (
     <div>
       <SubjectsListPageNav
         setIsScrollMode={setIsScrollMode}
-        isScrollMode={isScrollMode}
         setScrollPage={setScrollPage}
         setScrollPageParams={setScrollPageParams}
       />
@@ -152,10 +162,12 @@ export default function SubjectsListPage() {
         </SortBox>
         <SubjectsList subjects={subjects} isLoading={isLoading} pageSize={pageSize} />
 
-        {isScrollMode ? (
-          <ScrollLoading ref={scrollRef}>로딩중</ScrollLoading>
+        {!isScrollMode && <Pagination currentPage={currentPage} totalPages={totalPages} />}
+
+        {isScrollMode && hasNextScroll ? (
+          <LoadingBar ref={scrollRef}>로딩중</LoadingBar>
         ) : (
-          <Pagination currentPage={currentPage} totalPages={totalPages} />
+          isScrollMode && !hasNextScroll && <EndMessage>마지막 피드입니다.</EndMessage>
         )}
       </Container>
     </div>

@@ -1,21 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import settingIc from '../../assets/SubjectsListPage/setting.png';
-import usePaginationParam from '../../hooks/usePaginationParam';
-
-const Button = styled.button`
-  width: 40px;
-  height: 20px;
-  background-color: ${({ $isOn }) => ($isOn ? 'green' : 'gray')};
-  color: 'white';
-  padding: '8px 16px';
-  border: 'none';
-  border-radius: '20px';
-  cursor: 'pointer';
-  position: absolute;
-  top: 10px;
-  right: 0;
-`;
+import Toggle from '../../utils/Toggle';
 
 const SettingImg = styled.img`
   width: 30px;
@@ -28,18 +14,34 @@ const SettingImg = styled.img`
 
 const SettingBox = styled.div`
   position: absolute;
+  display: flex;
+  flex-direction: column;
+
   top: 45px;
   right: 373px;
-  width: 150px;
-  height: 100px;
+  width: 200px;
+  font-family: 'pretendard';
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--gray-50);
+
   background-color: var(--gray-10);
   border: 1px solid var(--gray-50);
   border-radius: 16px;
 `;
 
+const SettingOption = styled.li`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 25px 0 25px;
+  gap: 0 20px;
+  height: 46px;
+`;
+
 export default function SettingMenu({
   setIsScrollMode,
-  isScrollMode,
+
   setScrollPage,
   setScrollPageParams,
 }) {
@@ -56,10 +58,16 @@ export default function SettingMenu({
       <SettingImg onClick={() => setIsOn((prev) => !prev)} src={settingIc} />
       {isOn && (
         <SettingBox>
-          SCROLL모드
-          <Button onClick={handleClick} $isOn={isScrollMode}>
-            {isScrollMode ? 'ON' : 'OFF'}
-          </Button>
+          <ul>
+            <SettingOption>
+              Scroll 모드
+              <Toggle callback={handleClick} />
+            </SettingOption>
+            <SettingOption>
+              Dark 모드
+              <Toggle callback={() => {}} />
+            </SettingOption>
+          </ul>
         </SettingBox>
       )}
     </>
