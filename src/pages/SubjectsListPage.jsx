@@ -59,7 +59,7 @@ export default function SubjectsListPage() {
   const [scrollPage, setScrollPage] = useState(1);
   const [hasNextScroll, setHasNextScroll] = useState(true);
   const [scrollPageParams, setScrollPageParams] = useState([]);
-  const [isScrollMode, setIsScrollMode] = useState(true);
+  const [isScrollMode, setIsScrollMode] = useState(false);
 
   const [subjects, setSubjects] = useState([]);
   const [pageSize, setPageSize] = useState(8);
@@ -73,6 +73,7 @@ export default function SubjectsListPage() {
     isScrollLoading,
     hasNextScroll,
     isScrollMode,
+    setSubjects,
   };
 
   // 반응형 그리드
@@ -110,14 +111,15 @@ export default function SubjectsListPage() {
     if (scrollPageParams.includes(scrollPage)) {
       return;
     }
+    console.log('api호출함수실행');
     setIsScrollLoading(true);
-    console.log(hasNextScroll);
-
+    setScrollPageParams((prev) => [...prev, scrollPage]);
     try {
       const data = await getSubjectsList(scrollPage, 8, orderBy);
+      console.log('서브젝트업데이트');
+
       setSubjects((prev) => [...prev, ...data.results]);
       setHasNextScroll(data?.next);
-      setScrollPageParams((prev) => [...prev, scrollPage]);
     } catch (err) {
       console.log(err);
     } finally {

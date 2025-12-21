@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-export default function ({ callback, isScrollLoading, hasNextScroll, isScrollMode }) {
+export default function ({ callback, isScrollLoading, hasNextScroll, isScrollMode, setSubjects }) {
   const ref = useRef();
 
   useEffect(() => {
@@ -14,6 +14,10 @@ export default function ({ callback, isScrollLoading, hasNextScroll, isScrollMod
       if (ref.current) observer.unobserve(ref.current);
     };
   }, [hasNextScroll, isScrollLoading, isScrollMode]);
+
+  useEffect(() => {
+    setSubjects([]);
+  }, [isScrollMode]);
 
   return ref;
 }
