@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import media from '../../media';
+import media from '../../utils/media';
 
 export const Header = styled.header`
   /* PC/태블릿: 화면 우상단 고정(콘텐츠 정렬에 영향 X) */
@@ -47,5 +47,3 @@ export const GoQuestionsButton = styled.button`
     font-size: 13px;
   `}
 `;
-
-

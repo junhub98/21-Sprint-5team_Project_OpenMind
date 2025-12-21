@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import media from '../media';
+import media from '../utils/media';
 import BackgroundImage from '../assets/Images/Image2.png';
 
 export const Page = styled.main`
@@ -12,7 +12,11 @@ export const Page = styled.main`
   background-size: 1200px auto;
   background-position: center bottom;
   background-repeat: no-repeat;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
 
   ${media.tablet`
     background-size: 900px auto;
@@ -40,5 +44,3 @@ export const Content = styled.section`
     gap: 12px;
   `}
 `;
-
-

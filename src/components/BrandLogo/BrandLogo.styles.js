@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import media from '../../media';
+import media from '../../utils/media';
 
 export const LogoBox = styled.div`
   padding: 16px;
@@ -10,11 +10,7 @@ export const LogoImage = styled.img`
   width: 456px;
   height: auto;
 
-
-
   ${media.mobile`
     width: 248px;
   `}
 `;
-
-

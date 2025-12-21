@@ -1,14 +1,8 @@
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PersonImage from '../../assets/Images/Person.png';
-import { createSubject } from '../../getDataApi';
-import {
-  Form,
-  InputIcon,
-  InputWrapper,
-  NameInput,
-  SubmitButton,
-} from './CreateFeedForm.styles';
+import { createSubject } from '../../utils/getDataApi';
+import { Form, InputIcon, InputWrapper, NameInput, SubmitButton } from './CreateFeedForm.styles';
 
 export default function CreateFeedForm() {
   const nameInputRef = useRef(null);
@@ -42,25 +36,12 @@ export default function CreateFeedForm() {
   return (
     <Form onSubmit={handleCreateFeed}>
       <InputWrapper>
-        <InputIcon
-          src={PersonImage}
-          alt="이름 입력 아이콘"
-        />
-        <NameInput
-          ref={nameInputRef}
-          id="name"
-          type="text"
-          placeholder="이름을 입력해주세요"
-        />
+        <InputIcon src={PersonImage} alt="이름 입력 아이콘" />
+        <NameInput ref={nameInputRef} id="name" type="text" placeholder="이름을 입력해주세요" />
       </InputWrapper>
-      <SubmitButton
-        type="submit"
-        disabled={isCreating}
-      >
+      <SubmitButton type="submit" disabled={isCreating}>
         {isCreating ? '생성 중...' : '질문 받기'}
       </SubmitButton>
     </Form>
   );
 }
-
-
