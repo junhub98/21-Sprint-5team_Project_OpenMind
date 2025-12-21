@@ -9,7 +9,7 @@ import Photo from '../assets/Photo.png';
 
 
 
-export default function ProfileHeader () {
+function ProfileHeader () {
   return(
     <section className="profile-header">
 
@@ -32,3 +32,5 @@ export default function ProfileHeader () {
     </section>
   );
 };
+
+export default ProfileHeader

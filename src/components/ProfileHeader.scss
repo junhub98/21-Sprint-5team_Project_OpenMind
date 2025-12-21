@@ -1,10 +1,9 @@
-/* 프로필 헤더 */
 .profile-header {
   width: 100%;
   position: relative;
   
 
-  /* 프로필 커버 */
+
   .profile-cover {
     position: relative;
     height: 260px;
@@ -33,7 +32,6 @@
 
   }
 
-  /* 프로필 정보 */
   .profile-info {
     position: absolute;
     left: 50%;
@@ -55,7 +53,6 @@
     }
   }
 
-  /* 프로필 소셜 서비스 */
   .profile-social {
     margin-top: 24px;
     display: flex;

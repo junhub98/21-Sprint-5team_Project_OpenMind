@@ -1,23 +1,31 @@
 /*소셜 네트워크 서비스 버튼 */
+import './ProfileSocialButtons.scss';
 import styled from 'styled-components';
 import ShareLink from '../assets/ShareLinkIcon.png';
 import ShareKakao from '../assets/ShareKakaoIcon.png';
 import ShareFacebook from '../assets/ShareFacebookIcon.png';
+import { useLocation } from 'react-router-dom';
+import { useState } from 'react';
 
-const ImageButton = styled.button`
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 12px;
-  
-  &:hover {
-    opacity: 0.5;
-  }
-`;
 
-export default function SocialButtons() {
-  const LinkHandleClick = () => {
-    alert('링크!');
+function SocialButtons() {
+  const location = useLocation();
+
+  const [showToast, setShowToast] = useState(false);
+
+  const url = window.location.href;
+
+  const LinkHandleClick = async () => {
+    try {
+      await navigator.clipboard.writeText(url);
+      setShowToast(true);
+
+      setTimeout(() => {
+        setShowToast(false);
+      }, 5000);
+    } catch (error) {
+      console.error('URL 복사 실패', error);
+    }
   };
 
   const KakaoHandleClick = () => {
@@ -30,15 +38,21 @@ export default function SocialButtons() {
 
   return (
     <>
-      <ImageButton onClick={LinkHandleClick}>
-        <img src={ShareLink} alt="외부링크" />
-      </ImageButton>
-      <ImageButton onClick={KakaoHandleClick}>
-        <img src={ShareKakao} alt="카카오" />
-      </ImageButton>
-      <ImageButton onClick={FacebookHandleClick}>
-        <img src={ShareFacebook} alt="페이스북" />
-      </ImageButton>
+      <button className="image-button" onClick={LinkHandleClick}>
+        <img src={ShareLink} alt="링크 복사" />
+      </button>
+
+      <button className="image-button" onClick={KakaoHandleClick}>
+        <img src={ShareKakao} alt="카카오 공유" />
+      </button>
+
+      <button className="image-button" onClick={FacebookHandleClick}>
+        <img src={ShareFacebook} alt="페이스북 공유" />
+      </button>
+
+      {showToast && <div className='toast'>URL이 복사되었습니다</div>}
     </>
   );
 };
+
+export default SocialButtons;

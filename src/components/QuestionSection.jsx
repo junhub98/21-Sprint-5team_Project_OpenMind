@@ -1,10 +1,12 @@
-/* 질문 공용 컴포넌트 */
-import QuestionCard from "./QuestionCard";
+import QuestionList from "./QuestionList";
+import 'react-toastify/dist/ReactToastify.css';
 
-export default function QuestionSection () {
+function QuestionSection () {
   return(
     <div>
-      <QuestionCard />
+      <QuestionList />
     </div>
   );
 };
+
+export default QuestionSection;
