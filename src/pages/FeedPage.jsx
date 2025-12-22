@@ -1,11 +1,13 @@
 import FeedHeader from '../components/FeedHeader';
 import { getQuestionsList, getSubjectById } from '../utils/getDataApi';
 import QuestionsList from '../components/QuestionsList';
-import { useEffect, useRef, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useEffect, useRef, useState, useCallback } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import CreateQuestionButton from '../components/CreateQuestionButton';
+import styles from './FeedPage.module.css';
 
 export default function FeedPage() {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const subjectId = searchParams.get('subjectId');
 
@@ -19,7 +21,7 @@ export default function FeedPage() {
   const inFlightRef = useRef(false);
   const didInitRef = useRef(false);
 
-  const loadMore = async () => {
+  const loadMore = useCallback(async () => {
     if (!subjectId) return;
     if (!hasMoreRef.current) return;
     if (inFlightRef.current) return;
@@ -43,7 +45,7 @@ export default function FeedPage() {
     hasMoreRef.current = Boolean(res?.next);
 
     inFlightRef.current = false;
-  };
+  }, [subjectId, subjectName]);
 
   useEffect(() => {
     if (!subjectId) return;
@@ -63,7 +65,7 @@ export default function FeedPage() {
       await loadMore();
       window.scrollTo({ top: 0, behavior: 'auto' });
     })();
-  }, [subjectId]);
+  }, [subjectId, loadMore]);
 
   useEffect(() => {
     const onScroll = () => {
@@ -75,25 +77,18 @@ export default function FeedPage() {
 
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
-  }, [subjectId, subjectName]);
+  }, [loadMore]);
 
-  if (!subjectId) {
-    return (
-      <>
-        <FeedHeader />
-        <div style={{ textAlign: 'center', marginTop: 40 }}>
-          <code>/FeedPage?subjectId=숫자</code> 로 접근해주세요
-        </div>
-        <CreateQuestionButton />
-      </>
-    );
-  }
+  const goToCreateQuestion = () => {
+    if (!subjectId) return;
+    navigate(`/CreateQuestion`);
+  };
 
   return (
-    <>
+    <div className={styles.feedPage}>
       <FeedHeader />
       <QuestionsList questions={questions} />
-      <CreateQuestionButton />
-    </>
+      <CreateQuestionButton onClick={goToCreateQuestion} />
+    </div>
   );
 }

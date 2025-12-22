@@ -1,0 +1,19 @@
+.CreateQuestionCard {
+  width: 716px;
+  height: 330px;
+  margin: 250px auto;
+  padding: 16px 24px;
+  border: 1px solid #e4d5c9;
+  background-color: #f5f1ee;
+  border-radius: 16px;
+  text-align: center;
+}
+
+.CreateQuestionCard p {
+  font-size: 20px;
+  font-weight: 400;
+  color: #542f1a;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}

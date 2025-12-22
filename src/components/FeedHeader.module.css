@@ -1,12 +1,17 @@
 .headerWrapper {
   position: relative;
   width: 100%;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
 .bannerContainer {
   position: relative;
-  width: 100%;
+  width: 100vw;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
   height: 234px;
   overflow: hidden;
 }
@@ -73,4 +78,42 @@
   color: #ffffff;
   font-size: 14px;
   z-index: 10;
+}
+
+/* 미디어쿼리 */
+
+@media (max-width: 950px) {
+  .headerWrapper {
+    max-width: 704px;
+  }
+}
+
+@media (max-width: 768px) {
+  .headerWrapper {
+    max-width: 327px;
+    height: 177px;
+  }
+
+  .profileContainer {
+    top: 36px;
+    text-align: center;
+  }
+
+  .logoImage {
+    width: 124px;
+    height: 49px;
+  }
+
+  .profileImage {
+    width: 104px;
+    height: 104px;
+  }
+
+  .profileTitle {
+    font-size: 24px;
+  }
+
+  .socialContainer {
+    gap: 12px;
+  }
 }

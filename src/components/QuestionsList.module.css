@@ -33,3 +33,25 @@
   flex-direction: column;
   gap: 20px;
 }
+
+@media (max-width: 950px) {
+  .questionListContainer {
+    width: 704px;
+  }
+  .list {
+    width: 672px;
+    align-items: center;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .questionListContainer {
+    width: 327px;
+  }
+  .list {
+    width: 295px;
+    align-items: center;
+    margin: 0 auto;
+  }
+}
