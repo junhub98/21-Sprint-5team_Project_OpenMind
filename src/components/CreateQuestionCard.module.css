@@ -17,3 +17,16 @@
   justify-content: center;
   gap: 6px;
 }
+
+/* 미디어 쿼리 */
+@media (max-width: 950px) {
+  .CreateQuestionCard {
+    width: 704px;
+  }
+}
+
+@media (max-width: 768px) {
+  .CreateQuestionCard {
+    width: 327px;
+  }
+}

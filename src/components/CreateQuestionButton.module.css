@@ -16,3 +16,16 @@
   border-radius: 200px;
   cursor: pointer;
 }
+
+@media (max-width: 950px) {
+  .createQuestionButton {
+    width: 208px;
+  }
+}
+
+@media (max-width: 768px) {
+  .createQuestionButton {
+    width: 123px;
+    font-size: 18px;
+  }
+}
