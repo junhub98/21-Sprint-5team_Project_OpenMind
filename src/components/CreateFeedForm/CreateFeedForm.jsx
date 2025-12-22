@@ -1,15 +1,100 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PersonImage from '../../assets/Images/Person.png';
 import { createSubject } from '../../utils/getDataApi';
-import { Form, InputIcon, InputWrapper, NameInput, SubmitButton } from './CreateFeedForm.styles';
+import {
+  Form,
+  InputIcon,
+  InputWrapper,
+  NameInput,
+  SubmitButton,
+  TagButton,
+  TagDropdown,
+  TagList,
+  TagItem,
+  SelectedTag,
+  TagButtonWrapper,
+} from './CreateFeedForm.styles';
+
+// 태그 리스트 (필요에 따라 수정 가능)
+const TAG_LIST = [
+  '마케팅',
+  '영업',
+  '운영',
+  '기타',
+  '취미',
+  '일상',
+  '여행',
+];
 
 export default function CreateFeedForm() {
   const nameInputRef = useRef(null);
+  const tagDropdownRef = useRef(null);
+  const selectedTagRef = useRef(null);
+  const selectedTagDisplayRef = useRef(null);
   const [isCreating, setIsCreating] = useState(false);
   const navigate = useNavigate();
 
-  const handleCreateFeed = async (event) => {
+  // 드롭다운 표시/숨김을 DOM 직접 조작으로 처리
+  const toggleDropdown = useCallback((show) => {
+    if (tagDropdownRef.current) {
+      tagDropdownRef.current.style.display = show ? 'block' : 'none';
+    }
+  }, []);
+
+  // 외부 클릭 시 드롭다운 닫기
+  const handleClickOutside = useCallback((event) => {
+    if (
+      tagDropdownRef.current &&
+      !tagDropdownRef.current.contains(event.target) &&
+      !event.target.closest('[data-tag-button]')
+    ) {
+      toggleDropdown(false);
+    }
+  }, [toggleDropdown]);
+
+  const handleTagButtonClick = useCallback((event) => {
+    event.preventDefault();
+    const isVisible = tagDropdownRef.current?.style.display === 'block';
+    toggleDropdown(!isVisible);
+
+    if (!isVisible) {
+      // 드롭다운이 열릴 때만 이벤트 리스너 추가
+      setTimeout(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+      }, 0);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [toggleDropdown, handleClickOutside]);
+
+  const handleTagSelect = useCallback((tag) => {
+    selectedTagRef.current = tag;
+    
+    // 선택된 태그 표시 영역 업데이트 (DOM 직접 조작)
+    if (selectedTagDisplayRef.current) {
+      const tagText = selectedTagDisplayRef.current.querySelector('[data-tag-text]');
+      if (tagText) {
+        tagText.textContent = `#${tag}`;
+      }
+      selectedTagDisplayRef.current.style.display = 'flex';
+    }
+    
+    toggleDropdown(false);
+    document.removeEventListener('mousedown', handleClickOutside);
+  }, [toggleDropdown, handleClickOutside]);
+
+  const handleRemoveTag = useCallback((event) => {
+    event.preventDefault();
+    selectedTagRef.current = null;
+    
+    // 선택된 태그 표시 영역 숨기기
+    if (selectedTagDisplayRef.current) {
+      selectedTagDisplayRef.current.style.display = 'none';
+    }
+  }, []);
+
+  const handleCreateFeed = useCallback(async (event) => {
     event.preventDefault();
 
     const trimmedName = nameInputRef.current?.value.trim() || '';
@@ -21,7 +106,8 @@ export default function CreateFeedForm() {
     try {
       setIsCreating(true);
 
-      const created = await createSubject(trimmedName);
+      const selectedTag = selectedTagRef.current;
+      const created = await createSubject(trimmedName, selectedTag);
       // 응답으로 받은 id를 로컬스토리지에 저장
       localStorage.setItem('subjectId', created.id.toString());
       navigate(`/post/${created.id}/answer`);
@@ -31,14 +117,34 @@ export default function CreateFeedForm() {
     } finally {
       setIsCreating(false);
     }
-  };
+  }, [navigate]);
 
   return (
     <Form onSubmit={handleCreateFeed}>
       <InputWrapper>
         <InputIcon src={PersonImage} alt="이름 입력 아이콘" />
         <NameInput ref={nameInputRef} id="name" type="text" placeholder="이름을 입력해주세요" />
+        <TagButtonWrapper>
+          <TagButton type="button" data-tag-button onClick={handleTagButtonClick}>
+            태그
+          </TagButton>
+          <TagDropdown ref={tagDropdownRef} style={{ display: 'none' }}>
+            <TagList>
+              {TAG_LIST.map((tag) => (
+                <TagItem key={tag} onClick={() => handleTagSelect(tag)}>
+                  {tag}
+                </TagItem>
+              ))}
+            </TagList>
+          </TagDropdown>
+        </TagButtonWrapper>
       </InputWrapper>
+      <SelectedTag ref={selectedTagDisplayRef} style={{ display: 'none' }}>
+        <span data-tag-text></span>
+        <button type="button" data-tag-remove onClick={handleRemoveTag}>
+          ×
+        </button>
+      </SelectedTag>
       <SubmitButton type="submit" disabled={isCreating}>
         {isCreating ? '생성 중...' : '질문 받기'}
       </SubmitButton>

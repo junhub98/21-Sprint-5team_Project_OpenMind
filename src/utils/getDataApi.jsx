@@ -23,8 +23,16 @@ export async function getQuestionsList(subjectId, currentCards, loadCount) {
   return data;
 }
 
-export async function createSubject(name) {
-  const response = await axios.post('/subjects/', { name });
+export async function createSubject(name, tag = null) {
+  const subjectName = tag ? `${name}#tag:${tag}` : name;
+  const response = await axios.post('/subjects/', { name: subjectName });
   return response.data;
 }
 
+export function parseSubjectName(subjectName) {
+  const parts = subjectName.split('#tag:');
+  if (parts.length === 2) {
+    return { name: parts[0], tag: parts[1] };
+  }
+  return { name: subjectName, tag: null };
+}
