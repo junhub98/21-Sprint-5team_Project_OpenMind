@@ -18,4 +18,3 @@ const Skeleton = styled.div`
 `;
 
 export default Skeleton;
-
