@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import kebabIcon from '../../assets/Kebab.png';
+import kebabIcon from '../../assets/SubjectPostAnswerPage/Kebab.png';
 
 const Kebab = styled.div`
   position: relative;

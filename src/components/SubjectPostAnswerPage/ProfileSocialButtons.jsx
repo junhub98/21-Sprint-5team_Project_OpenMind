@@ -2,9 +2,9 @@
 import { useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import styled from 'styled-components';
-import ShareLink from '../../assets/ShareLinkIcon.png';
-import ShareKakao from '../../assets/ShareKakaoIcon.png';
-import ShareFacebook from '../../assets/ShareFacebookIcon.png';
+import ShareLink from '../../assets/SubjectPostAnswerPage/ShareLinkIcon.png';
+import ShareKakao from '../../assets/SubjectPostAnswerPage/ShareKakaoIcon.png';
+import ShareFacebook from '../../assets/SubjectPostAnswerPage/ShareFacebookIcon.png';
 
 const ImageButton = styled.button`
   background: none;

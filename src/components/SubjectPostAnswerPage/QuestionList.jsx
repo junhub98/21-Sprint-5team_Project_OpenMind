@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import QuestionCard from './QuestionCard';
-import Messages from '../../assets/Messages.png';
-import Mailbox from '../../assets/Mailbox.png';
+import Messages from '../../assets/SubjectPostAnswerPage/Messages.png';
+import Mailbox from '../../assets/SubjectPostAnswerPage/Mailbox.png';
 
 const QuestionListWrapper=styled.section`
   width: 100%;

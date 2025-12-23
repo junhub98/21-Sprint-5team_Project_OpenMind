@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import styled, {css} from 'styled-components';
-import ThumbsUp from '../../assets/thumbs-Up.png';
-import ThumbsDown from '../../assets/thumbs-down.png';
-import ThumbsUpActive from '../../assets/thumbs-up-active.png';
-import ThumbsDownActive from '../../assets/thumbs-down-active.png';
+import ThumbsUp from '../../assets/SubjectPostAnswerPage/thumbs-Up.png';
+import ThumbsDown from '../../assets/SubjectPostAnswerPage/thumbs-down.png';
+import ThumbsUpActive from '../../assets/SubjectPostAnswerPage/thumbs-up-active.png';
+import ThumbsDownActive from '../../assets/SubjectPostAnswerPage/thumbs-down-active.png';
 
 const ReactionContainer = styled.ul`
   display: flex;

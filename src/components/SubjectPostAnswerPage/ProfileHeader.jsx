@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import SocialButtons from './ProfileSocialButtons';
-import Logo from '../../assets/logo.png';
-import LogoOpenmind from '../../assets/logoOpenmind.png';
-import Photo from '../../assets/Photo.png';
+import Logo from '../../assets/SubjectPostAnswerPage/logo.png';
+import LogoOpenmind from '../../assets/SubjectPostAnswerPage/logoOpenmind.png';
+import Photo from '../../assets/SubjectPostAnswerPage/Photo.png';
 
 const ProfileHeaderWrapper = styled.section`
   width: 100%;
