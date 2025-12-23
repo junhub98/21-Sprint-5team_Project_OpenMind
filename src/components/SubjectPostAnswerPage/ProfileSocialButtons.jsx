@@ -1,11 +1,42 @@
 /*소셜 네트워크 서비스 버튼 */
-import './ProfileSocialButtons.scss';
-import styled from 'styled-components';
-import ShareLink from '../assets/ShareLinkIcon.png';
-import ShareKakao from '../assets/ShareKakaoIcon.png';
-import ShareFacebook from '../assets/ShareFacebookIcon.png';
 import { useLocation } from 'react-router-dom';
 import { useState } from 'react';
+import styled from 'styled-components';
+import ShareLink from '../../assets/ShareLinkIcon.png';
+import ShareKakao from '../../assets/ShareKakaoIcon.png';
+import ShareFacebook from '../../assets/ShareFacebookIcon.png';
+
+const ImageButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 12px;
+
+  &:hover {
+    opacity: 0.5;
+  }
+
+  img {
+    display: block;
+  }
+
+`;
+
+const Toast = styled.div`
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #ffffff;
+
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+
+  z-index: 1000;
+`;
 
 
 function SocialButtons() {
@@ -38,19 +69,19 @@ function SocialButtons() {
 
   return (
     <>
-      <button className="image-button" onClick={LinkHandleClick}>
+      <ImageButton onClick={LinkHandleClick}>
         <img src={ShareLink} alt="링크 복사" />
-      </button>
+      </ImageButton>
 
-      <button className="image-button" onClick={KakaoHandleClick}>
+      <ImageButton onClick={KakaoHandleClick}>
         <img src={ShareKakao} alt="카카오 공유" />
-      </button>
+      </ImageButton>
 
-      <button className="image-button" onClick={FacebookHandleClick}>
+      <ImageButton onClick={FacebookHandleClick}>
         <img src={ShareFacebook} alt="페이스북 공유" />
-      </button>
+      </ImageButton>
 
-      {showToast && <div className='toast'>URL이 복사되었습니다</div>}
+      {showToast && <Toast>URL이 복사되었습니다</Toast>}
     </>
   );
 };

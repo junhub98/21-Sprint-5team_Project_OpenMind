@@ -1,5 +1,5 @@
-import ProfileHeader from '../components/ProfileHeader';
-import QuestionSection from '../components/QuestionSection';
+import ProfileHeader from '../components/SubjectPostAnswerPage/ProfileHeader';
+import QuestionSection from '../components/SubjectPostAnswerPage/QuestionSection';
 
 
 export default function PostPage() {

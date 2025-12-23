@@ -1,9 +1,16 @@
 import QuestionList from "./QuestionList";
-import 'react-toastify/dist/ReactToastify.css';
+import { createGlobalStyle } from 'styled-components';
+
+const GlobalStyle = createGlobalStyle`
+  html {
+    overflow-y: scroll;
+  }
+`;
 
 function QuestionSection () {
   return(
     <div>
+      <GlobalStyle />
       <QuestionList />
     </div>
   );
