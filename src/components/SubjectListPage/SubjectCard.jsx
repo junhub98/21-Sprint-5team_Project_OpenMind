@@ -101,10 +101,8 @@ const Row = styled(InfoBox)`
 `;
 
 const QuestionImg = styled.img`
-  ${media.mobile`
-    width: 16px;
-    height: 16px;
-  `}
+  width: 16px;
+  height: 16px;
 `;
 
 const UserTag = styled.span`
@@ -131,13 +129,13 @@ const SubjectCard = memo(function SubjectCard({ subject }) {
       <Card>
         <UserBox>
           {userTag && <UserTag>#{userTag}</UserTag>}
-          <UserImg src={subject.imageSource} />
+          <UserImg src={subject.imageSource} alt="피드 유저 프로필 이미지" />
           {userName}
         </UserBox>
 
         <InfoBox>
           <Row>
-            <QuestionImg src={messagesIC} />
+            <QuestionImg src={messagesIC} alt="받은 질문 개수 이미지" />
             받은 질문
           </Row>
           {subject.questionCount}개

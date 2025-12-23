@@ -101,7 +101,12 @@ export default function SettingMenu({
 
   return (
     <>
-      <SettingImg ref={settingImgRef} onClick={() => setIsOpen((prev) => !prev)} src={settingIc} />
+      <SettingImg
+        ref={settingImgRef}
+        onClick={() => setIsOpen((prev) => !prev)}
+        src={settingIc}
+        alt="환경설정 이미지"
+      />
       {isOpen && (
         <SettingBox ref={settingBoxRef}>
           <ul>

@@ -91,7 +91,11 @@ export default function SortMenu() {
         >
           {sortOptions.map((option) => option.value == orderBy && option.name)}
         </button>
-        {isOpen ? <ArrowUp src={arrowUpIC} /> : <ArrowDown src={arrowDownIC} />}
+        {isOpen ? (
+          <ArrowUp src={arrowUpIC} alt="화살표 위로 향한 이미지" />
+        ) : (
+          <ArrowDown src={arrowDownIC} alt="화살표 아래로 향한 이미지" />
+        )}
       </div>
 
       {isOpen && (

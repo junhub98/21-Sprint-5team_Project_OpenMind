@@ -83,11 +83,11 @@ const SubjectsListPageNav = memo(function SubjectsListPageNav({
   return (
     <Header>
       <Link to="/">
-        <LogoImg src={logoImg} />
+        <LogoImg src={logoImg} alt="오픈마인드 로고 이미지" />
       </Link>
       <Button onClick={handleClick}>
         답변하러가기
-        <Arrow src={arrowRight} />
+        <Arrow src={arrowRight} alt="화살표 이미지" />
       </Button>
       <SettingMenu
         setIsScrollMode={setIsScrollMode}
