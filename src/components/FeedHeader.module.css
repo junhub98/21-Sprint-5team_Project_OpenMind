@@ -1,0 +1,119 @@
+.headerWrapper {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.bannerContainer {
+  position: relative;
+  width: 100vw;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  height: 234px;
+  overflow: hidden;
+}
+
+.bannerImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profileContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+.logoImage {
+  margin-bottom: 15px;
+  width: 170px;
+  height: 67px;
+}
+
+.profileImage {
+  width: 136px;
+  height: 136px;
+}
+
+.profileTitle {
+  font-family: Pretendard;
+  font-weight: 400;
+  font-size: 32px;
+}
+
+.socialContainer {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.socialContainer button {
+  all: unset;
+  display: inline-flex;
+  cursor: pointer;
+}
+
+.socialContainer a {
+  display: inline-flex;
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  background-color: #000000;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-weight: 500;
+  color: #ffffff;
+  font-size: 14px;
+  z-index: 10;
+}
+
+/* 미디어쿼리 */
+
+@media (max-width: 950px) {
+  .headerWrapper {
+    max-width: 704px;
+  }
+}
+
+@media (max-width: 768px) {
+  .headerWrapper {
+    max-width: 327px;
+    height: 177px;
+  }
+
+  .profileContainer {
+    top: 36px;
+    text-align: center;
+  }
+
+  .logoImage {
+    width: 124px;
+    height: 49px;
+  }
+
+  .profileImage {
+    width: 104px;
+    height: 104px;
+  }
+
+  .profileTitle {
+    font-size: 24px;
+  }
+
+  .socialContainer {
+    gap: 12px;
+  }
+}

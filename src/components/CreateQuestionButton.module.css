@@ -1,0 +1,31 @@
+.createQuestionButton {
+  width: 208px;
+  height: 54px;
+  position: fixed;
+  right: 30px;
+  bottom: 30px;
+  z-index: 1000;
+  background-color: #542f1a;
+  border: none;
+  color: #ffffff;
+  font-weight: 400;
+  font-size: 20px;
+  padding: 12px 24px;
+  text-align: center;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  border-radius: 200px;
+  cursor: pointer;
+}
+
+@media (max-width: 950px) {
+  .createQuestionButton {
+    width: 208px;
+  }
+}
+
+@media (max-width: 768px) {
+  .createQuestionButton {
+    width: 123px;
+    font-size: 18px;
+  }
+}

@@ -1,0 +1,174 @@
+.questionCard {
+  width: 684px;
+  height: auto;
+  padding: 16px;
+  background-color: #ffffff;
+  text-align: left;
+  box-shadow: 0px 4px 4px rgba(140, 140, 140, 0.25);
+  border-radius: 16px;
+}
+
+.questionList {
+  width: 620px;
+  margin: 0 auto;
+}
+
+.answerStatus span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #542f1a;
+  padding: 4px 12px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 14px;
+  color: #542f1a;
+}
+
+.answerStatus span.notAnswered {
+  border: 1px solid #818181;
+  color: #818181;
+}
+
+.questionItems {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  margin-top: 20px;
+  gap: 2px;
+}
+
+.question {
+  display: flex;
+  gap: 5px;
+}
+
+.questionText,
+.timeText,
+.dot {
+  font-weight: 500;
+  font-size: 14px;
+  color: #818181;
+}
+
+.questionContent {
+  font-weight: 400;
+  font-size: 18px;
+  color: #000000;
+}
+
+.answerItems {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.profileImage {
+  width: 48px;
+  height: 48px;
+}
+
+.questionLabel {
+  display: flex;
+  flex-direction: column;
+}
+
+.metaLine {
+  display: flex;
+  align-items: center;
+}
+
+.nickName {
+  font-weight: 400;
+  font-size: 18px;
+  margin: 0;
+}
+
+.answerTime {
+  margin-left: 5px;
+  font-weight: 500;
+  font-size: 14px;
+  color: #818181;
+}
+
+.answerContent {
+  font-weight: 400;
+  font-size: 16px;
+  margin: 0;
+  line-height: 1.5;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+hr {
+  width: 620px;
+  border: 1px solid #cfcfcf;
+  margin: 20px 0;
+}
+
+.reactionContainer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 10px 0;
+}
+
+.reactionButton {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #8c8c8c;
+  gap: 6px;
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+  color: currentColor;
+}
+
+.likeActive {
+  color: #1877f2;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.dislikeActive {
+  color: #b93333;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* 미디어 쿼리 */
+@media (max-width: 950px) {
+  .questionCard {
+    width: 684px;
+  }
+
+  .questionList {
+    width: 620px;
+  }
+
+  hr {
+    width: 608px;
+  }
+}
+
+@media (max-width: 768px) {
+  .questionCard {
+    width: 295px;
+  }
+
+  .questionList {
+    width: 295px;
+  }
+
+  hr {
+    width: 247px;
+  }
+}
