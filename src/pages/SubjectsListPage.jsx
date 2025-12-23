@@ -75,10 +75,12 @@ export default function SubjectsListPage() {
   const [totalPages, setTotalPages] = useState(50);
   const { orderBy } = useSortParam();
   const { currentPage, setCurrentPage } = usePaginationParam();
+
   const isLoading = subjects.length == 0 ? true : false;
 
   const scrollArgs = {
     callback: () => setScrollPage((prev) => prev + 1),
+    loadSubjectsScroll,
     isScrollLoading,
     hasNextScroll,
     isScrollMode,
@@ -144,9 +146,8 @@ export default function SubjectsListPage() {
   // api 호출 실행
 
   useEffect(() => {
-    if (isScrollMode) loadSubjectsScroll();
-    else loadSubjects();
-  }, [currentPage, orderBy, pageSize, scrollPage, isScrollMode]);
+    if (!isScrollMode) loadSubjects();
+  }, [currentPage, orderBy, pageSize, isScrollMode]);
 
   // 스크롤 감지할 DOM에 연결 할 useRef 반환
   const scrollRef = useIntersectionObserver(scrollArgs);

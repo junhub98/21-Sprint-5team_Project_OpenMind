@@ -14,8 +14,8 @@ function App() {
         <Route path="/">
           <Route index element={<MainPage />} />
           <Route path="list" element={<SubjectsListPage />} />
-          <Route path="/FeedPage" element={<FeedPage />} />
-          <Route path="/post/:subjectId" element={<CreateQuestion />} />
+
+          <Route path="/post/:subjectId" element={<FeedPage />} />
           <Route path="/post/:subjectId/answer" element={<SubjectsPostPage />} />
         </Route>
       </Routes>

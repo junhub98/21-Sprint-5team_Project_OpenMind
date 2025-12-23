@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 
 export default function useIntersectionObserver({
   callback,
+  loadSubjectsScroll,
   isScrollLoading,
   hasNextScroll,
   isScrollMode,
@@ -12,6 +13,7 @@ export default function useIntersectionObserver({
   useEffect(() => {
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting && hasNextScroll != null && !isScrollLoading) {
+        loadSubjectsScroll();
         callback();
       }
     });
