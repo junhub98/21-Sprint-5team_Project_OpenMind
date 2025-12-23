@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import settingIc from '../../assets/SubjectsListPage/setting.png';
 import Toggle from '../../utils/Toggle';
@@ -69,11 +69,13 @@ const SettingOption = styled.li`
 
 export default function SettingMenu({
   setIsScrollMode,
-
+  isScrollMode,
   setScrollPage,
   setScrollPageParams,
 }) {
-  const [isOn, setIsOn] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const settingBoxRef = useRef(null);
+  const settingImgRef = useRef(null);
 
   const handleClick = () => {
     setIsScrollMode((prev) => !prev);
@@ -81,15 +83,31 @@ export default function SettingMenu({
     setScrollPageParams([]);
   };
 
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleClick = (e) => {
+      if (
+        !settingBoxRef?.current.contains(e.target) &&
+        !settingImgRef?.current.contains(e.target)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    window.addEventListener('click', handleClick);
+    return () => window.removeEventListener('click', handleClick);
+  }, [isOpen]);
+
   return (
     <>
-      <SettingImg onClick={() => setIsOn((prev) => !prev)} src={settingIc} />
-      {isOn && (
-        <SettingBox>
+      <SettingImg ref={settingImgRef} onClick={() => setIsOpen((prev) => !prev)} src={settingIc} />
+      {isOpen && (
+        <SettingBox ref={settingBoxRef}>
           <ul>
             <SettingOption>
               Scroll 모드
-              <Toggle callback={handleClick} />
+              <Toggle isScrollMode={isScrollMode} callback={handleClick} />
             </SettingOption>
             <SettingOption>
               Dark 모드

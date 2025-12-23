@@ -70,6 +70,7 @@ const SubjectsListPageNav = memo(function SubjectsListPageNav({
   setIsScrollMode,
   setScrollPage,
   setScrollPageParams,
+  isScrollMode,
 }) {
   return (
     <Header>
@@ -84,6 +85,7 @@ const SubjectsListPageNav = memo(function SubjectsListPageNav({
         setIsScrollMode={setIsScrollMode}
         setScrollPage={setScrollPage}
         setScrollPageParams={setScrollPageParams}
+        isScrollMode={isScrollMode}
       />
     </Header>
   );

@@ -41,18 +41,18 @@ const ToggleBall = styled.div`
  * <Toggle callback={setEnabled} />
  */
 
-export default function Toggle({ callback }) {
+export default function Toggle({ callback, isScrollMode }) {
   const [isOn, setIsOn] = useState(false);
 
   return (
     <ToggleBox
-      $active={isOn}
+      $active={isScrollMode}
       onClick={() => {
         setIsOn((prev) => !prev);
         callback((prev) => !prev);
       }}
     >
-      <ToggleBall $active={isOn} />
+      <ToggleBall $active={isScrollMode} />
     </ToggleBox>
   );
 }

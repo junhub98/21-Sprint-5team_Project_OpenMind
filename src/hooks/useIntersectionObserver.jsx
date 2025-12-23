@@ -1,6 +1,11 @@
 import { useEffect, useRef } from 'react';
 
-export default function ({ callback, isScrollLoading, hasNextScroll, isScrollMode }) {
+export default function useIntersectionObserver({
+  callback,
+  isScrollLoading,
+  hasNextScroll,
+  isScrollMode,
+}) {
   const ref = useRef(); //하단 로딩바 DOM과 연결해줄 useRef
 
   // observer가 감지됐을때 실행 할 콜백

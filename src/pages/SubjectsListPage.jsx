@@ -95,6 +95,7 @@ export default function SubjectsListPage() {
     const sixGridMedia = window.matchMedia('(max-width: 863px)');
 
     const sixGridHandleChange = (e) => {
+      setSubjects([]);
       if (e.matches) setPageSize(6);
       else setPageSize(8);
     };
@@ -155,6 +156,7 @@ export default function SubjectsListPage() {
         setIsScrollMode={setIsScrollMode}
         setScrollPage={setScrollPage}
         setScrollPageParams={setScrollPageParams}
+        isScrollMode={isScrollMode}
       />
       <Container>
         <SortBox>

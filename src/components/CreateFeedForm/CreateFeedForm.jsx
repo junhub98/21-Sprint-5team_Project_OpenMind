@@ -17,15 +17,7 @@ import {
 } from './CreateFeedForm.styles';
 
 // 태그 리스트 (필요에 따라 수정 가능)
-const TAG_LIST = [
-  '마케팅',
-  '영업',
-  '운영',
-  '기타',
-  '취미',
-  '일상',
-  '여행',
-];
+const TAG_LIST = ['마케팅', '영업', '운영', '기타', '취미', '일상', '여행'];
 
 export default function CreateFeedForm() {
   const nameInputRef = useRef(null);
@@ -36,14 +28,14 @@ export default function CreateFeedForm() {
   const navigate = useNavigate();
 
   // 드롭다운 표시/숨김을 DOM 직접 조작으로 처리
-  const toggleDropdown = useCallback((show) => {
+  const toggleDropdown = (show) => {
     if (tagDropdownRef.current) {
       tagDropdownRef.current.style.display = show ? 'block' : 'none';
     }
-  }, []);
+  };
 
   // 외부 클릭 시 드롭다운 닫기
-  const handleClickOutside = useCallback((event) => {
+  const handleClickOutside = (event) => {
     if (
       tagDropdownRef.current &&
       !tagDropdownRef.current.contains(event.target) &&
@@ -51,9 +43,9 @@ export default function CreateFeedForm() {
     ) {
       toggleDropdown(false);
     }
-  }, [toggleDropdown]);
+  };
 
-  const handleTagButtonClick = useCallback((event) => {
+  const handleTagButtonClick = (event) => {
     event.preventDefault();
     const isVisible = tagDropdownRef.current?.style.display === 'block';
     toggleDropdown(!isVisible);
@@ -66,11 +58,11 @@ export default function CreateFeedForm() {
     } else {
       document.removeEventListener('mousedown', handleClickOutside);
     }
-  }, [toggleDropdown, handleClickOutside]);
+  };
 
-  const handleTagSelect = useCallback((tag) => {
+  const handleTagSelect = (tag) => {
     selectedTagRef.current = tag;
-    
+
     // 선택된 태그 표시 영역 업데이트 (DOM 직접 조작)
     if (selectedTagDisplayRef.current) {
       const tagText = selectedTagDisplayRef.current.querySelector('[data-tag-text]');
@@ -79,22 +71,22 @@ export default function CreateFeedForm() {
       }
       selectedTagDisplayRef.current.style.display = 'flex';
     }
-    
+
     toggleDropdown(false);
     document.removeEventListener('mousedown', handleClickOutside);
-  }, [toggleDropdown, handleClickOutside]);
+  };
 
-  const handleRemoveTag = useCallback((event) => {
+  const handleRemoveTag = (event) => {
     event.preventDefault();
     selectedTagRef.current = null;
-    
+
     // 선택된 태그 표시 영역 숨기기
     if (selectedTagDisplayRef.current) {
       selectedTagDisplayRef.current.style.display = 'none';
     }
-  }, []);
+  };
 
-  const handleCreateFeed = useCallback(async (event) => {
+  const handleCreateFeed = async (event) => {
     event.preventDefault();
 
     const trimmedName = nameInputRef.current?.value.trim() || '';
@@ -117,7 +109,7 @@ export default function CreateFeedForm() {
     } finally {
       setIsCreating(false);
     }
-  }, [navigate]);
+  };
 
   return (
     <Form onSubmit={handleCreateFeed}>
