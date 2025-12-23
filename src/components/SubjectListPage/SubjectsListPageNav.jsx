@@ -4,7 +4,7 @@ import arrowRight from '../../assets/SubjectsListPage/arrow-right.png';
 import media from '../../utils/media';
 import { memo } from 'react';
 import SettingMenu from './SettingMenu';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Header = styled.div`
   width: 100%;
@@ -72,12 +72,20 @@ const SubjectsListPageNav = memo(function SubjectsListPageNav({
   setScrollPageParams,
   isScrollMode,
 }) {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    const subjectId = localStorage.getItem('subjectId');
+    if (subjectId) navigate(`/post/${subjectId}/answer`);
+    else navigate('/');
+  };
+
   return (
     <Header>
       <Link to="/">
         <LogoImg src={logoImg} />
       </Link>
-      <Button>
+      <Button onClick={handleClick}>
         답변하러가기
         <Arrow src={arrowRight} />
       </Button>
