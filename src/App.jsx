@@ -11,15 +11,13 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-
         <Route path="/">
           <Route index element={<MainPage />} />
           <Route path="list" element={<SubjectsListPage />} />
-      <Route path="/FeedPage" element={<FeedPage />} />
-        <Route path="/CreateQuestion" element={<CreateQuestion />} />
+          <Route path="/FeedPage" element={<FeedPage />} />
+          <Route path="/post/:subjectId" element={<CreateQuestion />} />
           <Route path="/post/:subjectId/answer" element={<SubjectsPostPage />} />
         </Route>
-
       </Routes>
     </BrowserRouter>
   );

@@ -2,6 +2,7 @@ import styled, { keyframes } from 'styled-components';
 import messagesIC from '../../assets/SubjectsListPage/Messages.png';
 import media from '../../utils/media';
 import { memo } from 'react';
+import { Link } from 'react-router-dom';
 
 //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ    styled-components   ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
@@ -126,21 +127,23 @@ const SubjectCard = memo(function SubjectCard({ subject }) {
   const userName = subject?.name?.split('#tag:')[0];
   const userTag = subject?.name?.split('#tag:')[1];
   return (
-    <Card>
-      <UserBox>
-        {userTag && <UserTag>#{userTag}</UserTag>}
-        <UserImg src={subject.imageSource} />
-        {userName}
-      </UserBox>
+    <Link to={`/post/${subject.id}`}>
+      <Card>
+        <UserBox>
+          {userTag && <UserTag>#{userTag}</UserTag>}
+          <UserImg src={subject.imageSource} />
+          {userName}
+        </UserBox>
 
-      <InfoBox>
-        <Row>
-          <QuestionImg src={messagesIC} />
-          받은 질문
-        </Row>
-        {subject.questionCount}개
-      </InfoBox>
-    </Card>
+        <InfoBox>
+          <Row>
+            <QuestionImg src={messagesIC} />
+            받은 질문
+          </Row>
+          {subject.questionCount}개
+        </InfoBox>
+      </Card>
+    </Link>
   );
 });
 
