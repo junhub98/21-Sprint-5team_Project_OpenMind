@@ -51,58 +51,42 @@ const Hr = styled.hr`
 `;
 
 // 메인컴포넌트
-function QuestionCard({ question, onCreateAnswer, onUpdateAnswer, onDeleteAnswer }) {
+function QuestionCard({ question, onDelete, onUpdateAnswer }) {
   const [isEditing, setIsEditing] = useState(false);
   const isAnswered = Boolean(question.answer);
 
   const handleEdit = () => setIsEditing(true);
-
   const handleSubmitAnswer = (newAnswer) => {
-    if (!isAnswered) {
-      onCreateAnswer(question.id, newAnswer);
-    } else {
-      onUpdateAnswer(question.id, newAnswer, question.answer.isRejected);
-    }
+    onUpdateAnswer(question.id, newAnswer);
     setIsEditing(false);
   };
 
   const handleReject = () => {
-    if (!question.answer?.id) return;
-    onUpdateAnswer(question.id, '답변 거절', true);
-  };
-
-  const handleDeleteAnswer = () => {
-    if (!question.answer?.id) return;
-    onDeleteAnswer(question.answer.id);
+    onUpdateAnswer(question.id, '답변 거절');
+    setIsEditing(false);
   };
 
   return (
-    <>
-      <Card>
-        <CardTop>
-          <Status $done={isAnswered}>{isAnswered ? '답변완료' : '미답변'}</Status>
-          <KebabMenu
-            onEdit={() => setIsEditing(true)}
-            onDelete={handleDeleteAnswer}
-            onReject={handleReject}
-          />
-        </CardTop>
+    <Card>
+      <CardTop>
+        <Status $done={isAnswered}>{isAnswered ? '답변완료' : '미답변'}</Status>
+        <KebabMenu 
+          onEdit={handleEdit} 
+          onDelete={() => onDelete(question.id)} 
+          onReject={handleReject} />
+      </CardTop>
 
-        <Meta>
-          {question.author} · {question.date}
-        </Meta>
+      <Meta>
+        {question.author} · {question.date}
+      </Meta>
 
-        <Title>{question.title}</Title>
+      <Title>{question.title}</Title>
 
-        <QuestionReply
-          answer={question.answer?.content ?? ''}
-          createdAt={question.answer?.createdAt}
-          isEditing={isEditing || !isAnswered}
-          onSubmit={handleSubmitAnswer}
-        />
-      </Card>
-      <Hr />
-    </>
+      <QuestionReply 
+        answer={question.answer} 
+        isEditing={isEditing} 
+        onSubmit={handleSubmitAnswer} />
+    </Card>
   );
 }
 

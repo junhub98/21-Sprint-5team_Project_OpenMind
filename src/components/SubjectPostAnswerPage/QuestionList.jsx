@@ -4,7 +4,7 @@ import QuestionCard from './QuestionCard';
 import Messages from '../../assets/SubjectPostAnswerPage/Messages.png';
 import Mailbox from '../../assets/SubjectPostAnswerPage/Mailbox.png';
 import axios from '../../utils/axios';
-import { getQuestionsList, createAnswer, deleteAnswer, updateAnswer } from '../../utils/getDataApi';
+import { getQuestionsList } from '../../utils/getDataApi';
 
 
 const QuestionListWrapper=styled.section`
@@ -87,86 +87,43 @@ const EmptyIllustration = styled.div `
 
 // 메인 컴포넌트 API 연동
 function QuestionList({ subjectId }) {
+
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // 전체 질문 삭제
+  const handleDeleteAll = () => {
+    if (!window.confirm('모든 질문을 삭제하시겠습니까?')) return;
+    setQuestions([]);
+  };
+  // 개별 질문 삭제
+  const handleDeleteOne = (id) => {
+    if (!window.confirm('해당 질문을 삭제하시겠습니까?')) return;
+    setQuestions(prev => prev.filter(q => q.id !== id));
+  };
+  // 답변 업데이트
+  const handleUpdateAnswer = (id, newAnswer) => {
+    setQuestions(prev =>
+      prev.map(q => (q.id === id ? { ...q, answer: String(newAnswer) } : q))
+    );
+  };
+
+// API 호출
   useEffect(() => {
-    const fetchQuestions = async () => {
+    if (!subjectId) return; 
+    async function fetchQuestions() {
+      setLoading(true);
       try {
-        const data = await getQuestionsList(subjectId, 0, 20);
-        const mapped = data.map(q => ({
-          id: q.id,
-          questionId: q.id,
-          title: q.title,
-          content: q.content,
-          author: q.writer?.name ?? '익명',
-          date: q.createdAt,
-          answer: q.answer ? {
-            id: q.answer.id,
-            content: q.answer.content,
-            isRejected: q.answer.isRejected,
-            createdAt: q.answer.createdAt
-          } : null
-        }));
-        setQuestions(mapped);
+        const data = await getQuestionsList(subjectId, 0, 20); 
+        setQuestions(data);
       } catch (err) {
-        console.error(err);
+        console.error('질문 불러오기 실패', err);
       } finally {
         setLoading(false);
       }
-    };
-
+    }
     fetchQuestions();
   }, [subjectId]);
-
-  // 답변 생성
-  const handleCreateAnswer = async (questionId, content) => {
-    try {
-      const newAnswer = await createAnswer(questionId, content);
-      setQuestions(prev =>
-        prev.map(q =>
-          q.id === questionId
-            ? { ...q, answer: { ...newAnswer } }
-            : q
-        )
-      );
-    } catch (error) {
-      console.error('답변 생성 실패', error);
-      alert('답변 생성 중 오류가 발생했습니다.');
-    }
-  };
-// 답변 수정하기
-  const handleUpdateAnswer = async (questionId, content, isRejected) => {
-    try {
-      const answerId = questions.find(q => q.id === questionId)?.answer?.id;
-      if (!answerId) return;
-      const updated = await updateAnswer(answerId, content, isRejected);
-      setQuestions(prev =>
-        prev.map(q =>
-          q.id === questionId
-            ? { ...q, answer: { ...updated } }
-            : q
-        )
-      );
-    } catch (error) {
-      console.error('답변 수정 실패', error);
-    }
-  };
-// 답변 삭제하기
-  const handleDeleteAnswer = async (answerId) => {
-    try {
-      await deleteAnswer(answerId);
-      setQuestions(prev =>
-        prev.map(q =>
-          q.answer?.id === answerId
-            ? { ...q, answer: null }
-            : q
-        )
-      );
-    } catch (error) {
-      console.error('답변 삭제 실패', error);
-    }
-  };
 
   const hasQuestions = questions.length > 0;
 
@@ -175,7 +132,7 @@ function QuestionList({ subjectId }) {
       <QuestionListTop>
         <DeleteAllButton
           className={!hasQuestions ? 'disabled' : ''}
-          onClick={() => setQuestions([])}
+          onClick={hasQuestions ? handleDeleteAll : null}
         >
           전체 삭제하기
         </DeleteAllButton>
@@ -189,11 +146,11 @@ function QuestionList({ subjectId }) {
               <span>{questions.length}개의 질문이 있습니다</span>
             </>
           ) : (
-            <span>{loading ? '불러오는중...' : '아직 질문이 없습니다'}</span>
+            <span>아직 질문이 없습니다</span>
           )}
         </Count>
 
-        {!hasQuestions && !loading && (
+        {!hasQuestions && (
           <EmptyIllustration>
             <img src={Mailbox} alt="메일 상자" />
           </EmptyIllustration>
@@ -201,13 +158,12 @@ function QuestionList({ subjectId }) {
 
         {hasQuestions && (
           <QuestionListBody>
-            {questions.map(q => (
+            {questions.map((q) => (
               <QuestionCard
                 key={q.id}
                 question={q}
-                onCreateAnswer={handleCreateAnswer}
+                onDelete={handleDeleteOne}
                 onUpdateAnswer={handleUpdateAnswer}
-                onDeleteAnswer={handleDeleteAnswer}
               />
             ))}
           </QuestionListBody>

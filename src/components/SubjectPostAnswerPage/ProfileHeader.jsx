@@ -69,22 +69,24 @@ const ProfileSocial = styled.div`
 
 // 메인컴포넌트 프로필 그림, 사진 등등
 function ProfileHeader( {userId}) {
-  const [profileName, setProfileName] = useState('');
-  const [profileAvatar, setProfileAvartar] = useState('');
+  const [profileName, setProfileName] = useState('사용자');
+  const [profileAvatar, setProfileAvatar] = useState(Photo);
 
-  useEffect ( () => {
+  useEffect(() => {
+    if (!userId) return;
+
     async function fetchProfile() {
       try {
-        const response = await axios.get(`/users/${userId}`);
-        setProfileName (response.data.name);
-        setProfileAvartar (response.data.avartar);
-
-      } catch (error) {
-        console.log('프로필 불러오기 실패', error);
+        const response = await axios.get(`/users/${userId}/`);
+        setProfileName(response.data.name);
+        setProfileAvatar(response.data.avatar || Photo);
+      } catch (err) {
+        console.error('프로필 불러오기 실패', err);
       }
     }
+
     fetchProfile();
-  } , [userId]);
+  }, [userId]);
 
   return (
     <ProfileHeaderWrapper>
@@ -96,8 +98,10 @@ function ProfileHeader( {userId}) {
       </ProfileCover>
 
       <ProfileInfo>
-        <ProfileAvatar src={profileAvatar || Photo} alt="프로필 사진" />
-        <ProfileName>{profileName || '사용자'}</ProfileName>
+        <ProfileAvatar 
+          src={profileName.imageSource || Photo} 
+          alt={`${profileName.name}의 프로필 사진`} />
+        <ProfileName>{profileName.name || '사용자'}</ProfileName>
       </ProfileInfo>
 
       <ProfileSocial>

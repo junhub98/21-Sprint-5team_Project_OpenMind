@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { createAnswer, updateAnswer } from '../../utils/getDataApi';
 
 const ReplyWrapper = styled.div`
   display: flex;
@@ -43,47 +44,29 @@ const SubmitButton = styled.button`
   }
 `;
 // 메인 컴포넌트
-function QuestionReply({ answer, createdAt, isEditing, onSubmit }) {
-  const [value, setValue] = useState(answer || '');
+function QuestionReply({ answer, isEditing, onSubmit }) {
+  const [content, setContent] = useState(answer || '');
 
-  useEffect(() => {
-    setValue(answer || '');
-  }, [answer]);
-
-  const handleSubmit = () => {
-    if (!value.trim()) {
-      alert('답변 내용을 입력해주세요.');
-      return;
+  const handleSubmit = async () => {
+    try {
+      if (answer) {
+        await updateAnswer(answer.id, content);
+      } else {
+        const newAnswer = await createAnswer(1, content); // 🔹 subjectId 필요시 상위에서 전달
+        onSubmit(newAnswer);
+      }
+    } catch (err) {
+      console.error('답변 등록 실패', err);
     }
-    onSubmit(value);
   };
+
+  if (!isEditing) return <div>{answer || '아직 답변이 없습니다.'}</div>;
 
   return (
     <ReplyWrapper>
-      {answer && createdAt && (
-        <CreatedAt>
-          답변 작성: {new Date(createdAt).toLocaleString()}
-        </CreatedAt>
-      )}
-
-      {(isEditing || !answer) && (
-        <>
-          <Textarea
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            placeholder="답변을 작성하세요"
-          />
-          <ButtonWrapper>
-            <SubmitButton onClick={handleSubmit}>
-              {answer ? '수정 완료' : '답변 등록'}
-            </SubmitButton>
-          </ButtonWrapper>
-        </>
-      )}
-
-      {!isEditing && answer && (
-        <p>{value}</p>
-      )}
+      <AnswerTextarea value={content} onChange={(e) => setContent(e.target.value)} />
+      <Button onClick={handleSubmit}>등록</Button>
+      <hr />
     </ReplyWrapper>
   );
 }

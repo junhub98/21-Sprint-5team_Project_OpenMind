@@ -7,11 +7,11 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-function QuestionSection () {
+function QuestionSection ( {subjectId}) {
   return(
     <div>
       <GlobalStyle />
-      <QuestionList />
+      <QuestionList subjectId={subjectId}/>
     </div>
   );
 };

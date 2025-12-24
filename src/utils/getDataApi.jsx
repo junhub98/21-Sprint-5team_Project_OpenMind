@@ -64,8 +64,11 @@ export async function updateAnswer(answerId, newContent) {
     return response.data;
 }
 
-export async function createQuestion(subjectId, content) {
-  const response = await axios.post(`/subjects/${subjectId}/questions/`, { content });
+// 거절하기 
+export async function rejectAnswer(answerId) {
+  const response = await axios.patch(`/answers/${answerId}/`, {
+    content: '답변을 거절했습니다.',
+    isRejected: true,
+  });
   return response.data;
-
 }
