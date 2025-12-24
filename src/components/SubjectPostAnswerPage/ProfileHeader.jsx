@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import axios from '../../utils/axios';
 import styled from 'styled-components';
 import SocialButtons from './ProfileSocialButtons';
 import Logo from '../../assets/SubjectPostAnswerPage/logo.png';
@@ -66,7 +68,24 @@ const ProfileSocial = styled.div`
 `;
 
 // 메인컴포넌트 프로필 그림, 사진 등등
-function ProfileHeader() {
+function ProfileHeader( {userId}) {
+  const [profileName, setProfileName] = useState('');
+  const [profileAvatar, setProfileAvartar] = useState('');
+
+  useEffect ( () => {
+    async function fetchProfile() {
+      try {
+        const response = await axios.get(`/users/${userId}`);
+        setProfileName (response.data.name);
+        setProfileAvartar (response.data.avartar);
+
+      } catch (error) {
+        console.log('프로필 불러오기 실패', error);
+      }
+    }
+    fetchProfile();
+  } , [userId]);
+
   return (
     <ProfileHeaderWrapper>
       <ProfileCover>
@@ -77,8 +96,8 @@ function ProfileHeader() {
       </ProfileCover>
 
       <ProfileInfo>
-        <ProfileAvatar src={Photo} alt="프로필 사진" />
-        <ProfileName>아초는 고양이</ProfileName>
+        <ProfileAvatar src={profileAvatar || Photo} alt="프로필 사진" />
+        <ProfileName>{profileName || '사용자'}</ProfileName>
       </ProfileInfo>
 
       <ProfileSocial>

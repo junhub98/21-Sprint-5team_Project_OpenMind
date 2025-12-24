@@ -63,6 +63,7 @@ export async function updateAnswer(answerId, newContent) {
     
     return response.data;
 }
+
 export async function createQuestion(subjectId, content) {
   const response = await axios.post(`/subjects/${subjectId}/questions/`, { content });
   return response.data;
