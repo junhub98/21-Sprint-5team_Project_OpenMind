@@ -5,8 +5,7 @@ import Messages from '../../assets/SubjectPostAnswerPage/Messages.png';
 import Mailbox from '../../assets/SubjectPostAnswerPage/Mailbox.png';
 import { getQuestionsList } from '../../utils/getDataApi';
 
-
-const QuestionListWrapper=styled.section`
+const QuestionListWrapper = styled.section`
   width: 100%;
   max-width: 720px;
   margin: 0 auto 160px;
@@ -23,22 +22,22 @@ const QuestionListTop = styled.div`
 
 const DeleteAllButton = styled.button`
   background-color: #542f1a;
-    color: #ffffff;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 999px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: opacity 0.2s;
+  color: #ffffff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: opacity 0.2s;
 
-    &:hover {
-      opacity: 0.9;
-    }
+  &:hover {
+    opacity: 0.9;
+  }
 
-    &.disabled {
-      opacity: 0.4;
-      pointer-events: none;
-    }
+  &.disabled {
+    opacity: 0.4;
+    pointer-events: none;
+  }
 `;
 
 const QuestionListContainer = styled.div`
@@ -52,7 +51,7 @@ const QuestionListContainer = styled.div`
   min-height: 220px;
 `;
 
-const Count = styled.div `
+const Count = styled.div`
   height: 40px;
   display: flex;
   align-items: center;
@@ -73,54 +72,49 @@ const QuestionListBody = styled.div`
   gap: 20px;
 `;
 
-const EmptyIllustration = styled.div `
-   display: flex;
-   justify-content:center;
-   height: 100px;
-   margin-top: 4px;
+const EmptyIllustration = styled.div`
+  display: flex;
+  justify-content: center;
+  height: 100px;
+  margin-top: 4px;
 
-   img {
+  img {
     display: block;
-   }
+  }
 `;
 
 // 메인 컴포넌트 API 연동
 function QuestionList({ subjectId }) {
   const [questions, setQuestions] = useState([]);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
 
   // 질문 리스트 불러오기
   useEffect(() => {
     if (!subjectId) return;
     setLoading(true);
     getQuestionsList(subjectId, 0, 20)
-      .then(data => setQuestions(data))
+      .then((data) => setQuestions(data.results))
       .finally(() => setLoading(false));
-    }, [subjectId]);
+  }, [subjectId]);
 
   const handleDeleteAll = () => {
     if (!window.confirm('모든 질문을 삭제하시겠습니까?')) return;
-    questions.forEach(q => {
-      if (q.answerId) deleteAnswer(q.answerId); 
+    questions.forEach((q) => {
+      if (q.answerId) deleteAnswer(q.answerId);
     });
     setQuestions([]);
   };
 
   const handleDeleteOne = (id) => {
-    const target = questions.find(q => q.id === id);
+    const target = questions.find((q) => q.id === id);
     if (!target) return;
     if (!window.confirm('해당 질문을 삭제하시겠습니까?')) return;
-    if (target.answerId) deleteAnswer(target.answerId); 
-    setQuestions(prev => prev.filter(q => q.id !== id));
+    if (target.answerId) deleteAnswer(target.answerId);
+    setQuestions((prev) => prev.filter((q) => q.id !== id));
   };
 
-
   const handleUpdateAnswer = (questionId, updatedAnswer) => {
-    setQuestions(prev =>
-      prev.map(q =>
-        q.id === questionId ? { ...q, ...updatedAnswer } : q
-      )
-    );
+    setQuestions((prev) => prev.map((q) => (q.id === questionId ? { ...q, ...updatedAnswer } : q)));
   };
 
   const hasQuestions = questions.length > 0;
