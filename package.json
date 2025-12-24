@@ -17,8 +17,7 @@
     "react-dom": "^19.2.0",
     "react-router-dom": "^7.10.1",
     "styled": "^1.0.0",
-    "styled-components": "^6.1.19",
-    "vite-plugin-svgr": "^4.5.0"
+    "styled-components": "^6.1.19"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
@@ -37,6 +36,7 @@
     "prettier": "^3.7.4",
     "sass": "^1.97.0",
     "sass-embedded": "^1.97.1",
-    "vite": "^7.2.4"
+    "vite": "^7.2.4",
+    "vite-plugin-svgr": "^4.5.0"
   }
 }

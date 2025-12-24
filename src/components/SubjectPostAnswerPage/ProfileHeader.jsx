@@ -5,6 +5,7 @@ import Logo from '../../assets/SubjectPostAnswerPage/logo.png';
 import LogoOpenmind from '../../assets/SubjectPostAnswerPage/logoOpenmind.png';
 import Photo from '../../assets/SubjectPostAnswerPage/Photo.png';
 
+// styled-components 
 const ProfileHeaderWrapper = styled.section`
   width: 100%;
   position: relative;
@@ -64,6 +65,7 @@ const ProfileSocial = styled.div`
   justify-content: center;
 `;
 
+// 메인컴포넌트 프로필 그림, 사진 등등
 function ProfileHeader() {
   return (
     <ProfileHeaderWrapper>

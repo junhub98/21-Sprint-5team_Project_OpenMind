@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo, useCallback, useRef } from 'react';
 import styled, {css} from 'styled-components';
 import ReactionButtons from './ReactionButtons';
 
+// styled-components 
 const replyBoxCommon = css`
   width: 100%;
   min-height: 120px;
@@ -69,51 +70,97 @@ const Hr = styled.hr`
   margin: 20px, 0;
 `;
 
-function QuestionReply({ answer, isEditing, onSubmit }) {
-  const [inputValue, setInputValue] = useState('');
-
-
-  const isAnswered = !!answer;
+//답변 입력 수정
+const ReplyEditor = memo(function ReplyEditor({
+  answer,
+  isEditing,
+  onSubmit,
+}) {
+  const inputRef = useRef('');
+  const [hasValue, setHasValue] = useState(false);
 
   useEffect(() => {
     if (isEditing) {
-      setInputValue(answer !== undefined && answer !== null ? String(answer) : '');
+      inputRef.current = answer ?? '';
+      setHasValue(!!answer?.trim());
     }
   }, [isEditing, answer]);
- 
+
+  const handleChange = useCallback((e) => {
+    const value = e.target.value;
+    inputRef.current = value;
+    setHasValue(!!value.trim());
+  }, []);
+
+  const handleSubmit = useCallback(() => {
+    onSubmit(inputRef.current);
+  }, [onSubmit]);
+
+  console.log('ReplyEditor render');
+
+  if (answer && !isEditing) {
+    return <AnswerBox>{answer}</AnswerBox>;
+  }
+
+  return (
+    <>
+      <ReplyInput
+        placeholder="답변을 입력해주세요"
+        defaultValue={inputRef.current}
+        onChange={handleChange}
+      />
+
+      <SubmitButton
+        hasValue={hasValue}
+        isEditing={!!answer}
+        onClick={handleSubmit}
+      />
+    </>
+  );
+});
+
+// 버튼
+const SubmitButton = memo(function SubmitButton({
+  hasValue,
+  isEditing,
+  onClick,
+}) {
+  console.log('SubmitButton render');
+
+  return (
+    <ReplyButton disabled={!hasValue} onClick={onClick}>
+      {isEditing ? '수정 완료' : '답변 완료'}
+    </ReplyButton>
+  );
+});
+
+
+// 밑줄 선
+const Line = memo(function Line() {
+  return <Hr />
+});
+
+// 좋아요, 싫어요
+const ReactionSection = memo(function ReactionSection({ isAnswered }) {
+  return <ReactionButtons isAnswered={isAnswered} />;
+}); 
+
+// 메인컴포넌트
+function QuestionReply({ answer, isEditing, onSubmit }) {
+  const isAnswered = !!answer;
+
   return (
     <ReplyContainer>
-      {(isEditing || !answer) && (
-      <div>
-        <ReplyInput
-          placeholder="답변을 입력해주세요"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-        />
-        <ReplyButton
-          disabled={!inputValue.trim()}
-          type="button"
-          onClick={() => onSubmit(inputValue)}
-        >
-          {answer ? '수정 완료' : '답변 완료'}
-        </ReplyButton>
-      </div>  
-      )}
-
-      {answer && !isEditing && (
-        <div>
-          <AnswerBox>{answer}</AnswerBox> 
-        </div>
-      )
-      }
-
-      <Hr />
-      
-
-      <ReactionButtons isAnswered={isAnswered} />
+      <ReplyEditor
+        answer={answer}
+        isEditing={isEditing}
+        onSubmit={onSubmit}
+      />
+      <Line />
+      <ReactionSection 
+        isAnswered={isAnswered} />
     </ReplyContainer>
-    
   );
 }
 
-export default QuestionReply;
+export default memo(QuestionReply);

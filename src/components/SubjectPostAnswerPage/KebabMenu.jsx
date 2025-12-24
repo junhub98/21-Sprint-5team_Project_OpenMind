@@ -2,6 +2,8 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import kebabIcon from '../../assets/SubjectPostAnswerPage/Kebab.png';
 
+
+// styled-components 
 const Kebab = styled.div`
   position: relative;
 `;
@@ -46,7 +48,7 @@ const KebabMenuStyle = styled.ul`
   }
 `;
 
-
+// 메인컴포넌트 수정하기, 삭제하기, 거절하기
 function KebabMenu({ onEdit, onDelete, onReject }) {
   const [open, setOpen] = useState(false);
 
