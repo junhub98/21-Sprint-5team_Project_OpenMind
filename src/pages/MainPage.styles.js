@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import media from '../utils/media';
-import BackgroundImage from '../assets/Images/BackgroundImage.svg';
+import BackgroundImage from '../assets/MainPage/BackgroundImage.svg';
 
 export const Page = styled.main`
   min-height: 100vh;

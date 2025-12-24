@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import PersonImage from '../../assets/Images/Person.png';
+import PersonImage from '../../assets/MainPage/Person.png';
 import { createSubject } from '../../utils/getDataApi';
 import {
   Form,
@@ -14,6 +14,9 @@ import {
   TagItem,
   SelectedTag,
   TagButtonWrapper,
+  TagContent,
+  TagText,
+  RemoveButton,
 } from './CreateFeedForm.styles';
 
 // 태그 리스트 (필요에 따라 수정 가능)
@@ -132,10 +135,12 @@ export default function CreateFeedForm() {
         </TagButtonWrapper>
       </InputWrapper>
       <SelectedTag ref={selectedTagDisplayRef} style={{ display: 'none' }}>
-        <span data-tag-text></span>
-        <button type="button" data-tag-remove onClick={handleRemoveTag}>
-          ×
-        </button>
+        <TagContent>
+          <TagText data-tag-text></TagText>
+          <RemoveButton type="button" data-tag-remove onClick={handleRemoveTag}>
+            ×
+          </RemoveButton>
+        </TagContent>
       </SelectedTag>
       <SubmitButton type="submit" disabled={isCreating}>
         {isCreating ? '생성 중...' : '질문 받기'}

@@ -1,4 +1,4 @@
-import OpenMindImage from '../../assets/Images/logo.png';
+import OpenMindImage from '../../assets/Mainpage/logo.png';
 import { LogoBox, LogoImage } from './BrandLogo.styles';
 
 export default function BrandLogo() {

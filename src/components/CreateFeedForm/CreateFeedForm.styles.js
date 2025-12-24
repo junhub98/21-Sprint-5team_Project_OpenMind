@@ -123,38 +123,84 @@ export const TagItem = styled.li`
 export const SelectedTag = styled.div`
   display: flex;
   align-items: center;
+  width: 100%;
+`;
+
+export const TagContent = styled.div`
+  display: inline-flex;
+  align-items: center;
   gap: 8px;
   padding: 8px 12px;
-  background-color: var(--gray-20);
-  border-radius: 6px;
+  background: linear-gradient(135deg, var(--brown-10) 0%, var(--brown-15) 100%);
+  border: 1px solid var(--brown-20);
+  border-radius: 20px;
+  font-family: 'pretendard', sans-serif;
   font-size: 13px;
   color: var(--brown-40);
   font-weight: 500;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  animation: slideIn 0.3s ease-out;
 
-  button {
-    background: none;
-    border: none;
-    color: var(--brown-40);
-    font-size: 18px;
-    line-height: 1;
-    cursor: pointer;
-    padding: 0;
-    width: 20px;
-    height: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    transition: background-color 0.2s;
-
-    &:hover {
-      background-color: var(--gray-30);
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(-5px);
     }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  &:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
   }
 
   ${media.mobile`
     padding: 6px 10px;
     font-size: 12px;
+    gap: 6px;
+  `}
+`;
+
+export const TagText = styled.span`
+  display: inline-block;
+  letter-spacing: 0.2px;
+`;
+
+export const RemoveButton = styled.button`
+  background: rgba(154, 66, 42, 0.1);
+  border: none;
+  color: var(--brown-40);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+
+  &:hover {
+    background-color: var(--brown-40);
+    color: var(--gray-10);
+    transform: rotate(90deg) scale(1.1);
+  }
+
+  &:active {
+    transform: rotate(90deg) scale(0.95);
+  }
+
+  ${media.mobile`
+    width: 18px;
+    height: 18px;
+    font-size: 14px;
   `}
 `;
 
