@@ -1,8 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import QuestionCard from './QuestionCard';
 import Messages from '../../assets/SubjectPostAnswerPage/Messages.png';
 import Mailbox from '../../assets/SubjectPostAnswerPage/Mailbox.png';
+import axios from '../../utils/axios';
+import { getQuestionsList, createAnswer, deleteAnswer, updateAnswer } from '../../utils/getDataApi';
+
 
 const QuestionListWrapper=styled.section`
   width: 100%;
@@ -82,53 +85,87 @@ const EmptyIllustration = styled.div `
    }
 `;
 
+// 메인 컴포넌트 API 연동
+function QuestionList({ subjectId }) {
+  const [questions, setQuestions] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-const DUMMY_QUESTIONS = [
-  { 
-    id: 1, 
-    title: "스프린트 21기 5팀 인원은?", 
-    content: "", 
-    author: "아초는 고양이", 
-    date: "3일전",
-    answer: "",
-  },
-  { 
-    id: 2, 
-    title: "좋아하는 동물은?", 
-    content: "", 
-    author: "아초는 고양이", 
-    date: "2주전",
-    answer: "",
-  },
-  { 
-    id: 3, 
-    title: "리액트 공부 방법은?", 
-    content: "", 
-    author: "아초는 고양이", 
-    date: "1주전",
-    answer: "",
-  },
-];
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      try {
+        const data = await getQuestionsList(subjectId, 0, 20);
+        const mapped = data.map(q => ({
+          id: q.id,
+          questionId: q.id,
+          title: q.title,
+          content: q.content,
+          author: q.writer?.name ?? '익명',
+          date: q.createdAt,
+          answer: q.answer ? {
+            id: q.answer.id,
+            content: q.answer.content,
+            isRejected: q.answer.isRejected,
+            createdAt: q.answer.createdAt
+          } : null
+        }));
+        setQuestions(mapped);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-function QuestionList() {
-  const [questions, setQuestions] = useState(DUMMY_QUESTIONS);
+    fetchQuestions();
+  }, [subjectId]);
 
-  const handleDeleteAll = () => {
-    if (!window.confirm('모든 질문을 삭제하시겠습니까?')) return;
-    setQuestions([]);
+  // 답변 생성
+  const handleCreateAnswer = async (questionId, content) => {
+    try {
+      const newAnswer = await createAnswer(questionId, content);
+      setQuestions(prev =>
+        prev.map(q =>
+          q.id === questionId
+            ? { ...q, answer: { ...newAnswer } }
+            : q
+        )
+      );
+    } catch (error) {
+      console.error('답변 생성 실패', error);
+      alert('답변 생성 중 오류가 발생했습니다.');
+    }
   };
-
-  const handleDeleteOne = (id) => {
-    if (!window.confirm('해당 질문을 삭제하시겠습니까?')) return;
-    setQuestions(prev => prev.filter(q => q.id !== id));
+// 답변 수정하기
+  const handleUpdateAnswer = async (questionId, content, isRejected) => {
+    try {
+      const answerId = questions.find(q => q.id === questionId)?.answer?.id;
+      if (!answerId) return;
+      const updated = await updateAnswer(answerId, content, isRejected);
+      setQuestions(prev =>
+        prev.map(q =>
+          q.id === questionId
+            ? { ...q, answer: { ...updated } }
+            : q
+        )
+      );
+    } catch (error) {
+      console.error('답변 수정 실패', error);
+    }
   };
-
-  const handleUpdateAnswer = (id, newAnswer) => {
-    setQuestions(prev =>
-      prev.map(q =>
-        q.id === id ? { ...q, answer: String(newAnswer) } : q
-      )
-    );
+// 답변 삭제하기
+  const handleDeleteAnswer = async (answerId) => {
+    try {
+      await deleteAnswer(answerId);
+      setQuestions(prev =>
+        prev.map(q =>
+          q.answer?.id === answerId
+            ? { ...q, answer: null }
+            : q
+        )
+      );
+    } catch (error) {
+      console.error('답변 삭제 실패', error);
+    }
   };
 
   const hasQuestions = questions.length > 0;
@@ -138,7 +175,7 @@ function QuestionList() {
       <QuestionListTop>
         <DeleteAllButton
           className={!hasQuestions ? 'disabled' : ''}
-          onClick={hasQuestions ? handleDeleteAll : null}
+          onClick={() => setQuestions([])}
         >
           전체 삭제하기
         </DeleteAllButton>
@@ -152,11 +189,11 @@ function QuestionList() {
               <span>{questions.length}개의 질문이 있습니다</span>
             </>
           ) : (
-            <span>아직 질문이 없습니다</span>
+            <span>{loading ? '불러오는중...' : '아직 질문이 없습니다'}</span>
           )}
         </Count>
 
-        {!hasQuestions && (
+        {!hasQuestions && !loading && (
           <EmptyIllustration>
             <img src={Mailbox} alt="메일 상자" />
           </EmptyIllustration>
@@ -168,8 +205,9 @@ function QuestionList() {
               <QuestionCard
                 key={q.id}
                 question={q}
-                onDelete={handleDeleteOne}
+                onCreateAnswer={handleCreateAnswer}
                 onUpdateAnswer={handleUpdateAnswer}
+                onDeleteAnswer={handleDeleteAnswer}
               />
             ))}
           </QuestionListBody>

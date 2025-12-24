@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import QuestionReply from './QuestionReply';
 import KebabMenu from './KebabMenu';
 
+// styled-components
 const Card = styled.div`
   background-color: #fff;
   padding: 16px;
@@ -27,8 +28,10 @@ const Status = styled.span`
   background-color: transparent;
   line-height: 1;
 
-  color: ${(props) => (props.$done ? '#542f1a' : '#c8b6a6')};
-  border-color: ${(props) => (props.$done ? '#542f1a' : '#c8b6a6')};
+  color: ${(props) => 
+    (props.$done ? '#542f1a' : '#c8b6a6')};
+  border-color: ${(props) => 
+    (props.$done ? '#542f1a' : '#c8b6a6')};
 `;
 
 const Title = styled.h3`
@@ -41,51 +44,65 @@ const Meta = styled.div`
   color: #818181;
 `;
 
-function QuestionCard({ question, onDelete, onUpdateAnswer }) {
+const Hr = styled.hr`
+  border: none;
+  border-top: 1px solid #e5d8cc;
+  margin: 12px 0 0 0;
+`;
+
+// 메인컴포넌트
+function QuestionCard({ question, onCreateAnswer, onUpdateAnswer, onDeleteAnswer }) {
   const [isEditing, setIsEditing] = useState(false);
   const isAnswered = Boolean(question.answer);
 
   const handleEdit = () => setIsEditing(true);
 
   const handleSubmitAnswer = (newAnswer) => {
-    onUpdateAnswer(question.id, String(newAnswer));
+    if (!isAnswered) {
+      onCreateAnswer(question.id, newAnswer);
+    } else {
+      onUpdateAnswer(question.id, newAnswer, question.answer.isRejected);
+    }
     setIsEditing(false);
   };
 
   const handleReject = () => {
-    onUpdateAnswer(question.id, '답변 거절');
-    setIsEditing(false);
+    if (!question.answer?.id) return;
+    onUpdateAnswer(question.id, '답변 거절', true);
   };
-  
+
+  const handleDeleteAnswer = () => {
+    if (!question.answer?.id) return;
+    onDeleteAnswer(question.answer.id);
+  };
+
   return (
-    
-    <Card>
-      <CardTop>
-        <Status $done={isAnswered} >
-          {isAnswered ? '답변완료' : '미답변'}
-        </Status>
+    <>
+      <Card>
+        <CardTop>
+          <Status $done={isAnswered}>{isAnswered ? '답변완료' : '미답변'}</Status>
+          <KebabMenu
+            onEdit={() => setIsEditing(true)}
+            onDelete={handleDeleteAnswer}
+            onReject={handleReject}
+          />
+        </CardTop>
 
-        <KebabMenu
-          onEdit={handleEdit}
-          onDelete={() => onDelete(question.id)}
-          onReject={handleReject}
+        <Meta>
+          {question.author} · {question.date}
+        </Meta>
+
+        <Title>{question.title}</Title>
+
+        <QuestionReply
+          answer={question.answer?.content ?? ''}
+          createdAt={question.answer?.createdAt}
+          isEditing={isEditing || !isAnswered}
+          onSubmit={handleSubmitAnswer}
         />
-      </CardTop>
-
-      <Meta>
-        {question.author} · {question.date}
-      </Meta>
-
-      <Title>
-        {question.title}
-      </Title>
-
-      <QuestionReply
-        answer={question.answer}
-        isEditing={isEditing}
-        onSubmit={handleSubmitAnswer}
-      />
-    </Card>
+      </Card>
+      <Hr />
+    </>
   );
 }
 

@@ -1,98 +1,59 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import kebabIcon from '../../assets/SubjectPostAnswerPage/Kebab.png';
+import KebabIcon from '../../assets/SubjectPostAnswerPage/Kebab.png';
 
 
 // styled-components 
-const Kebab = styled.div`
+const MenuWrapper = styled.div`
   position: relative;
+  display: inline-block;
 `;
 
-const KebabButton = styled.button`
-  background: none;     
-  border: none;         
-  padding: 0;           
+const MenuButton = styled.button`
+  background: none;
+  border: none;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-
-  img {
-    width: 20px;        
-    height: 20px;
-    display: block;
-  }
 `;
 
-const KebabMenuStyle = styled.ul`
+const MenuList = styled.ul`
   position: absolute;
-  top: 28px;
+  top: 100%;
   right: 0;
-  list-style: none;
-  margin: 0;
-  padding: 4px 0;
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  background: #fff;
+  border: 1px solid #e5d8cc;
+  border-radius: 12px;
+  padding: 8px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 10;
+`;
 
-   li {
-    padding: 8px 12px;   
-    cursor: pointer;
-    font-size: 14px;
-    color: #000;
-    text-align: left;     
-    white-space: nowrap;  
-
-    &:hover {
-      background-color: #f7f2ed; 
-    }
+const MenuItem = styled.li`
+  padding: 6px 12px;
+  cursor: pointer;
+  &:hover {
+    background-color: #f0f0f0;
   }
 `;
 
-// 메인컴포넌트 수정하기, 삭제하기, 거절하기
 function KebabMenu({ onEdit, onDelete, onReject }) {
-  const [open, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <Kebab>
-      <KebabButton
-        onClick={() => setOpen(prev => !prev)}
-        type="button"
-      >
-        <img src={kebabIcon} alt="케밥 아이콘" />
-      </KebabButton>
+    <MenuWrapper>
+      <MenuButton onClick={() => setIsOpen(prev => !prev)}>
+        <img src={KebabIcon} alt="메뉴" />
+      </MenuButton>
 
-      {open && (
-        <KebabMenuStyle>
-          <li
-            onClick={(e) => {
-              e.preventDefault();
-              onEdit();
-              setOpen(false);
-            }}
-          >
-            수정하기
-          </li>
-          <li
-            onClick={(e) => {
-              e.preventDefault();
-              onDelete();
-              setOpen(false);
-            }}
-          >
-            삭제하기
-          </li>
-          <li 
-            onClick={(e) => {
-              e.preventDefault();
-              onReject();
-              setOpen(false);
-            }}
-          >
-            거절하기
-          </li>
-        </KebabMenuStyle>
+      {isOpen && (
+        <MenuList>
+          <MenuItem onClick={onEdit}>수정</MenuItem>
+          <MenuItem onClick={onDelete}>삭제</MenuItem>
+          <MenuItem onClick={onReject}>거절</MenuItem>
+        </MenuList>
       )}
-    </ Kebab>
+    </MenuWrapper>
   );
 }
 

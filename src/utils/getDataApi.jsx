@@ -48,4 +48,23 @@ export function parseSubjectName(subjectName) {
   return { name: subjectName, tag: null };
 }
 
+// 답변 생성하기
+export async function createAnswer(questionId, content) {
+  const response = 
+    await axios.post(`/questions/${questionId}/answers/`, { content });
+    
+    return response.data;
+}
 
+// 삭제하기
+export async function deleteAnswer(answerId) {
+  await axios.delete(`/answers/${answerId}/`);
+}
+
+// 수정하기 (PUT 보다 PATCH가 안전)
+export async function updateAnswer(answerId, newContent) {
+  const response = 
+    await axios.patch(`/answers/${answerId}/`, { content: newContent });
+    
+    return response.data;
+}
