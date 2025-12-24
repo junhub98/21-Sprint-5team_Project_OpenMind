@@ -5,7 +5,7 @@ export const Form = styled.form`
   width: 420px;
   padding: 28px 24px 32px;
   border-radius: 16px;
-  background-color: #ffffff;
+  background-color: var(--gray-10);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
@@ -42,7 +42,7 @@ export const NameInput = styled.input`
   padding-left: 44px;
   padding-right: 80px;
   border-radius: 8px;
-  border: 1px solid #d0c4b8;
+  border: 1px solid var(--brown-20);
   font-size: 14px;
   outline: none;
   width: 100%;
@@ -64,17 +64,17 @@ export const TagButtonWrapper = styled.div`
 export const TagButton = styled.button`
   padding: 6px 12px;
   border-radius: 6px;
-  border: 1px solid #d0c4b8;
-  background-color: #ffffff;
-  color: #9a5d2c;
+  border: 1px solid var(--brown-20);
+  background-color: var(--gray-10);
+  color: var(--brown-40);
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
 
   &:hover {
-    background-color: #f5f5f5;
-    border-color: #9a5d2c;
+    background-color: var(--gray-20);
+    border-color: var(--brown-40);
   }
 
   ${media.mobile`
@@ -87,8 +87,8 @@ export const TagDropdown = styled.div`
   position: absolute;
   top: calc(100% + 8px);
   right: 0;
-  background-color: #ffffff;
-  border: 1px solid #d0c4b8;
+  background-color: var(--gray-10);
+  border: 1px solid var(--brown-20);
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   min-width: 150px;
@@ -106,12 +106,12 @@ export const TagList = styled.ul`
 export const TagItem = styled.li`
   padding: 10px 16px;
   font-size: 14px;
-  color: #333333;
+  color: var(--gray-50);
   cursor: pointer;
   transition: background-color 0.2s;
 
   &:hover {
-    background-color: #f5f5f5;
+    background-color: var(--gray-20);
   }
 
   ${media.mobile`
@@ -123,38 +123,84 @@ export const TagItem = styled.li`
 export const SelectedTag = styled.div`
   display: flex;
   align-items: center;
+  width: 100%;
+`;
+
+export const TagContent = styled.div`
+  display: inline-flex;
+  align-items: center;
   gap: 8px;
   padding: 8px 12px;
-  background-color: #f5f5f5;
-  border-radius: 6px;
+  background: linear-gradient(135deg, var(--brown-10) 0%, var(--brown-15) 100%);
+  border: 1px solid var(--brown-20);
+  border-radius: 20px;
+  font-family: 'pretendard', sans-serif;
   font-size: 13px;
-  color: #9a5d2c;
+  color: var(--brown-40);
   font-weight: 500;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  animation: slideIn 0.3s ease-out;
 
-  button {
-    background: none;
-    border: none;
-    color: #9a5d2c;
-    font-size: 18px;
-    line-height: 1;
-    cursor: pointer;
-    padding: 0;
-    width: 20px;
-    height: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    transition: background-color 0.2s;
-
-    &:hover {
-      background-color: #e0e0e0;
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(-5px);
     }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  &:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
   }
 
   ${media.mobile`
     padding: 6px 10px;
     font-size: 12px;
+    gap: 6px;
+  `}
+`;
+
+export const TagText = styled.span`
+  display: inline-block;
+  letter-spacing: 0.2px;
+`;
+
+export const RemoveButton = styled.button`
+  background: rgba(154, 66, 42, 0.1);
+  border: none;
+  color: var(--brown-40);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+
+  &:hover {
+    background-color: var(--brown-40);
+    color: var(--gray-10);
+    transform: rotate(90deg) scale(1.1);
+  }
+
+  &:active {
+    transform: rotate(90deg) scale(0.95);
+  }
+
+  ${media.mobile`
+    width: 18px;
+    height: 18px;
+    font-size: 14px;
   `}
 `;
 
@@ -163,14 +209,14 @@ export const SubmitButton = styled.button`
   padding: 10px 14px;
   border-radius: 8px;
   border: none;
-  background-color: #9a5d2c;
-  color: #ffffff;
+  background-color: var(--brown-40);
+  color: var(--gray-10);
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
 
   &:disabled {
-    background-color: #c7a38a;
+    background-color: var(--brown-30);
     cursor: default;
   }
 

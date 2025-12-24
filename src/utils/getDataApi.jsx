@@ -1,12 +1,7 @@
-
-
-
 import axios from './axios';
 
 export async function getSubjectsList(currentPage = 1, pageSize = 8, orderBy = 'name') {
   const offset = (currentPage - 1) * pageSize;
-
-
 
   const params = { limit: pageSize, offset, sort: orderBy };
 
@@ -33,7 +28,6 @@ export async function getQuestionsList(subjectId, currentCards, loadCount) {
   return data;
 }
 
-
 export async function createSubject(name, tag = null) {
   const subjectName = tag ? `${name}#tag:${tag}` : name;
   const response = await axios.post('/subjects/', { name: subjectName });
@@ -47,6 +41,7 @@ export function parseSubjectName(subjectName) {
   }
   return { name: subjectName, tag: null };
 }
+
 
 // 답변 생성하기
 export async function createAnswer(questionId, content) {
@@ -67,4 +62,9 @@ export async function updateAnswer(answerId, newContent) {
     await axios.patch(`/answers/${answerId}/`, { content: newContent });
     
     return response.data;
+}
+export async function createQuestion(subjectId, content) {
+  const response = await axios.post(`/subjects/${subjectId}/questions/`, { content });
+  return response.data;
+
 }
