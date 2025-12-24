@@ -56,15 +56,7 @@ function QuestionCard({ question, onDelete, onUpdateAnswer }) {
   const isAnswered = Boolean(question.answer);
 
   const handleEdit = () => setIsEditing(true);
-  const handleSubmitAnswer = (newAnswer) => {
-    onUpdateAnswer(question.id, newAnswer);
-    setIsEditing(false);
-  };
 
-  const handleReject = () => {
-    onUpdateAnswer(question.id, '답변 거절');
-    setIsEditing(false);
-  };
 
   return (
     <Card>
@@ -73,19 +65,16 @@ function QuestionCard({ question, onDelete, onUpdateAnswer }) {
         <KebabMenu 
           onEdit={handleEdit} 
           onDelete={() => onDelete(question.id)} 
-          onReject={handleReject} />
+        />
       </CardTop>
 
-      <Meta>
-        {question.author} · {question.date}
-      </Meta>
-
+      <Meta>{question.author} · {question.createdAt}</Meta>
       <Title>{question.title}</Title>
 
       <QuestionReply 
         answer={question.answer} 
         isEditing={isEditing} 
-        onSubmit={handleSubmitAnswer} />
+        onUpdateAnswer={onUpdateAnswer} />
     </Card>
   );
 }

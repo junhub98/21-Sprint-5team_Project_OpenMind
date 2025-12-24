@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { createAnswer, updateAnswer } from '../../utils/getDataApi';
 
@@ -43,29 +43,47 @@ const SubmitButton = styled.button`
     opacity: 0.9;
   }
 `;
+
 // 메인 컴포넌트
-function QuestionReply({ answer, isEditing, onSubmit }) {
-  const [content, setContent] = useState(answer || '');
+function QuestionReply({ question, isEditing, onUpdateAnswer }) {
+  const initialContent = question.content || '';
+
+  const [content, setContent] = useState(initialContent);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
+    if (!content) return;
+    setLoading(true);
+
     try {
-      if (answer) {
-        await updateAnswer(answer.id, content);
-      } else {
-        const newAnswer = await createAnswer(1, content); // 🔹 subjectId 필요시 상위에서 전달
-        onSubmit(newAnswer);
+      let updatedAnswer;
+      if (question.answerId) {    // 기존 답변이 있으면 PATCH
+        updatedAnswer = await updateAnswer(question.answerId, content);
+      } else {                    // 답변이 없으면 POST
+        updatedAnswer = await createAnswer(question.id, content);
       }
+      onUpdateAnswer(question.id, updatedAnswer);
+      setContent(updatedAnswer.content);
     } catch (err) {
-      console.error('답변 등록 실패', err);
+      console.error('답변 제출 실패', err);
+    } finally {
+      setLoading(false);
     }
   };
 
-  if (!isEditing) return <div>{answer || '아직 답변이 없습니다.'}</div>;
-
   return (
     <ReplyWrapper>
-      <AnswerTextarea value={content} onChange={(e) => setContent(e.target.value)} />
-      <Button onClick={handleSubmit}>등록</Button>
+      {question.createdAt && <CreatedAtLabel>{question.createdAt}</CreatedAtLabel>}
+      <ReplyTextarea
+        value={content}
+        onChange={e => setContent(e.target.value)}
+        readOnly={!isEditing || loading}
+      />
+      {isEditing && (
+        <SubmitButton onClick={handleSubmit} disabled={loading}>
+          {loading ? '저장중...' : '등록'}
+        </SubmitButton>
+      )}
       <hr />
     </ReplyWrapper>
   );
