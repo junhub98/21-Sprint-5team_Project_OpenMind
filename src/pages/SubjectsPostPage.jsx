@@ -1,10 +1,10 @@
 import ProfileHeader from '../components/SubjectPostAnswerPage/ProfileHeader';
 import QuestionSection from '../components/SubjectPostAnswerPage/QuestionSection';
-import { useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 
 function SubjectPostAnswerPage() {
-  const [subjectId, setSubjectId] = useState(null); 
-  const [userId, setUserId] = useState(null);       
+  const [subjectId, setSubjectId] = useState(null);
+  const [userId, setUserId] = useState(null);
 
   // localStorage에서 subjectId 읽기
   useEffect(() => {
@@ -15,9 +15,9 @@ function SubjectPostAnswerPage() {
   }, []);
 
   // 로그인 없이 막기
-  // if (!userId) 
-  //   return <div>로그인 후 확인 가능합니다.</div>; 
-
+  // if (!userId)
+  //   return <div>로그인 후 확인 가능합니다.</div>;
+  console.log(subjectId);
   return (
     <>
       <ProfileHeader userId={userId} />
