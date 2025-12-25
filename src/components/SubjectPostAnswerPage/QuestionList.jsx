@@ -91,8 +91,10 @@ function QuestionList({ subjectId }) {
   // 질문 리스트 불러오기
   useEffect(() => {
     if (!subjectId) return;
+
     setLoading(true);
     getQuestionsList(subjectId, 0, 20)
+
       .then((data) => setQuestions(data.results))
       .finally(() => setLoading(false));
   }, [subjectId]);
