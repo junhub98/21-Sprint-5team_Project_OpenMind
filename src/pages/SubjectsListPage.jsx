@@ -148,7 +148,7 @@ export default function SubjectsListPage() {
   useEffect(() => {
     if (!isScrollMode) loadSubjects();
   }, [currentPage, orderBy, pageSize, isScrollMode]);
-
+    
   // 스크롤 감지할 DOM에 연결 할 useRef 반환
   const scrollRef = useIntersectionObserver(scrollArgs);
   return (
@@ -159,15 +159,17 @@ export default function SubjectsListPage() {
         setScrollPageParams={setScrollPageParams}
         isScrollMode={isScrollMode}
       />
+
       <Container>
         <SortBox>
           <TitleSpan> 누구에게 질문할까요? </TitleSpan>
           <SortMenu />
         </SortBox>
+
         <SubjectsList subjects={subjects} isLoading={isLoading} pageSize={pageSize} />
 
         {!isScrollMode && <Pagination currentPage={currentPage} totalPages={totalPages} />}
-
+        
         {isScrollMode && hasNextScroll ? (
           <LoadingBar ref={scrollRef}>로딩중</LoadingBar>
         ) : (

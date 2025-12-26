@@ -1,8 +1,9 @@
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
-import { useRef, useState } from 'react';
-import closeIc from '../assets/close.png';
-import { createQuestion } from './getDataApi';
+import { useEffect, useRef, useState } from 'react';
+import closeIc from '../assets/PersonalImages/close.png';
+import { createQuestion, getSubjectById } from './getDataApi';
+import messages from '../assets/PersonalImages/messages.png';
 
 const Overlay = styled.div`
   position: fixed;
@@ -30,19 +31,33 @@ const Header = styled.div`
   align-items: center;
 `;
 const Title = styled.span`
+  display: flex;
+  align-items: center;
   font-size: 24px;
-
+  gap: 0 5px;
   margin-bottom: 40px;
 `;
 
 const UserProfile = styled.span`
+  display: flex;
+  align-items: center;
+  gap: 0 5px;
   font-family: 'pretendard';
-  font-size: 16px;
+  font-size: 18px;
+  font-weight: 400;
 `;
 
+const NickName = styled.span`
+  font-size: 16px;
+`;
 const UserImg = styled.img`
+  border-radius: 14px;
   width: 28px;
   height: 28px;
+`;
+
+const CloseBtn = styled.img`
+  cursor: pointer;
 `;
 
 const QuestionText = styled.textarea`
@@ -52,20 +67,41 @@ const QuestionText = styled.textarea`
   background-color: var(--gray-20);
   border: none;
   border-radius: 8px;
+  font-family: 'pretendard';
+  font-size: 16px;
+  font-weight: 400;
+  padding: 16px 16px;
+  resize: none;
 `;
 
 const SubmitButton = styled.button`
   width: 532px;
   height: 46px;
   border: none;
+  color: var(--gray-10);
   border-radius: 8px;
-  background-color: ${({ $active }) => ($active ? 'var(--brown-30)' : 'var(--brown-40)')};
+  background-color: ${({ $active }) => ($active ? 'var(--brown-40)' : 'var(--brown-30)')};
+  margin-top: 5px;
+  font-family: 'pretendard';
+  font-size: 16px;
+  font-weight: 400;
 `;
-export default function Modal({ open, onClose, subject }) {
-  if (!open) return null;
-
+export default function ModalCreateQuestion({ setOnClose, subjectId }) {
   const [isActive, setIsActive] = useState(false);
+  const [subject, setSubject] = useState({});
   const textRef = useRef(null);
+
+  useEffect(() => {
+    async function loadsubject() {
+      try {
+        const data = await getSubjectById(subjectId);
+        setSubject(data);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    loadsubject();
+  }, [subjectId]);
 
   const handleChange = () => {
     if (textRef.current.value.length > 0) setIsActive(true);
@@ -73,20 +109,29 @@ export default function Modal({ open, onClose, subject }) {
   };
 
   const handleClick = () => {
-    if (textRef.current.value) createQuestion(subject.id, textRef.current.value);
-    onClose();
+    if (textRef.current.value) {
+      createQuestion(subject.id, textRef.current.value);
+      setOnClose();
+    } else {
+      alert('질문을 입력해주세요.');
+    }
   };
 
   return createPortal(
-    <Overlay onClick={onClose}>
+    <Overlay onClick={setOnClose}>
       <Content onClick={(e) => e.stopPropagation()}>
         <Header>
-          <Title>질문을 작성하세요</Title>
-          <img src={closeIc} onClick={onClose} alt="닫기 버튼" />
+          <Title>
+            <img src={messages} />
+            질문을 작성하세요
+          </Title>
+          <CloseBtn src={closeIc} onClick={setOnClose} alt="닫기 버튼" />
         </Header>
+
         <UserProfile>
-          <UserImg src={subject.image} alt="유저 프로필사진" />
-          {subject.name}
+          To.
+          <UserImg src={subject?.imageSource} alt="유저 프로필사진" />
+          <NickName>{subject?.name}</NickName>
         </UserProfile>
 
         <QuestionText onChange={handleChange} placeholder="질문을 입력해주세요" ref={textRef} />
