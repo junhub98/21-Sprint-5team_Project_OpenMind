@@ -96,7 +96,7 @@ function QuestionList({ subjectId }) {
     setLoading(true);
     getQuestionsList(subjectId, 0, 20)
 
-      .then((data) => setQuestions(data.results))
+      .then((data) => setQuestions(data.results ?? []))
       .finally(() => setLoading(false));
   }, [subjectId]);
 
@@ -105,10 +105,9 @@ function QuestionList({ subjectId }) {
     if (!window.confirm('모든 질문을 삭제하시겠습니까?')) return;
     
     try {
-      const targets = questions.filter((q) => q.answerId);
-      
+      const targets = questions.filter((q) => q.answer?.id);
       await Promise.all(
-        targets.map( (q) => deleteAnswer(q.answerId))    
+        targets.map( (q) => deleteAnswer(q.answer.id))    
       );
       setQuestions([]);
     } catch (error) {
@@ -139,9 +138,14 @@ function QuestionList({ subjectId }) {
   // 개별 답변 업데이트
   const handleUpdateAnswer = (questionId, payload) => {
     setQuestions((prev) => 
-      prev.map((q) => 
-      q.id === questionId ? { ...q, answer: payload.answer } : q
-    ));
+      prev.map((q) => {
+        if (q.id !== questionId) return q;
+
+        return {
+          ...q, answer: payload?.answer ?? q.answer,    
+        };
+      })
+    );
   };
 
   const hasQuestions = questions.length > 0;

@@ -47,9 +47,9 @@ const SubmitButton = styled.button`
 `;
 
 // 메인 컴포넌트
-function QuestionReply({ answer, isEditing, onUpdateAnswer, questionId }) {
+function QuestionReply({ answer, isEditing, onUpdateAnswer, questionId, onFinishEdit }) {
   
-  const [content, setContent] = useState(initialContent);
+  const [content, setContent] = useState(answer?.content ?? '');
   const [loading, setLoading] = useState(false);
 
   useEffect( () => {
@@ -70,7 +70,7 @@ function QuestionReply({ answer, isEditing, onUpdateAnswer, questionId }) {
       }
 
       onUpdateAnswer(questionId, {answer: updatedAnswer});
-      
+
       setContent(updatedAnswer.content);
     } catch (error) {
       console.error('답변 제출 실패', error);

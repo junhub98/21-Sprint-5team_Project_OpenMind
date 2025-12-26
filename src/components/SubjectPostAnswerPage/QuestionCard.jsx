@@ -55,13 +55,10 @@ function QuestionCard({ question, onDelete, onUpdateAnswer }) {
   if (!question) return null;
 
   const [isEditing, setIsEditing] = useState(false);
-  const isAnswered = Boolean(question?.answer);
+  const isAnswered = Boolean(question?.answer?.content ?? false);
 
-  const handleDelete = () => {
-    question?.id && onDelete(question.id);
-  }
+  const handleDelete = () => onDelete(question.id);
   const handleEdit = () => setIsEditing(true);
-
 
   return (
     <Card>
@@ -75,15 +72,15 @@ function QuestionCard({ question, onDelete, onUpdateAnswer }) {
           />
       </CardTop>
 
-      <Meta>{question?.author} · {question?.createdAt}</Meta>
-      <Title>{question?.title}</Title>
+      <Meta>{question.author} · {question.createdAt}</Meta>
+      <Title>{question.title}</Title>
 
       <QuestionReply 
         answer={question.answer} 
         questionId={question.id}
         isEditing={isEditing} 
         onUpdateAnswer={onUpdateAnswer} 
-        
+        onFinishEdit={ () => setIsEditing(false)}
         />
     </Card>
   );
