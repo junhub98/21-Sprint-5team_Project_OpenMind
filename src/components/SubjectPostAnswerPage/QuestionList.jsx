@@ -5,7 +5,7 @@ import Messages from '../../assets/SubjectPostAnswerPage/Messages.png';
 import Mailbox from '../../assets/SubjectPostAnswerPage/Mailbox.png';
 import { getQuestionsList, deleteAnswer } from '../../utils/getDataApi';
 
-
+// styled-components
 const QuestionListWrapper = styled.section`
   width: 100%;
   max-width: 720px;

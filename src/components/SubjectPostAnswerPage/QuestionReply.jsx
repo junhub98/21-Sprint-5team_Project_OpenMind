@@ -2,6 +2,8 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { createAnswer, updateAnswer } from '../../utils/getDataApi';
 
+
+// styled-components
 const ReplyWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -45,8 +47,8 @@ const SubmitButton = styled.button`
 `;
 
 // 메인 컴포넌트
-function QuestionReply({ question, isEditing, onUpdateAnswer }) {
-  const initialContent = question.content || '';
+function QuestionReply({ answer, isEditing, onUpdateAnswer, questionId }) {
+  const initialContent = answer?.content ?? '';
 
   const [content, setContent] = useState(initialContent);
   const [loading, setLoading] = useState(false);
@@ -57,15 +59,16 @@ function QuestionReply({ question, isEditing, onUpdateAnswer }) {
 
     try {
       let updatedAnswer;
-      if (question.answerId) {    // 기존 답변이 있으면 PATCH
-        updatedAnswer = await updateAnswer(question.answerId, content);
+
+      if (answer?.Id) {    // 기존 답변이 있으면 PATCH
+        updatedAnswer = await updateAnswer(answer.Id, content);
       } else {                    // 답변이 없으면 POST
-        updatedAnswer = await createAnswer(question.id, content);
+        updatedAnswer = await createAnswer(questionId, content);
       }
-      onUpdateAnswer(question.id, updatedAnswer);
+      onUpdateAnswer(questionId, {answer: updatedAnswer});
       setContent(updatedAnswer.content);
-    } catch (err) {
-      console.error('답변 제출 실패', err);
+    } catch (error) {
+      console.error('답변 제출 실패', error);
     } finally {
       setLoading(false);
     }
@@ -73,7 +76,7 @@ function QuestionReply({ question, isEditing, onUpdateAnswer }) {
 
   return (
     <ReplyWrapper>
-      {question.createdAt && <CreatedAt>{question.createdAt}</CreatedAt>}
+      
       <Textarea
         value={content}
         onChange={e => setContent(e.target.value)}
