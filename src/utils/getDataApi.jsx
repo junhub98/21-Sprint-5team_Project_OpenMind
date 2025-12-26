@@ -35,6 +35,8 @@ export async function createSubject(name, tag = null) {
 }
 
 export function parseSubjectName(subjectName) {
+  if (!subjectName) return;
+
   const parts = subjectName.split('#tag:');
   if (parts.length === 2) {
     return { name: parts[0], tag: parts[1] };

@@ -2,7 +2,7 @@ import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 import { useEffect, useRef, useState } from 'react';
 import closeIc from '../assets/PersonalImages/close.png';
-import { createQuestion, getSubjectById } from './getDataApi';
+import { createQuestion, getSubjectById, parseSubjectName } from './getDataApi';
 import messages from '../assets/PersonalImages/messages.png';
 
 const Overlay = styled.div`
@@ -12,6 +12,7 @@ const Overlay = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 9999;
 `;
 
 const Content = styled.div`
@@ -56,6 +57,21 @@ const UserImg = styled.img`
   height: 28px;
 `;
 
+const TagBox = styled.span`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 3px;
+  height: 25px;
+  background-color: var(--brown-20);
+  border: none;
+  border-radius: 12.5px;
+  font-family: 'pretendard';
+  font-size: 16px;
+  font-weight: 400;
+  padding: 1px 12px 0 12px;
+`;
+
 const CloseBtn = styled.img`
   cursor: pointer;
 `;
@@ -88,8 +104,10 @@ const SubmitButton = styled.button`
 `;
 export default function ModalCreateQuestion({ setOnClose, subjectId }) {
   const [isActive, setIsActive] = useState(false);
-  const [subject, setSubject] = useState({});
+  const [subject, setSubject] = useState(null);
   const textRef = useRef(null);
+
+  const { name, tag } = parseSubjectName(subject?.name) || { name: '', tag: '' };
 
   useEffect(() => {
     async function loadsubject() {
@@ -112,6 +130,7 @@ export default function ModalCreateQuestion({ setOnClose, subjectId }) {
     if (textRef.current.value) {
       createQuestion(subject.id, textRef.current.value);
       setOnClose();
+      window.location.reload();
     } else {
       alert('질문을 입력해주세요.');
     }
@@ -131,7 +150,8 @@ export default function ModalCreateQuestion({ setOnClose, subjectId }) {
         <UserProfile>
           To.
           <UserImg src={subject?.imageSource} alt="유저 프로필사진" />
-          <NickName>{subject?.name}</NickName>
+          <NickName>{name}</NickName>
+          <TagBox>#{tag}</TagBox>
         </UserProfile>
 
         <QuestionText onChange={handleChange} placeholder="질문을 입력해주세요" ref={textRef} />
