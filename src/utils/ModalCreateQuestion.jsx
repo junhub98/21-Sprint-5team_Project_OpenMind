@@ -151,7 +151,7 @@ export default function ModalCreateQuestion({ setOnClose, subjectId }) {
           To.
           <UserImg src={subject?.imageSource} alt="유저 프로필사진" />
           <NickName>{name}</NickName>
-          <TagBox>#{tag}</TagBox>
+          {tag && <TagBox>#{tag}</TagBox>}
         </UserProfile>
 
         <QuestionText onChange={handleChange} placeholder="질문을 입력해주세요" ref={textRef} />
