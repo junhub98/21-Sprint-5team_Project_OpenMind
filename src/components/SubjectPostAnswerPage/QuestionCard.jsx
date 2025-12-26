@@ -52,29 +52,38 @@ const Hr = styled.hr`
 
 // 메인컴포넌트
 function QuestionCard({ question, onDelete, onUpdateAnswer }) {
+  if (!question) return null;
   const [isEditing, setIsEditing] = useState(false);
-  const isAnswered = Boolean(question.answer);
+  const isAnswered = Boolean(question?.answer);
 
+  const handleDelete = () => {
+    question?.id && onDelete(question.id);
+  };
+  
   const handleEdit = () => setIsEditing(true);
-
 
   return (
     <Card>
       <CardTop>
-        <Status $done={isAnswered}>{isAnswered ? '답변완료' : '미답변'}</Status>
-        <KebabMenu 
-          onEdit={handleEdit} 
-          onDelete={() => onDelete(question.id)} 
-        />
+        <Status $done={isAnswered}>
+          {isAnswered ? '답변완료' : '미답변'}
+        </Status>
+          <KebabMenu 
+            onEdit={handleEdit} 
+            onDelete={handleDelete} 
+          />
       </CardTop>
 
       <Meta>{question.author} · {question.createdAt}</Meta>
-      <Title>{question.title}</Title>
+      <Title>{question?.title}</Title>
 
       <QuestionReply 
-        answer={question.answer} 
+        answer={question?.answer} 
+        questionId={question.id}
         isEditing={isEditing} 
-        onUpdateAnswer={onUpdateAnswer} />
+        onUpdateAnswer={onUpdateAnswer} 
+        
+        />
     </Card>
   );
 }

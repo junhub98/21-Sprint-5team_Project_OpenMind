@@ -39,11 +39,12 @@ const Toast = styled.div`
 `;
 
 // 컴포넌트 분리 (리렌더링 범위 관리) React.memo 사용
+// 링크 복사하기
 const LinkCopyButton = memo(  function LinkCopyButton() {
   const [showToast, setShowToast] = useState(false);
   const url = window.location.href;
 
-  const HandleClick = async () => {
+  const handleCopyLinkClick = async () => {
     try {
       await navigator.clipboard.writeText(url);
       setShowToast(true);
@@ -58,7 +59,7 @@ const LinkCopyButton = memo(  function LinkCopyButton() {
   
   return (
     <>
-      <ImageButton onClick={HandleClick}>
+      <ImageButton onClick={handleCopyLinkClick}>
         <img src={ShareLink} alt="링크복사" />
       </ImageButton>
       {showToast && <Toast>URL이 복사되었습니다</Toast>}
@@ -67,6 +68,7 @@ const LinkCopyButton = memo(  function LinkCopyButton() {
 
 });
 
+// 카카오톡 공유하기
 const KakaoButton = memo(function KakaoButton() {
   return (
     <ImageButton onClick={() => alert('카카오톡')}>
@@ -75,11 +77,26 @@ const KakaoButton = memo(function KakaoButton() {
   );
 });
 
+// 페이스북 공유하기
 const FacebookButton = memo(function FacebookButton() {
+  
+  const handleFacebookShare = () => {
+    const url = encodeURIComponent(window.location.href);
+
+    window.open(
+      `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+      `_blank`,
+      `width=1200, height=1200`
+    );
+  };
+
   return (
-    <ImageButton onClick={() => alert('페이스북')}>
-      <img src={ShareFacebook} alt="페이스북 공유" />
-    </ImageButton>
+    <>
+      <ImageButton onClick={handleFacebookShare}>
+        <img src={ShareFacebook} alt="페이스북 공유" />
+      </ImageButton>
+
+    </>
   );
 });
 

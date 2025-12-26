@@ -1,21 +1,21 @@
-import FeedHeader from '../components/FeedHeader';
+import FeedHeader from '../components/PersonalPage/FeedHeader/FeedHeader';
 import { getQuestionsList, getSubjectById } from '../utils/getDataApi';
-import QuestionsList from '../components/QuestionsList';
+import QuestionsList from '../components/PersonalPage/QuestionList/QuestionsList';
 import { useEffect, useRef, useState, useCallback } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import CreateQuestionButton from '../components/CreateQuestionButton';
+import { useNavigate, useParams } from 'react-router-dom';
+import CreateQuestionButton from '../components/PersonalPage/CreateQuestionButton/CreateQuestionButton';
 import styles from './FeedPage.module.css';
+import ModalCreateQuestion from '../utils/ModalCreateQuestion';
 
 export default function FeedPage() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const subjectId = searchParams.get('subjectId');
+  const { subjectId } = useParams();
 
   const BATCH = 3;
 
   const [questions, setQuestions] = useState([]);
   const [subjectName, setSubjectName] = useState('익명');
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const offsetRef = useRef(0);
   const hasMoreRef = useRef(true);
   const inFlightRef = useRef(false);
@@ -40,7 +40,6 @@ export default function FeedPage() {
     list.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
     setQuestions((prev) => [...prev, ...list.map((q) => ({ ...q, subjectName }))]);
-
     offsetRef.current += list.length;
     hasMoreRef.current = Boolean(res?.next);
 
@@ -79,16 +78,18 @@ export default function FeedPage() {
     return () => window.removeEventListener('scroll', onScroll);
   }, [loadMore]);
 
-  const goToCreateQuestion = () => {
-    if (!subjectId) return;
-    navigate(`/CreateQuestion`);
-  };
-
   return (
     <div className={styles.feedPage}>
       <FeedHeader />
       <QuestionsList questions={questions} />
-      <CreateQuestionButton onClick={goToCreateQuestion} />
+      <CreateQuestionButton onClick={() => setIsModalOpen(true)} />
+      {isModalOpen && (
+        <ModalCreateQuestion
+          isOpen={isModalOpen}
+          setOnClose={() => setIsModalOpen(false)}
+          subjectId={subjectId}
+        />
+      )}
     </div>
   );
 }

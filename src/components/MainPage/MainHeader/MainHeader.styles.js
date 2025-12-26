@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import media from '../../utils/media';
+import media from '../../../utils/media';
 
 export const Header = styled.header`
   /* PC/태블릿: 화면 우상단 고정(콘텐츠 정렬에 영향 X) */
@@ -32,7 +32,7 @@ export const GoQuestionsButton = styled.button`
   border-radius: 8px;
   border: 1px solid #b88a5a;
   background-color: #fff7f0;
-  color: #7a4a1b;
+  color: var( --brown-40);
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;

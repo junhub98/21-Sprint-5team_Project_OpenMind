@@ -1,8 +1,8 @@
 import styles from './QuestionCard.module.css';
 import React, { useState } from 'react';
-import profileImage from '../assets/profileImage.svg';
-import ThumbsUp from '../assets/thumbsUp.svg?react';
-import ThumbsDown from '../assets/thumbsDown.svg?react';
+import profileImage from '../../../assets/PersonalImages/profileImage.svg';
+import ThumbsUp from '../../../assets/PersonalImages/thumbsUp.svg?react';
+import ThumbsDown from '../../../assets/PersonalImages/thumbsDown.svg?react';
 
 function QuestionDate(dateString) {
   if (!dateString) return '';

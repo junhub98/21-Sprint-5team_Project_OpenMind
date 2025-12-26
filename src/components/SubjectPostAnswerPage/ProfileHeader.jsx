@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import axios from '../../utils/axios';
 import styled from 'styled-components';
 import SocialButtons from './ProfileSocialButtons';
 import Logo from '../../assets/SubjectPostAnswerPage/logo.png';
 import LogoOpenmind from '../../assets/SubjectPostAnswerPage/logoOpenmind.png';
 import Photo from '../../assets/SubjectPostAnswerPage/Photo.png';
+import { getSubjectById } from '../../utils/getDataApi';
 
 // styled-components 
 const ProfileHeaderWrapper = styled.section`
@@ -68,25 +68,34 @@ const ProfileSocial = styled.div`
 `;
 
 // 메인컴포넌트 프로필 그림, 사진 등등
-function ProfileHeader( {userId}) {
-  const [profileName, setProfileName] = useState('사용자');
-  const [profileAvatar, setProfileAvatar] = useState(Photo);
+function ProfileHeader( {subjectId}) {
+  const [subject, setSubject] = useState(null);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
-    if (!userId) return;
+    if (!subjectId) return;
 
-    async function fetchProfile() {
+    async function fetchsubject() {
       try {
-        const response = await axios.get(`/users/${userId}/`);
-        setProfileName(response.data.name);
-        setProfileAvatar(response.data.avatar || Photo);
-      } catch (err) {
-        console.error('프로필 불러오기 실패', err);
-      }
+        const data = await getSubjectById(subjectId);
+        setSubject(data);
+      } catch (error) {
+        console.error('프로필 불러오기 실패', error);
+        setError(true);
+      } 
     }
 
-    fetchProfile();
-  }, [userId]);
+    fetchsubject();
+  }, [subjectId]);
+
+  if(error) {
+    return <div> 프로필 정보를 불러올수 없습니다.</div>;
+  }
+
+  if(!subject) {
+    return <div> 프로필 정보 로딩중.</div>;
+  }
+
 
   return (
     <ProfileHeaderWrapper>
@@ -99,9 +108,13 @@ function ProfileHeader( {userId}) {
 
       <ProfileInfo>
         <ProfileAvatar 
-          src={profileName.imageSource || Photo} 
-          alt={`${profileName.name}의 프로필 사진`} />
-        <ProfileName>{profileName.name || '사용자'}</ProfileName>
+          src={subject?.imageSource || Photo} 
+          alt='프로필 사진'
+        />
+          
+        <ProfileName>
+          {subject?.name || '이름 없음'}
+        </ProfileName>
       </ProfileInfo>
 
       <ProfileSocial>

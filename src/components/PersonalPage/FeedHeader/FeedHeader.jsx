@@ -1,10 +1,10 @@
 import styles from './FeedHeader.module.css';
-import bannerImage from '../assets/bannerImage.svg';
-import logoImage from '../assets/logo.svg';
-import profileImage from '../assets/profileImage.svg';
-import linkImage from '../assets/linkImage.svg';
-import kakaoImage from '../assets/kakaoImage.svg';
-import facebookImage from '../assets/facebookImage.svg';
+import bannerImage from '../../../assets/PersonalImages/bannerImage.svg';
+import logoImage from '../../../assets/PersonalImages/logo.svg';
+import profileImage from '../../../assets/PersonalImages/profileImage.svg';
+import linkImage from '../../../assets/PersonalImages/linkImage.svg';
+import kakaoImage from '../../../assets/PersonalImages/kakaoImage.svg';
+import facebookImage from '../../../assets/PersonalImages/facebookImage.svg';
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 

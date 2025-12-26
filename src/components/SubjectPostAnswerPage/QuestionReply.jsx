@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { createAnswer, updateAnswer } from '../../utils/getDataApi';
 
+
+// styled-components
 const ReplyWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -45,11 +47,13 @@ const SubmitButton = styled.button`
 `;
 
 // 메인 컴포넌트
-function QuestionReply({ question, isEditing, onUpdateAnswer }) {
-  const initialContent = question.content || '';
-
-  const [content, setContent] = useState(initialContent);
+function QuestionReply({ answer, isEditing, onUpdateAnswer, questionId}) {
+  const [content, setContent] = useState(answer?.content ?? '');
   const [loading, setLoading] = useState(false);
+
+  useEffect( () => {
+    setContent(answer?.content ?? '')
+  }, [answer]);
 
   const handleSubmit = async () => {
     if (!content) return;
@@ -57,32 +61,39 @@ function QuestionReply({ question, isEditing, onUpdateAnswer }) {
 
     try {
       let updatedAnswer;
-      if (question.answerId) {    // 기존 답변이 있으면 PATCH
-        updatedAnswer = await updateAnswer(question.answerId, content);
+
+      if (answer?.id) {    // 기존 답변이 있으면 PATCH
+        updatedAnswer = await updateAnswer(answer.id, content);
       } else {                    // 답변이 없으면 POST
-        updatedAnswer = await createAnswer(question.id, content);
+        updatedAnswer = await createAnswer(questionId, content);
       }
-      onUpdateAnswer(question.id, updatedAnswer);
-      setContent(updatedAnswer.content);
-    } catch (err) {
-      console.error('답변 제출 실패', err);
+
+      onUpdateAnswer(questionId, {
+        answer: updatedAnswer ?? { content, id: updatedAnswer?.id ?? null}});
+
+      setContent(updatedAnswer?.content ?? content);
+    } catch (error) {
+      console.error('답변 제출 실패', error);
+      alert('답변 제출에 실패했습니다.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <ReplyWrapper>
-      {question.createdAt && <CreatedAtLabel>{question.createdAt}</CreatedAtLabel>}
-      <ReplyTextarea
+    <ReplyWrapper>      
+      <Textarea
         value={content}
         onChange={e => setContent(e.target.value)}
         readOnly={!isEditing || loading}
+        placeholder='답변을 입력하세요.'
       />
       {isEditing && (
-        <SubmitButton onClick={handleSubmit} disabled={loading}>
-          {loading ? '저장중...' : '등록'}
-        </SubmitButton>
+        <ButtonWrapper>
+          <SubmitButton onClick={handleSubmit} disabled={loading}>
+            {loading ? '저장중...' : '등록'}
+          </SubmitButton>
+        </ButtonWrapper>
       )}
       <hr />
     </ReplyWrapper>

@@ -1,9 +1,13 @@
 import styles from './QuestionsList.module.css';
-import QuestionCard from './QuestionCard';
-import QuestionIcon from '../assets/questionIcon.svg';
+import QuestionCard from '../QuestionCard/QuestionCard';
+import QuestionIcon from '../../../assets/PersonalImages/questionIcon.svg';
+import CreateQuestionCard from '../EmptyQuestionCard/CreateQuestionCard';
 
 export default function QuestionsList({ questions }) {
   const list = Array.isArray(questions) ? questions : [];
+  if (list.length === 0) {
+    return <CreateQuestionCard />;
+  }
 
   return (
     <div className={styles.questionListContainer}>

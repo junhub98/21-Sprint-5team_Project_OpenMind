@@ -3,8 +3,9 @@ import styled from 'styled-components';
 import QuestionCard from './QuestionCard';
 import Messages from '../../assets/SubjectPostAnswerPage/Messages.png';
 import Mailbox from '../../assets/SubjectPostAnswerPage/Mailbox.png';
-import { getQuestionsList } from '../../utils/getDataApi';
+import { getQuestionsList, deleteAnswer } from '../../utils/getDataApi';
 
+// styled-components
 const QuestionListWrapper = styled.section`
   width: 100%;
   max-width: 720px;
@@ -83,7 +84,7 @@ const EmptyIllustration = styled.div`
   }
 `;
 
-// 메인 컴포넌트 API 연동
+// 메인 컴포넌트 
 function QuestionList({ subjectId }) {
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -91,30 +92,53 @@ function QuestionList({ subjectId }) {
   // 질문 리스트 불러오기
   useEffect(() => {
     if (!subjectId) return;
+
     setLoading(true);
     getQuestionsList(subjectId, 0, 20)
-      .then((data) => setQuestions(data.results))
+      .then((data) => setQuestions(data?.results ?? []))
       .finally(() => setLoading(false));
   }, [subjectId]);
 
-  const handleDeleteAll = () => {
+  // 전체 삭제 
+  const handleDeleteAll = async () => {
     if (!window.confirm('모든 질문을 삭제하시겠습니까?')) return;
-    questions.forEach((q) => {
-      if (q.answerId) deleteAnswer(q.answerId);
-    });
-    setQuestions([]);
+    
+    try {
+      const targets = questions.filter(q => q.answer);
+      await Promise.all(
+        targets.map( (q) => deleteAnswer(q.answer.id))    
+      );
+      setQuestions([]);
+    } catch (error) {
+        console.error('전체 질문 삭제', error)
+        alert('전체 질문 삭제에 실패했습니다.');
+    } 
   };
 
-  const handleDeleteOne = (id) => {
-    const target = questions.find((q) => q.id === id);
+    // 개별 삭제
+  const handleDeleteOne = async (id) => {
+    const target = questions.find(q => q.id === id);
     if (!target) return;
     if (!window.confirm('해당 질문을 삭제하시겠습니까?')) return;
-    if (target.answerId) deleteAnswer(target.answerId);
-    setQuestions((prev) => prev.filter((q) => q.id !== id));
-  };
 
-  const handleUpdateAnswer = (questionId, updatedAnswer) => {
-    setQuestions((prev) => prev.map((q) => (q.id === questionId ? { ...q, ...updatedAnswer } : q)));
+      try {
+        if (target.answer?.id) await deleteAnswer(target.answer.id);
+          setQuestions(prev => prev.filter(q => q.id !== id));
+      } catch (error) {
+          console.error('삭제 실패', error);
+          alert('질문 삭제에 실패했습니다.');
+      } 
+  };
+  
+  // 개별 답변 업데이트
+  const handleUpdateAnswer = (questionId, payload) => {
+    setQuestions(prev => 
+      prev.map(q => 
+        q.id !== questionId
+          ? { ...q, answer: payload?.answer ?? q.answer ?? null }
+          : q
+      )
+    );
   };
 
   const hasQuestions = questions.length > 0;
@@ -152,12 +176,12 @@ function QuestionList({ subjectId }) {
           <QuestionListBody>
             {questions.map((q) => (
               <QuestionCard
-                key={q.id}
+                key={q?.id}
                 question={q}
                 onDelete={handleDeleteOne}
                 onUpdateAnswer={handleUpdateAnswer}
               />
-            ))}
+            ) )}
           </QuestionListBody>
         )}
       </QuestionListContainer>
