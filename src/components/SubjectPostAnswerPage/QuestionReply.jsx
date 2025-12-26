@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { createAnswer, updateAnswer } from '../../utils/getDataApi';
 
@@ -47,7 +47,7 @@ const SubmitButton = styled.button`
 `;
 
 // 메인 컴포넌트
-function QuestionReply({ answer, isEditing, onUpdateAnswer, questionId, onFinishEdit }) {
+function QuestionReply({ answer, isEditing, onUpdateAnswer, questionId}) {
   
   const [content, setContent] = useState(answer?.content ?? '');
   const [loading, setLoading] = useState(false);
@@ -70,7 +70,6 @@ function QuestionReply({ answer, isEditing, onUpdateAnswer, questionId, onFinish
       }
 
       onUpdateAnswer(questionId, {answer: updatedAnswer});
-
       setContent(updatedAnswer.content);
     } catch (error) {
       console.error('답변 제출 실패', error);
@@ -80,11 +79,10 @@ function QuestionReply({ answer, isEditing, onUpdateAnswer, questionId, onFinish
   };
 
   return (
-    <ReplyWrapper>
-      
+    <ReplyWrapper>      
       <Textarea
         value={content}
-        onChange={e => setContent(e.target.value)}
+        onChange={(e) => setContent(e.target.value)}
         readOnly={!isEditing || loading}
       />
       {isEditing && (

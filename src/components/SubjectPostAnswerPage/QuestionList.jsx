@@ -138,13 +138,9 @@ function QuestionList({ subjectId }) {
   // 개별 답변 업데이트
   const handleUpdateAnswer = (questionId, payload) => {
     setQuestions((prev) => 
-      prev.map((q) => {
-        if (q.id !== questionId) return q;
-
-        return {
-          ...q, answer: payload?.answer ?? q.answer,    
-        };
-      })
+      prev.map((q) => 
+        q.id !== questionId? { ...q, answer: payload?.answer ?? q.answer } : q
+      )
     );
   };
 
