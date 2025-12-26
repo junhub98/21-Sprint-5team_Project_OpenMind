@@ -1,5 +1,5 @@
 import styles from './CreateQuestionCard.module.css';
-import QuestionIcon from '../assets/questionIcon.svg';
+import QuestionIcon from '../../../assets/PersonalImages/questionIcon.svg';
 
 export default function CreateQuestionCard({ onClick }) {
   return (
