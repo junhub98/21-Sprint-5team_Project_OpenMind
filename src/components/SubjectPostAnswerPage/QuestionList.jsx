@@ -84,7 +84,7 @@ const EmptyIllustration = styled.div`
   }
 `;
 
-// 메인 컴포넌트 API 연동
+// 메인 컴포넌트 
 function QuestionList({ subjectId }) {
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -125,8 +125,8 @@ function QuestionList({ subjectId }) {
     if (!window.confirm('해당 질문을 삭제하시겠습니까?')) return;
 
       try {
-        if (target.answerId) {
-          await deleteAnswer(target.answerId);
+        if (target.answer?.id) {
+          await deleteAnswer(target.answer.id);
         }
 
         setQuestions((prev) => prev.filter((q) => q.id !== id));
@@ -136,9 +136,12 @@ function QuestionList({ subjectId }) {
       } 
   };
   
-  const handleUpdateAnswer = (questionId, updatedAnswer) => {
-    setQuestions((prev) => prev.map((q) => 
-      (q.id === questionId ? { ...q, ...updatedAnswer } : q)));
+  // 개별 답변 업데이트
+  const handleUpdateAnswer = (questionId, payload) => {
+    setQuestions((prev) => 
+      prev.map((q) => 
+      q.id === questionId ? { ...q, answer: payload.answer } : q
+    ));
   };
 
   const hasQuestions = questions.length > 0;
