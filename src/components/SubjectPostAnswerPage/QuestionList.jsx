@@ -95,8 +95,7 @@ function QuestionList({ subjectId }) {
 
     setLoading(true);
     getQuestionsList(subjectId, 0, 20)
-
-      .then((data) => setQuestions(data.results ?? []))
+      .then((data) => setQuestions(data?.results ?? []))
       .finally(() => setLoading(false));
   }, [subjectId]);
 
@@ -105,7 +104,7 @@ function QuestionList({ subjectId }) {
     if (!window.confirm('모든 질문을 삭제하시겠습니까?')) return;
     
     try {
-      const targets = questions.filter((q) => q.answer?.id);
+      const targets = questions.filter(q => q.answer);
       await Promise.all(
         targets.map( (q) => deleteAnswer(q.answer.id))    
       );
@@ -118,17 +117,13 @@ function QuestionList({ subjectId }) {
 
     // 개별 삭제
   const handleDeleteOne = async (id) => {
-    const target = questions.find((q) => q.id === id);
+    const target = questions.find(q => q.id === id);
     if (!target) return;
-
     if (!window.confirm('해당 질문을 삭제하시겠습니까?')) return;
 
       try {
-        if (target.answer?.id) {
-          await deleteAnswer(target.answer.id);
-        }
-
-        setQuestions((prev) => prev.filter((q) => q.id !== id));
+        if (target.answer?.id) await deleteAnswer(target.answer.id);
+          setQuestions(prev => prev.filter(q => q.id !== id));
       } catch (error) {
           console.error('삭제 실패', error);
           alert('질문 삭제에 실패했습니다.');
@@ -137,9 +132,11 @@ function QuestionList({ subjectId }) {
   
   // 개별 답변 업데이트
   const handleUpdateAnswer = (questionId, payload) => {
-    setQuestions((prev) => 
-      prev.map((q) => 
-        q.id !== questionId? { ...q, answer: payload?.answer ?? q.answer } : q
+    setQuestions(prev => 
+      prev.map(q => 
+        q.id !== questionId
+          ? { ...q, answer: payload?.answer ?? q.answer ?? null }
+          : q
       )
     );
   };
@@ -179,12 +176,12 @@ function QuestionList({ subjectId }) {
           <QuestionListBody>
             {questions.map((q) => (
               <QuestionCard
-                key={q.id}
+                key={q?.id}
                 question={q}
                 onDelete={handleDeleteOne}
                 onUpdateAnswer={handleUpdateAnswer}
               />
-            ))}
+            ) )}
           </QuestionListBody>
         )}
       </QuestionListContainer>

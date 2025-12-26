@@ -108,12 +108,12 @@ function ProfileHeader( {subjectId}) {
 
       <ProfileInfo>
         <ProfileAvatar 
-          src={subject.imageSource || Photo} 
+          src={subject?.imageSource || Photo} 
           alt='프로필 사진'
         />
           
         <ProfileName>
-          {subject.name}
+          {subject?.name || '이름 없음'}
         </ProfileName>
       </ProfileInfo>
 

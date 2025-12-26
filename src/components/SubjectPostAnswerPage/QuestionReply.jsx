@@ -48,7 +48,6 @@ const SubmitButton = styled.button`
 
 // 메인 컴포넌트
 function QuestionReply({ answer, isEditing, onUpdateAnswer, questionId}) {
-  
   const [content, setContent] = useState(answer?.content ?? '');
   const [loading, setLoading] = useState(false);
 
@@ -69,10 +68,13 @@ function QuestionReply({ answer, isEditing, onUpdateAnswer, questionId}) {
         updatedAnswer = await createAnswer(questionId, content);
       }
 
-      onUpdateAnswer(questionId, {answer: updatedAnswer});
-      setContent(updatedAnswer.content);
+      onUpdateAnswer(questionId, {
+        answer: updatedAnswer ?? { content, id: updatedAnswer?.id ?? null}});
+
+      setContent(updatedAnswer?.content ?? content);
     } catch (error) {
       console.error('답변 제출 실패', error);
+      alert('답변 제출에 실패했습니다.');
     } finally {
       setLoading(false);
     }
@@ -82,13 +84,16 @@ function QuestionReply({ answer, isEditing, onUpdateAnswer, questionId}) {
     <ReplyWrapper>      
       <Textarea
         value={content}
-        onChange={(e) => setContent(e.target.value)}
+        onChange={e => setContent(e.target.value)}
         readOnly={!isEditing || loading}
+        placeholder='답변을 입력하세요.'
       />
       {isEditing && (
-        <SubmitButton onClick={handleSubmit} disabled={loading}>
-          {loading ? '저장중...' : '등록'}
-        </SubmitButton>
+        <ButtonWrapper>
+          <SubmitButton onClick={handleSubmit} disabled={loading}>
+            {loading ? '저장중...' : '등록'}
+          </SubmitButton>
+        </ButtonWrapper>
       )}
       <hr />
     </ReplyWrapper>
