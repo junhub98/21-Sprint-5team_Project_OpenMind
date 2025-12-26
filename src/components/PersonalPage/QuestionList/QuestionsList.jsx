@@ -1,5 +1,5 @@
 import styles from './QuestionsList.module.css';
-import QuestionCard from './QuestionCard';
+import QuestionCard from '../QuestionCard/QuestionCard';
 import QuestionIcon from '../assets/questionIcon.svg';
 
 export default function QuestionsList({ questions }) {
