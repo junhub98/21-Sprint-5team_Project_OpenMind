@@ -47,7 +47,9 @@ const SubmitButton = styled.button`
 `;
 
 // 메인 컴포넌트
-function QuestionReply({ answer, isEditing, onUpdateAnswer, questionId}) {
+function QuestionReply({ answer={}, isEditing, onUpdateAnswer, questionId}) {
+  
+  
   const [content, setContent] = useState(answer?.content ?? '');
   const [loading, setLoading] = useState(false);
 

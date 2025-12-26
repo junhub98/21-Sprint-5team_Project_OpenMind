@@ -70,8 +70,47 @@ const LinkCopyButton = memo(  function LinkCopyButton() {
 
 // 카카오톡 공유하기
 const KakaoButton = memo(function KakaoButton() {
+  const handleKakaoShare = () => {
+    if (!window.Kakao) {
+      console.error('Kakao SDK not loaded');
+      return;
+    }
+
+    if(!window.Kakao.isInitialized()) {
+      console.error('Kakao SDK not initialized');
+      return;
+    }
+
+    if(!window.Kakao.Share) {
+      console.error('Kakao.Share module not available yet');
+      return;
+    }
+
+    window.Kakao.Share.sendDefault({
+      objectType: 'feed',
+      content: {
+        title: '질문을 공유해보세요',
+        description: '이 질문에 답변을 남겨주세요!',
+        imageUrl: 'https://via.placeholder.com/640x480', // 공유할 이미지
+        link: {
+          mobileWebUrl: window.location.href,
+          webUrl: window.location.href,
+        },
+      },
+      buttons: [
+        {
+          title: '웹에서 보기',
+          link: {
+            mobileWebUrl: window.location.href,
+            webUrl: window.location.href,
+          }
+        }
+      ],
+    });
+  };
+
   return (
-    <ImageButton onClick={() => alert('카카오톡')}>
+    <ImageButton onClick={handleKakaoShare}>
       <img src={ShareKakao} alt="카카오 공유" />
     </ImageButton>
   );
