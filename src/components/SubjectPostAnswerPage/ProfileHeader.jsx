@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import axios from '../../utils/axios';
 import styled from 'styled-components';
 import SocialButtons from './ProfileSocialButtons';
 import Logo from '../../assets/SubjectPostAnswerPage/logo.png';
@@ -70,7 +69,7 @@ const ProfileSocial = styled.div`
 
 // 메인컴포넌트 프로필 그림, 사진 등등
 function ProfileHeader( {subjectId}) {
-  const [subject, setSubject] = useState('null');
+  const [subject, setSubject] = useState(null);
   const [error, setError] = useState(false);
 
   useEffect(() => {
@@ -81,7 +80,7 @@ function ProfileHeader( {subjectId}) {
         const data = await getSubjectById(subjectId);
         setSubject(data);
       } catch (error) {
-        console.error('프로필 불러오기 실패', err);
+        console.error('프로필 불러오기 실패', error);
         setError(true);
       } 
     }

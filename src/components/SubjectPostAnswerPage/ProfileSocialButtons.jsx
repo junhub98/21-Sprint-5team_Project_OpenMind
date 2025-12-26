@@ -67,6 +67,7 @@ const LinkCopyButton = memo(  function LinkCopyButton() {
 
 });
 
+// 카카오톡 공유하기
 const KakaoButton = memo(function KakaoButton() {
   return (
     <ImageButton onClick={() => alert('카카오톡')}>
@@ -75,11 +76,26 @@ const KakaoButton = memo(function KakaoButton() {
   );
 });
 
+// 페이스북 공유하기
 const FacebookButton = memo(function FacebookButton() {
+  
+  const handleFacebookShare = () => {
+    const url = encodeURIComponent(window.location.href);
+
+    window.open(
+      `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+      `_blank`,
+      `width=1200, height=1200`
+    );
+  };
+
   return (
-    <ImageButton onClick={() => alert('페이스북')}>
-      <img src={ShareFacebook} alt="페이스북 공유" />
-    </ImageButton>
+    <>
+      <ImageButton onClick={handleFacebookShare}>
+        <img src={ShareFacebook} alt="페이스북 공유" />
+      </ImageButton>
+
+    </>
   );
 });
 
