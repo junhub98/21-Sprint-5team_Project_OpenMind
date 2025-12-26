@@ -48,10 +48,13 @@ const SubmitButton = styled.button`
 
 // 메인 컴포넌트
 function QuestionReply({ answer, isEditing, onUpdateAnswer, questionId }) {
-  const initialContent = answer?.content ?? '';
-
+  
   const [content, setContent] = useState(initialContent);
   const [loading, setLoading] = useState(false);
+
+  useEffect( () => {
+    setContent(answer?.content ?? '')
+  }, [answer]);
 
   const handleSubmit = async () => {
     if (!content) return;
@@ -60,12 +63,14 @@ function QuestionReply({ answer, isEditing, onUpdateAnswer, questionId }) {
     try {
       let updatedAnswer;
 
-      if (answer?.Id) {    // 기존 답변이 있으면 PATCH
-        updatedAnswer = await updateAnswer(answer.Id, content);
+      if (answer?.id) {    // 기존 답변이 있으면 PATCH
+        updatedAnswer = await updateAnswer(answer.id, content);
       } else {                    // 답변이 없으면 POST
         updatedAnswer = await createAnswer(questionId, content);
       }
+
       onUpdateAnswer(questionId, {answer: updatedAnswer});
+      
       setContent(updatedAnswer.content);
     } catch (error) {
       console.error('답변 제출 실패', error);

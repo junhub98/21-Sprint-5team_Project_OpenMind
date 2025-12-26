@@ -79,7 +79,7 @@ function QuestionCard({ question, onDelete, onUpdateAnswer }) {
       <Title>{question?.title}</Title>
 
       <QuestionReply 
-        answer={question?.answer} 
+        answer={question.answer} 
         questionId={question.id}
         isEditing={isEditing} 
         onUpdateAnswer={onUpdateAnswer} 
