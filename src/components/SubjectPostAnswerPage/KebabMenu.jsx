@@ -40,17 +40,37 @@ const MenuItem = styled.li`
 function KebabMenu({ onEdit, onDelete, onReject }) {
   const [isOpen, setIsOpen] = useState(false);
 
+  const handleToggleMenu = () => {
+    setIsOpen(prev => !prev);
+  };
+
+  const handleEditClick = () => {
+    onEdit();
+    setIsOpen(false);
+  };
+
+  const handleDeleteClick = () => {
+    onDelete();
+    setIsOpen(false);
+  };
+
+  const handleRejectClick = () => {
+    if (!onReject) return;
+    onReject();
+    setIsOpen(false);
+  };
+
   return (
     <MenuWrapper>
-      <MenuButton onClick={() => setIsOpen(prev => !prev)}>
+      <MenuButton onClick={handleToggleMenu}>
         <img src={KebabIcon} alt="메뉴" />
       </MenuButton>
 
       {isOpen && (
         <MenuList>
-          <MenuItem onClick={onEdit}>수정</MenuItem>
-          <MenuItem onClick={onDelete}>삭제</MenuItem>
-          <MenuItem onClick={onReject}>거절</MenuItem>
+          <MenuItem onClick={handleEditClick}>수정</MenuItem>
+          <MenuItem onClick={handleDeleteClick}>삭제</MenuItem>
+          <MenuItem onClick={handleRejectClick}>거절</MenuItem>
         </MenuList>
       )}
     </MenuWrapper>

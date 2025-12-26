@@ -1,6 +1,13 @@
 import ProfileHeader from '../components/SubjectPostAnswerPage/ProfileHeader';
 import QuestionSection from '../components/SubjectPostAnswerPage/QuestionSection';
 import { useEffect, useState } from 'react';
+import { createGlobalStyle } from 'styled-components';
+
+const GlobalStyle = createGlobalStyle`
+  html {
+    overflow-y: scroll;
+  }
+`;
 
 function SubjectPostAnswerPage() {
   const [subjectId, setSubjectId] = useState(null);    
@@ -26,6 +33,7 @@ function SubjectPostAnswerPage() {
 
   return (
     <>
+      <GlobalStyle />
       <ProfileHeader subjectId={subjectId} />
       <QuestionSection subjectId={subjectId} />
     </>

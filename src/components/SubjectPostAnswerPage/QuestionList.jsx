@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import QuestionCard from './QuestionCard';
 import Messages from '../../assets/SubjectPostAnswerPage/Messages.png';
 import Mailbox from '../../assets/SubjectPostAnswerPage/Mailbox.png';
-import { getQuestionsList } from '../../utils/getDataApi';
+import { getQuestionsList, deleteAnswer } from '../../utils/getDataApi';
+
 
 const QuestionListWrapper = styled.section`
   width: 100%;
@@ -99,24 +100,45 @@ function QuestionList({ subjectId }) {
       .finally(() => setLoading(false));
   }, [subjectId]);
 
-  const handleDeleteAll = () => {
+  // 전체 삭제 
+  const handleDeleteAll = async () => {
     if (!window.confirm('모든 질문을 삭제하시겠습니까?')) return;
-    questions.forEach((q) => {
-      if (q.answerId) deleteAnswer(q.answerId);
-    });
-    setQuestions([]);
+    
+    try {
+      const targets = questions.filter((q) => q.answerId);
+      
+      await Promise.all(
+        targets.map( (q) => deleteAnswer(q.answerId))    
+      );
+      setQuestions([]);
+    } catch (error) {
+        console.error('전체 질문 삭제', error)
+        alert('전체 질문 삭제에 실패했습니다.');
+    } 
   };
 
-  const handleDeleteOne = (id) => {
+    // 개별 삭제
+  const handleDeleteOne = async (id) => {
     const target = questions.find((q) => q.id === id);
     if (!target) return;
-    if (!window.confirm('해당 질문을 삭제하시겠습니까?')) return;
-    if (target.answerId) deleteAnswer(target.answerId);
-    setQuestions((prev) => prev.filter((q) => q.id !== id));
-  };
 
+    if (!window.confirm('해당 질문을 삭제하시겠습니까?')) return;
+
+      try {
+        if (target.answerId) {
+          await deleteAnswer(target.answerId);
+        }
+
+        setQuestions((prev) => prev.filter((q) => q.id !== id));
+      } catch (error) {
+          console.error('삭제 실패', error);
+          alert('질문 삭제에 실패했습니다.');
+      } 
+  };
+  
   const handleUpdateAnswer = (questionId, updatedAnswer) => {
-    setQuestions((prev) => prev.map((q) => (q.id === questionId ? { ...q, ...updatedAnswer } : q)));
+    setQuestions((prev) => prev.map((q) => 
+      (q.id === questionId ? { ...q, ...updatedAnswer } : q)));
   };
 
   const hasQuestions = questions.length > 0;

@@ -55,6 +55,9 @@ function QuestionCard({ question, onDelete, onUpdateAnswer }) {
   const [isEditing, setIsEditing] = useState(false);
   const isAnswered = Boolean(question.answer);
 
+  const handleDelete = () => {
+    onDelete(question.id);
+  }
   const handleEdit = () => setIsEditing(true);
 
 
@@ -64,7 +67,7 @@ function QuestionCard({ question, onDelete, onUpdateAnswer }) {
         <Status $done={isAnswered}>{isAnswered ? '답변완료' : '미답변'}</Status>
         <KebabMenu 
           onEdit={handleEdit} 
-          onDelete={() => onDelete(question.id)} 
+          onDelete={handleDelete} 
         />
       </CardTop>
 

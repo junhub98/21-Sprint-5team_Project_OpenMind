@@ -73,8 +73,8 @@ function QuestionReply({ question, isEditing, onUpdateAnswer }) {
 
   return (
     <ReplyWrapper>
-      {question.createdAt && <CreatedAtLabel>{question.createdAt}</CreatedAtLabel>}
-      <ReplyTextarea
+      {question.createdAt && <CreatedAt>{question.createdAt}</CreatedAt>}
+      <Textarea
         value={content}
         onChange={e => setContent(e.target.value)}
         readOnly={!isEditing || loading}
