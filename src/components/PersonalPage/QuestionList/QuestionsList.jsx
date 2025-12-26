@@ -1,6 +1,6 @@
 import styles from './QuestionsList.module.css';
 import QuestionCard from '../QuestionCard/QuestionCard';
-import QuestionIcon from '../assets/questionIcon.svg';
+import QuestionIcon from '../../../assets/PersonalImages/questionIcon.svg';
 
 export default function QuestionsList({ questions }) {
   const list = Array.isArray(questions) ? questions : [];

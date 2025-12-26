@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import PersonImage from '../../assets/MainPage/Person.png';
+import PersonImage from '../../../assets/MainPage/Person.png';
 import { createSubject } from '../../../utils/getDataApi';
 import {
   Form,
