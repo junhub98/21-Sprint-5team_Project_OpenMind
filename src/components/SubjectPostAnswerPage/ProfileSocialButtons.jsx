@@ -1,16 +1,22 @@
 /*소셜 네트워크 서비스 버튼 */
+import ReactDom from 'react-dom';
 import { useState, memo, useEffect } from 'react';
 import styled from 'styled-components';
 import ShareLink from '../../assets/SubjectPostAnswerPage/ShareLinkIcon.png';
 import ShareKakao from '../../assets/SubjectPostAnswerPage/ShareKakaoIcon.png';
 import ShareFacebook from '../../assets/SubjectPostAnswerPage/ShareFacebookIcon.png';
+import media from '../../utils/media';
 
 // styled-components
 const ImageButton = styled.button`
   background: none;
   border: none;
   cursor: pointer;
-  padding: 12px;
+  padding: 12px 16px 12px 16px;
+
+  &:last-child {
+    margin-right: 0;
+  }
 
   &:hover {
     opacity: 0.5;
@@ -18,25 +24,44 @@ const ImageButton = styled.button`
 
   img {
     display: block;
+    width: 40px;
+    height: 40px;
   }
 `;
 
 const Toast = styled.div`
   position: fixed;
+  top: 787px;
   bottom: 40px;
   left: 50%;
   transform: translateX(-50%);
-
-  background-color: rgba(0, 0, 0, 0.8);
+  width: 167px;
+  height: 42px;
+  background-color: #000000;
   color: #ffffff;
-
-  padding: 12px 20px;
   border-radius: 8px;
   font-size: 14px;
+  box-shadow: 0px 4px 4px rgba(0,0,0,0.25);
+  display: flex,
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 12px 20px;
 
-  z-index: 1000;
+  ${media.mobile`
+    top: 667px;
+  `}
 `;
 
+const ToastText = styled.span`
+  color: #FFFFFF;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 18px;
+  letter-spacing: 0;
+  text-align: center;
+  white-space:nowrap;
+`;
 // 컴포넌트 분리 (리렌더링 범위 관리) React.memo 사용
 // 링크 복사하기
 const LinkCopyButton = memo(function LinkCopyButton() {
@@ -61,7 +86,14 @@ const LinkCopyButton = memo(function LinkCopyButton() {
       <ImageButton onClick={handleCopyLinkClick}>
         <img src={ShareLink} alt="링크복사" />
       </ImageButton>
-      {showToast && <Toast>URL이 복사되었습니다</Toast>}
+      {showToast && 
+        ReactDom.createPortal(
+          <Toast>
+            <ToastText>URL이 복사되었습니다</ToastText>
+          </Toast>,
+        document.body
+        )
+      }
     </>
   );
 });
