@@ -1,11 +1,11 @@
 /*소셜 네트워크 서비스 버튼 */
-import { useState, memo } from 'react';
+import { useState, memo, useEffect } from 'react';
 import styled from 'styled-components';
 import ShareLink from '../../assets/SubjectPostAnswerPage/ShareLinkIcon.png';
 import ShareKakao from '../../assets/SubjectPostAnswerPage/ShareKakaoIcon.png';
 import ShareFacebook from '../../assets/SubjectPostAnswerPage/ShareFacebookIcon.png';
 
-// styled-components 
+// styled-components
 const ImageButton = styled.button`
   background: none;
   border: none;
@@ -19,7 +19,6 @@ const ImageButton = styled.button`
   img {
     display: block;
   }
-
 `;
 
 const Toast = styled.div`
@@ -40,7 +39,7 @@ const Toast = styled.div`
 
 // 컴포넌트 분리 (리렌더링 범위 관리) React.memo 사용
 // 링크 복사하기
-const LinkCopyButton = memo(  function LinkCopyButton() {
+const LinkCopyButton = memo(function LinkCopyButton() {
   const [showToast, setShowToast] = useState(false);
   const url = window.location.href;
 
@@ -56,7 +55,7 @@ const LinkCopyButton = memo(  function LinkCopyButton() {
       console.error('URL 복사 실패', error);
     }
   };
-  
+
   return (
     <>
       <ImageButton onClick={handleCopyLinkClick}>
@@ -65,24 +64,45 @@ const LinkCopyButton = memo(  function LinkCopyButton() {
       {showToast && <Toast>URL이 복사되었습니다</Toast>}
     </>
   );
-
 });
 
 // 카카오톡 공유하기
+
+const KAKAO_JS_KEY = '비공개KEY';
+
 const KakaoButton = memo(function KakaoButton() {
+  useEffect(() => {
+    // 이미 로드돼 있으면 바로 init
+    if (window.Kakao) {
+      if (!window.Kakao.isInitialized()) {
+        window.Kakao.init(KAKAO_JS_KEY);
+        console.log('Kakao initialized (existing)');
+      }
+      return;
+    }
+
+    // SDK 로딩
+    const script = document.createElement('script');
+    script.src = 'https://developers.kakao.com/sdk/js/kakao.min.js';
+    script.async = true;
+
+    script.onload = () => {
+      if (!window.Kakao.isInitialized()) {
+        window.Kakao.init(KAKAO_JS_KEY);
+        console.log('Kakao initialized (loaded)');
+      }
+    };
+
+    script.onerror = () => {
+      console.error('Failed to load Kakao SDK');
+    };
+
+    document.head.appendChild(script);
+  }, []);
+
   const handleKakaoShare = () => {
-    if (!window.Kakao) {
-      console.error('Kakao SDK not loaded');
-      return;
-    }
-
-    if(!window.Kakao.isInitialized()) {
-      console.error('Kakao SDK not initialized');
-      return;
-    }
-
-    if(!window.Kakao.Share) {
-      console.error('Kakao.Share module not available yet');
+    if (!window.Kakao?.Share) {
+      console.error('Kakao Share not available');
       return;
     }
 
@@ -91,20 +111,20 @@ const KakaoButton = memo(function KakaoButton() {
       content: {
         title: '질문을 공유해보세요',
         description: '이 질문에 답변을 남겨주세요!',
-        imageUrl: 'https://via.placeholder.com/640x480', // 공유할 이미지
+        imageUrl: 'https://via.placeholder.com/640x480',
         link: {
-          mobileWebUrl: window.location.href,
-          webUrl: window.location.href,
+          mobileWebUrl: 'https://sprint21-5openmind.netlify.app',
+          webUrl: 'https://sprint21-5openmind.netlify.app',
         },
       },
       buttons: [
         {
           title: '웹에서 보기',
           link: {
-            mobileWebUrl: window.location.href,
-            webUrl: window.location.href,
-          }
-        }
+            mobileWebUrl: 'https://sprint21-5openmind.netlify.app',
+            webUrl: 'https://sprint21-5openmind.netlify.app',
+          },
+        },
       ],
     });
   };
@@ -118,14 +138,13 @@ const KakaoButton = memo(function KakaoButton() {
 
 // 페이스북 공유하기
 const FacebookButton = memo(function FacebookButton() {
-  
   const handleFacebookShare = () => {
     const url = encodeURIComponent(window.location.href);
 
     window.open(
       `https://www.facebook.com/sharer/sharer.php?u=${url}`,
       `_blank`,
-      `width=1200, height=1200`
+      `width=1200, height=1200`,
     );
   };
 
@@ -134,14 +153,12 @@ const FacebookButton = memo(function FacebookButton() {
       <ImageButton onClick={handleFacebookShare}>
         <img src={ShareFacebook} alt="페이스북 공유" />
       </ImageButton>
-
     </>
   );
 });
 
 // 메인 컴포넌트
 function SocialButtons() {
-  
   return (
     <>
       <LinkCopyButton />
@@ -149,6 +166,6 @@ function SocialButtons() {
       <FacebookButton />
     </>
   );
-};
+}
 
 export default SocialButtons;

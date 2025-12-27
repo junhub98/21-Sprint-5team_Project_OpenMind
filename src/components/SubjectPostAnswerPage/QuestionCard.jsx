@@ -53,9 +53,10 @@ const Hr = styled.hr`
 // 메인컴포넌트
 function QuestionCard({ question, onDelete, onUpdateAnswer }) {
   if (!question) return null;
-  const [isEditing, setIsEditing] = useState(false);
-  const isAnswered = Boolean(question?.answer);
 
+  const isAnswered = Boolean(question?.answer);
+  const [isEditing, setIsEditing] = useState(!isAnswered);
+  
   const handleDelete = () => {
     question?.id && onDelete(question.id);
   };
@@ -74,7 +75,11 @@ function QuestionCard({ question, onDelete, onUpdateAnswer }) {
           />
       </CardTop>
 
-      <Meta>{question.author} · {question.createdAt}</Meta>
+      <Meta>
+        작성자: {answerAuthor} · 
+        {answerTime}
+      </Meta>
+      
       <Title>{question?.title}</Title>
 
       <QuestionReply 
@@ -82,7 +87,7 @@ function QuestionCard({ question, onDelete, onUpdateAnswer }) {
         questionId={question.id}
         isEditing={isEditing} 
         onUpdateAnswer={onUpdateAnswer} 
-        
+        onFinishEdit={() => setIsEditing(false)}
         />
     </Card>
   );

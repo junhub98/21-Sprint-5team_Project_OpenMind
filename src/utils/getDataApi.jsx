@@ -44,6 +44,12 @@ export function parseSubjectName(subjectName) {
   return { name: subjectName, tag: null };
 }
 
+// 질문 조회
+export async function getQuestionById(questionId) {
+  const response = await axios.get(`/questions/${questionId}/`);
+  return response.data;
+}
+
 // 답변 생성하기
 export async function createAnswer(questionId, content) {
   const response = await axios.post(`/questions/${questionId}/answers/`, { content });
