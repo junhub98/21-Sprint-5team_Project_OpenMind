@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import KebabIcon from '../../assets/SubjectPostAnswerPage/Kebab.png';
 
@@ -24,7 +24,7 @@ const MenuList = styled.ul`
   border-radius: 12px;
   padding: 8px 0;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 4px;
   z-index: 10;
 `;
@@ -37,12 +37,31 @@ const MenuItem = styled.li`
   }
 `;
 
+// 메인 컴포넌트 
 function KebabMenu({ onEdit, onDelete, onReject }) {
   const [isOpen, setIsOpen] = useState(false);
+  const wrapperRef = useRef(null);
 
+  // 토글
   const handleToggleMenu = () => {
     setIsOpen(prev => !prev);
   };
+
+  // 외부 클릭시 케밥 닫기
+  useEffect(() => {
+    if(!isOpen) return;
+
+    const handleClickOutside = (e) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen]);
 
   const handleEditClick = () => {
     onEdit();
@@ -68,9 +87,12 @@ function KebabMenu({ onEdit, onDelete, onReject }) {
 
       {isOpen && (
         <MenuList>
-          <MenuItem onClick={handleEditClick}>수정</MenuItem>
-          <MenuItem onClick={handleDeleteClick}>삭제</MenuItem>
-          <MenuItem onClick={handleRejectClick}>거절</MenuItem>
+          <MenuItem onClick={handleEditClick}>수정하기</MenuItem>
+          <MenuItem onClick={handleDeleteClick}>삭제하기 </MenuItem>
+          {onReject && (
+            <MenuItem onClick={handleRejectClick}>거절하기</MenuItem>
+          )}
+            
         </MenuList>
       )}
     </MenuWrapper>

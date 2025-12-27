@@ -134,7 +134,7 @@ function QuestionList({ subjectId }) {
   const handleUpdateAnswer = (questionId, payload) => {
     setQuestions(prev => 
       prev.map(q => 
-        q.id !== questionId
+        q.id === questionId
           ? { ...q, answer: payload?.answer ?? q.answer ?? null }
           : q
       )
