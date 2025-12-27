@@ -76,3 +76,14 @@ export async function createQuestion(subjectId, content) {
   const response = await axios.post(`/subjects/${subjectId}/questions/`, { content: content });
   return response.data;
 }
+
+// 좋아요/싫어요 기능
+export async function reactionQuestion(questionId, reactionType) {
+  const response = await axios.post(`/questions/${questionId}/reaction/`, {
+    type: reactionType,
+  });
+  return response.data;
+}
+export const likeQuestion = (questionId) => reactionQuestion(questionId, 'like');
+
+export const dislikeQuestion = (questionId) => reactionQuestion(questionId, 'dislike');
