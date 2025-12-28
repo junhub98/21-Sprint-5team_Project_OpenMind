@@ -85,11 +85,11 @@ const SubmitButton = styled.button`
   font-weight: 400;
   color: var(--gray-10);
 
-  ${media.tablet `
+  ${media.tablet`
     width: 548px;
   `}
 
-  ${media.mobile `
+  ${media.mobile`
     width: 203px;
     gap: 10px;
   `}
@@ -126,7 +126,12 @@ export default function AnswerArea({ question, subject, isEdit }) {
           {tag && <Tag>#{tag}</Tag>}
         </UserInfo>
 
-        <AnswerTextArea placeholder="답변을 입력해주세요" onChange={handleChange} ref={textRef} />
+        <AnswerTextArea
+          placeholder="답변을 입력해주세요"
+          defaultValue={question.answer?.content}
+          onChange={handleChange}
+          ref={textRef}
+        />
 
         <SubmitButton $active={isActive} disabled={!isActive} type="submit">
           {isEdit ? '수정하기' : '답변하기'}
