@@ -68,7 +68,7 @@ const LinkCopyButton = memo(function LinkCopyButton() {
 
 // 카카오톡 공유하기
 
-const KAKAO_JS_KEY = '비공개KEY';
+const KAKAO_JS_KEY = '비공개Key';
 
 const KakaoButton = memo(function KakaoButton() {
   useEffect(() => {
@@ -85,11 +85,10 @@ const KakaoButton = memo(function KakaoButton() {
     const script = document.createElement('script');
     script.src = 'https://developers.kakao.com/sdk/js/kakao.min.js';
     script.async = true;
-
+    // SDK 로딩 완료시 init
     script.onload = () => {
       if (!window.Kakao.isInitialized()) {
         window.Kakao.init(KAKAO_JS_KEY);
-        console.log('Kakao initialized (loaded)');
       }
     };
 

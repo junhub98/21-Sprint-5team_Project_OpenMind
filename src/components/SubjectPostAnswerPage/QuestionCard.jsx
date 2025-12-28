@@ -2,6 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import QuestionReply from './QuestionReply';
 import KebabMenu from './KebabMenu';
+import Reactions from '../../utils/Reactions';
 
 // styled-components
 const Card = styled.div`
@@ -16,7 +17,7 @@ const Card = styled.div`
 
 const CardTop = styled.div`
   display: flex;
-  justify-content: space-between; 
+  justify-content: space-between;
   align-items: center;
 `;
 
@@ -28,10 +29,8 @@ const Status = styled.span`
   background-color: transparent;
   line-height: 1;
 
-  color: ${(props) => 
-    (props.$done ? '#542f1a' : '#c8b6a6')};
-  border-color: ${(props) => 
-    (props.$done ? '#542f1a' : '#c8b6a6')};
+  color: ${(props) => (props.$done ? '#542f1a' : '#c8b6a6')};
+  border-color: ${(props) => (props.$done ? '#542f1a' : '#c8b6a6')};
 `;
 
 const Title = styled.h3`
@@ -56,39 +55,32 @@ function QuestionCard({ question, onDelete, onUpdateAnswer }) {
 
   const isAnswered = Boolean(question?.answer);
   const [isEditing, setIsEditing] = useState(!isAnswered);
-  
+
   const handleDelete = () => {
     question?.id && onDelete(question.id);
   };
-  
+
   const handleEdit = () => setIsEditing(true);
 
   return (
     <Card>
       <CardTop>
-        <Status $done={isAnswered}>
-          {isAnswered ? '답변완료' : '미답변'}
-        </Status>
-          <KebabMenu 
-            onEdit={handleEdit} 
-            onDelete={handleDelete} 
-          />
+        <Status $done={isAnswered}>{isAnswered ? '답변완료' : '미답변'}</Status>
+        <KebabMenu onEdit={handleEdit} onDelete={handleDelete} />
       </CardTop>
 
-      <Meta>
-        작성자: {answerAuthor} · 
-        {answerTime}
-      </Meta>
-      
+      <Meta></Meta>
+
       <Title>{question?.title}</Title>
 
-      <QuestionReply 
-        answer={question?.answer} 
+      <QuestionReply
+        answer={question?.answer}
         questionId={question.id}
-        isEditing={isEditing} 
-        onUpdateAnswer={onUpdateAnswer} 
+        isEditing={isEditing}
+        onUpdateAnswer={onUpdateAnswer}
         onFinishEdit={() => setIsEditing(false)}
-        />
+      />
+      <Reactions question={question} />
     </Card>
   );
 }

@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { createAnswer, updateAnswer } from '../../utils/getDataApi';
 
-
 // styled-components
 const ReplyWrapper = styled.div`
   width: 100%;
@@ -43,7 +42,7 @@ const SubmitButton = styled.button`
   border-radius: 999px;
   font-size: 14px;
   cursor: pointer;
-  opacity: ${({disabled}) => (disabled ? 0.4 : 1)};
+  opacity: ${({ disabled }) => (disabled ? 0.4 : 1)};
 `;
 
 // 날짜 계산 함수
@@ -60,24 +59,16 @@ function QuestionDate(dateString) {
 }
 
 // 메인 컴포넌트
-function QuestionReply({ 
-  answer=null, 
-  isEditing, 
-  onUpdateAnswer, 
-  questionId,
-  onFinishEdit,
-}) {
-    
+function QuestionReply({ answer = null, isEditing, onUpdateAnswer, questionId, onFinishEdit }) {
   const [content, setContent] = useState(answer?.content ?? '');
   const [loading, setLoading] = useState(false);
-  
+
   const isEditMode = Boolean(answer?.id);
 
-  useEffect( () => {
-    setContent(answer?.content ?? '')
+  useEffect(() => {
+    setContent(answer?.content ?? '');
   }, [answer]);
 
- 
   const handleSubmit = async () => {
     if (!content.trim()) return;
 
@@ -87,7 +78,7 @@ function QuestionReply({
       const updatedAnswer = answer?.id
         ? await updateAnswer(answer.id, content)
         : await createAnswer(questionId, content);
-      
+
       onUpdateAnswer(questionId, updatedAnswer);
 
       onFinishEdit?.();
@@ -102,21 +93,17 @@ function QuestionReply({
   const displayTime = answer?.updateAt || answer?.createdAt;
 
   return (
-    <ReplyWrapper>      
+    <ReplyWrapper>
       <Textarea
         value={content}
-        onChange={e => setContent(e.target.value)}
+        onChange={(e) => setContent(e.target.value)}
         readOnly={!isEditing || loading}
-        placeholder='답변을 입력하세요.'
-        onFocus={handleFocus}
+        placeholder="답변을 입력하세요."
       />
 
       {isEditing && (
         <ButtonWrapper>
-          <SubmitButton 
-            onClick={handleSubmit} 
-            disabled={!content.trim() || loading}
-          >
+          <SubmitButton onClick={handleSubmit} disabled={!content.trim() || loading}>
             {isEditMode ? '수정완료' : '답변 완료'}
           </SubmitButton>
         </ButtonWrapper>
@@ -124,7 +111,7 @@ function QuestionReply({
 
       {answer?.createdAt && displayTime && (
         <Meta>
-          작성자: {answer.authorId} · {QuestionDate(displayTime)} 
+          작성자: {answer.authorId} · {QuestionDate(displayTime)}
         </Meta>
       )}
       <hr />
