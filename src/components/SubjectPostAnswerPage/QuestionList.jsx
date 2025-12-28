@@ -133,12 +133,19 @@ const QuestionListBody = styled.div`
 
 const EmptyIllustration = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  height: 100px;
+  align-items: center;
+  width: 100%;
+  height: 330px;
   margin-top: 4px;
+  padding: 16px 24px 16px 24px;
 
   img {
     display: block;
+    width: 150px;
+    height: 154px;
+    top: 534px;
   }
 `;
 
@@ -212,7 +219,10 @@ function QuestionList({ subjectId }) {
               <span>{questions.length}개의 질문이 있습니다</span>
             </>
           ) : (
-            <span>아직 질문이 없습니다</span>
+            <>
+              <img src={Messages} alt="질문 아이콘" />
+              <span>아직 질문이 없습니다</span>
+            </>
           )}
         </Count>
 
