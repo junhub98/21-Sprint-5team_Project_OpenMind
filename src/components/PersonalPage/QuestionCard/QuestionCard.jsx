@@ -4,7 +4,7 @@ import profileImage from '../../../assets/PersonalImages/profileImage.svg';
 import ThumbsUp from '../../../assets/PersonalImages/thumbsUp.svg?react';
 import ThumbsDown from '../../../assets/PersonalImages/thumbsDown.svg?react';
 import { likeQuestion, dislikeQuestion } from '../../../utils/getDataApi';
-
+import Reactions from '../../../utils/Reactions';
 function QuestionDate(dateString) {
   if (!dateString) return '';
   const diff = Date.now() - new Date(dateString).getTime();
@@ -122,27 +122,7 @@ function QuestionCard({ question, subjectName }) {
 
         <hr />
 
-        <div className={styles.reactionContainer}>
-          <button
-            type="button"
-            onClick={handleLike}
-            disabled={saving}
-            className={`${styles.reactionButton} ${liked ? styles.likeActive : ''}`}
-          >
-            <ThumbsUp className={styles.icon} />
-            좋아요 {likeCount}
-          </button>
-
-          <button
-            type="button"
-            onClick={handleDislike}
-            disabled={saving}
-            className={`${styles.reactionButton} ${disliked ? styles.dislikeActive : ''}`}
-          >
-            <ThumbsDown className={styles.icon} />
-            싫어요 {dislikeCount}
-          </button>
-        </div>
+        <Reactions question={question} />
       </div>
     </div>
   );
