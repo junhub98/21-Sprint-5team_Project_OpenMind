@@ -61,8 +61,8 @@ export async function createAnswer(questionId, content) {
 }
 
 // 삭제하기
-export async function deleteAnswer(answerId) {
-  await axios.delete(`/answers/${answerId}/`);
+export async function deleteQuestion(questionId) {
+  await axios.delete(`/questions/${questionId}/`);
 }
 
 export async function deleteSubject(subjectId) {

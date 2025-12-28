@@ -3,7 +3,12 @@ import styled from 'styled-components';
 import QuestionCard from './QuestionCard';
 import Messages from '../../assets/SubjectPostAnswerPage/Messages.png';
 import Mailbox from '../../assets/SubjectPostAnswerPage/Mailbox.png';
-import { getQuestionsList, deleteSubject, getSubjectById } from '../../utils/getDataApi';
+import {
+  getQuestionsList,
+  deleteSubject,
+  getSubjectById,
+  deleteQuestion,
+} from '../../utils/getDataApi';
 import media from '../../utils/media';
 import { useNavigate } from 'react-router-dom';
 // styled-components
@@ -123,14 +128,12 @@ function QuestionList({ subjectId }) {
   };
 
   // 개별 삭제
-  const handleDeleteOne = async (id) => {
-    const target = questions.find((q) => q.id === id);
-    if (!target) return;
+  const handleDeleteOne = async (questionId) => {
     if (!window.confirm('해당 질문을 삭제하시겠습니까?')) return;
 
     try {
-      if (target.answer?.id) await deleteAnswer(target.answer.id);
-      setQuestions((prev) => prev.filter((q) => q.id !== id));
+      await deleteQuestion(questionId);
+      window.location.reload();
     } catch (error) {
       console.error('삭제 실패', error);
       alert('질문 삭제에 실패했습니다.');
