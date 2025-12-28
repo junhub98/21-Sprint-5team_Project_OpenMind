@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import KebabIcon from '../../assets/SubjectPostAnswerPage/Kebab.png';
+import { rejectAnswer } from '../../utils/getDataApi';
 
-
-// styled-components 
+// styled-components
 const MenuWrapper = styled.div`
   position: relative;
   display: inline-block;
@@ -22,60 +22,47 @@ const MenuList = styled.ul`
   background: #fff;
   border: 1px solid #e5d8cc;
   border-radius: 12px;
-  padding: 8px 0;
-  display: flex;
-  flex-direction: row;
+
   gap: 4px;
   z-index: 10;
 `;
 
 const MenuItem = styled.li`
-  padding: 6px 12px;
+  padding: 6px 6px;
+  width: 80px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
   &:hover {
     background-color: #f0f0f0;
   }
 `;
 
-// 메인 컴포넌트 
-function KebabMenu({ onEdit, onDelete, onReject }) {
+// 메인 컴포넌트
+function KebabMenu({ setIsEdit, onDelete, question }) {
   const [isOpen, setIsOpen] = useState(false);
-  const wrapperRef = useRef(null);
+
+  const isRejected = question?.answer?.isRejected;
 
   // 토글
   const handleToggleMenu = () => {
-    setIsOpen(prev => !prev);
+    setIsOpen((prev) => !prev);
   };
 
-  // 외부 클릭시 케밥 닫기
-  useEffect(() => {
-    if(!isOpen) return;
-
-    const handleClickOutside = (e) => {
-      if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isOpen]);
-
   const handleEditClick = () => {
-    onEdit();
+    setIsEdit(true);
     setIsOpen(false);
   };
 
   const handleDeleteClick = () => {
-    onDelete();
+    onDelete(question.id);
     setIsOpen(false);
   };
 
   const handleRejectClick = () => {
-    if (!onReject) return;
-    onReject();
+    rejectAnswer(question.id);
     setIsOpen(false);
   };
 
@@ -87,12 +74,11 @@ function KebabMenu({ onEdit, onDelete, onReject }) {
 
       {isOpen && (
         <MenuList>
-          <MenuItem onClick={handleEditClick}>수정하기</MenuItem>
+          {question.answer && <MenuItem onClick={handleEditClick}>수정하기</MenuItem>}
           <MenuItem onClick={handleDeleteClick}>삭제하기 </MenuItem>
-          {onReject && (
+          {!isRejected && !question.answer && (
             <MenuItem onClick={handleRejectClick}>거절하기</MenuItem>
           )}
-            
         </MenuList>
       )}
     </MenuWrapper>

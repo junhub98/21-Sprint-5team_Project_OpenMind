@@ -52,7 +52,10 @@ export async function getQuestionById(questionId) {
 
 // 답변 생성하기
 export async function createAnswer(questionId, content) {
-  const response = await axios.post(`/questions/${questionId}/answers/`, { content });
+  const response = await axios.post(`/questions/${questionId}/answers/`, {
+    content,
+    isRejected: false,
+  });
 
   return response.data;
 }
@@ -70,8 +73,8 @@ export async function updateAnswer(answerId, newContent) {
 }
 
 // 거절하기
-export async function rejectAnswer(answerId) {
-  const response = await axios.patch(`/answers/${answerId}/`, {
+export async function rejectAnswer(questionId) {
+  const response = await axios.post(`/questions/${questionId}/answers/`, {
     content: '답변을 거절했습니다.',
     isRejected: true,
   });
