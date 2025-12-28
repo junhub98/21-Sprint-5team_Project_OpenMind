@@ -64,6 +64,7 @@ function KebabMenu({ setIsEdit, onDelete, question }) {
   const handleRejectClick = () => {
     rejectAnswer(question.id);
     setIsOpen(false);
+    setTimeout(() => window.location.reload(), 10);
   };
 
   return (
