@@ -14,12 +14,18 @@ import { useNavigate } from 'react-router-dom';
 // styled-components
 
 const QuestionListWrapper = styled.section`
+  top: 423px;
   width: 100%;
-  max-width: 720px;
+  max-width: 716px;
   margin: 120px auto 160px;
   display: flex;
   flex-direction: column;
   gap: 12px;
+
+  ${media.mobile`
+    width: 327px;
+    top: 353px; 
+  `}
 `;
 
 const QuestionListTop = styled.div`
@@ -32,15 +38,33 @@ const DeleteAllButton = styled.button`
   background-color: #542f1a;
   color: #ffffff;
   border: none;
-  padding: 8px 16px;
+  padding: 12px 24px;
   border-radius: 999px;
+  width: 100px;
+  height: 35px;
   font-size: 14px;
+  font-weight: 400;
+  line-height: 25px;
+  letter-spacing: 0;
+
+  box-shadow: 0px 4px 4px rgba(0,0,0,0.25);
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   transition: opacity 0.2s;
 
   &:hover {
     opacity: 0.9;
   }
+
+  ${media.mobile`
+    width: 70px;
+    height: 25px;
+    padding: 0;
+    font-size: 10px;
+  `}
 `;
 
 const QuestionListContainer = styled.div`
@@ -52,21 +76,53 @@ const QuestionListContainer = styled.div`
   flex-direction: column;
   gap: 12px;
   min-height: 220px;
+
+  ${media.mobile`
+    align-items: center;
+  `}
 `;
 
 const Count = styled.div`
-  height: 40px;
+  width: 184px
+  height: 25px;
+  margin 0 auto;
+
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 2px;
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 25px;
+  letter-spacing: 0;
   color: #542f1a;
   text-align: center;
+  
   img {
+    width: 24px;
+    height: 24px;
     display: block;
+    flex-shrink: 0;
   }
+  
+  span {
+    text-align: center;
+  }
+
+  ${media.mobile`
+    width: 170px;
+    height: 24px;
+    font-size: 18px;
+    line-height: 1;
+    white-space: nowrap;
+    
+
+    img {
+      width: 22px;
+      height: 22px;
+      display: block;
+    }
+  `}
 `;
 
 const QuestionListBody = styled.div`
@@ -145,7 +201,7 @@ function QuestionList({ subjectId }) {
   return (
     <QuestionListWrapper>
       <QuestionListTop>
-        <DeleteAllButton onClick={handleDeleteSubject}>전체 삭제하기</DeleteAllButton>
+        <DeleteAllButton onClick={handleDeleteSubject}>삭제하기</DeleteAllButton>
       </QuestionListTop>
 
       <QuestionListContainer>

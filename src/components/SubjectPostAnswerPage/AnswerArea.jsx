@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { parseSubjectName, createAnswer, updateAnswer } from '../../utils/getDataApi';
 import { useRef, useState } from 'react';
+import media from '../../utils/media';
 
 const Container = styled.div`
   width: 620px;
@@ -54,7 +55,7 @@ const UserInfo = styled.div`
 const AnswerTextArea = styled.textarea`
   width: 560px;
   height: 186px;
-  padding: 15px 15px;
+  padding: 16px 16px;
   border: none;
   border-radius: 8px;
   background-color: var(--gray-20);
@@ -63,6 +64,14 @@ const AnswerTextArea = styled.textarea`
   font-weight: 400;
   color: var(--gray-60);
   resize: none;
+
+  ${media.tablet`
+    width: 548px;
+  `}
+
+  ${media.mobile`
+    width: 203px;
+  `}
 `;
 
 const SubmitButton = styled.button`
@@ -75,6 +84,15 @@ const SubmitButton = styled.button`
   font-size: 16px;
   font-weight: 400;
   color: var(--gray-10);
+
+  ${media.tablet `
+    width: 548px;
+  `}
+
+  ${media.mobile `
+    width: 203px;
+    gap: 10px;
+  `}
 `;
 export default function AnswerArea({ question, subject, isEdit }) {
   const { name, tag } = parseSubjectName(subject.name) || '';
