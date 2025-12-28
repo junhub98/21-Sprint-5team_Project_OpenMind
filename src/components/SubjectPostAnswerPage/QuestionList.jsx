@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import QuestionCard from './QuestionCard';
 import Messages from '../../assets/SubjectPostAnswerPage/Messages.png';
 import Mailbox from '../../assets/SubjectPostAnswerPage/Mailbox.png';
-import { getQuestionsList, deleteAnswer, getSubjectById } from '../../utils/getDataApi';
+import { getQuestionsList, deleteSubject, getSubjectById } from '../../utils/getDataApi';
 import media from '../../utils/media';
-
+import { useNavigate } from 'react-router-dom';
 // styled-components
 
 const QuestionListWrapper = styled.section`
@@ -35,11 +35,6 @@ const DeleteAllButton = styled.button`
 
   &:hover {
     opacity: 0.9;
-  }
-
-  &.disabled {
-    opacity: 0.4;
-    pointer-events: none;
   }
 `;
 
@@ -92,6 +87,8 @@ function QuestionList({ subjectId }) {
   const [loading, setLoading] = useState(true);
   const [subject, setSubject] = useState({});
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     async function loadSubject() {
       const data = await getSubjectById(subjectId);
@@ -111,16 +108,17 @@ function QuestionList({ subjectId }) {
   }, [subjectId]);
 
   // 전체 삭제
-  const handleDeleteAll = async () => {
-    if (!window.confirm('모든 질문을 삭제하시겠습니까?')) return;
+  const handleDeleteSubject = async () => {
+    if (!window.confirm('해당 피드를 삭제하시겠습니까?')) return;
 
     try {
-      const targets = questions.filter((q) => q.answer);
-      await Promise.all(targets.map((q) => deleteAnswer(q.answer.id)));
-      setQuestions([]);
+      deleteSubject(subjectId);
     } catch (error) {
-      console.error('전체 질문 삭제', error);
-      alert('전체 질문 삭제에 실패했습니다.');
+      console.error('피드 삭제', error);
+      alert('피드 삭제에 실패했습니다.');
+    } finally {
+      localStorage.setItem('subjectId', '');
+      navigate('/');
     }
   };
 
@@ -144,12 +142,7 @@ function QuestionList({ subjectId }) {
   return (
     <QuestionListWrapper>
       <QuestionListTop>
-        <DeleteAllButton
-          className={!hasQuestions ? 'disabled' : ''}
-          onClick={hasQuestions ? handleDeleteAll : null}
-        >
-          전체 삭제하기
-        </DeleteAllButton>
+        <DeleteAllButton onClick={handleDeleteSubject}>전체 삭제하기</DeleteAllButton>
       </QuestionListTop>
 
       <QuestionListContainer>

@@ -65,6 +65,9 @@ export async function deleteAnswer(answerId) {
   await axios.delete(`/answers/${answerId}/`);
 }
 
+export async function deleteSubject(subjectId) {
+  await axios.delete(`/subjectId/${subjectId}/`);
+}
 // 수정하기 (PUT 보다 PATCH가 안전)
 export async function updateAnswer(answerId, newContent) {
   const response = await axios.patch(`/answers/${answerId}/`, { content: newContent });
