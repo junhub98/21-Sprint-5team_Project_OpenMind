@@ -47,7 +47,7 @@ const DeleteAllButton = styled.button`
   line-height: 25px;
   letter-spacing: 0;
 
-  box-shadow: 0px 4px 4px rgba(0,0,0,0.25);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -180,13 +180,12 @@ function QuestionList({ subjectId }) {
     if (!window.confirm('해당 피드를 삭제하시겠습니까?')) return;
 
     try {
-      deleteSubject(subjectId);
+      await deleteSubject(subjectId);
+      localStorage.setItem('subjectId', '');
+      navigate('/');
     } catch (error) {
       console.error('피드 삭제', error);
       alert('피드 삭제에 실패했습니다.');
-    } finally {
-      localStorage.setItem('subjectId', '');
-      navigate('/');
     }
   };
 
