@@ -76,18 +76,20 @@ const SubmitButton = styled.button`
   font-weight: 400;
   color: var(--gray-10);
 `;
-export default function AnswerArea({ question, subject, isEdit, setIsEdit }) {
+export default function AnswerArea({ question, subject, isEdit }) {
   const { name, tag } = parseSubjectName(subject.name) || '';
   const [isActive, setIsActive] = useState(false);
   const textRef = useRef(null);
 
-  const handleSubmit = (e) => {
-    console.log(isEdit);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     const content = textRef.current.value;
     if (!isEdit) {
-      createAnswer(question.id, content);
+      await createAnswer(question.id, content);
+      window.location.reload();
     } else {
-      updateAnswer(question.answer.id, content);
+      await updateAnswer(question.answer.id, content);
+      window.location.reload();
     }
   };
 

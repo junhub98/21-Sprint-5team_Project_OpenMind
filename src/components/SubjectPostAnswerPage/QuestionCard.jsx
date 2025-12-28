@@ -97,7 +97,7 @@ function QuestionCard({ question, onDelete, subject }) {
 
         {isAnswered && !isEdit && (
           <div className={styles.answerItems}>
-            <img className={styles.profileImage} src={profileImage} alt="profile" />
+            <img className={styles.profileImage} src={subject.imageSource} alt="profile" />
             <div className={styles.questionLabel}>
               <div className={styles.metaLine}>
                 <span className={styles.nickName}>{name}</span>
