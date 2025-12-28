@@ -4,12 +4,14 @@ import QuestionCard from './QuestionCard';
 import Messages from '../../assets/SubjectPostAnswerPage/Messages.png';
 import Mailbox from '../../assets/SubjectPostAnswerPage/Mailbox.png';
 import { getQuestionsList, deleteAnswer } from '../../utils/getDataApi';
+import media from '../../utils/media';
 
 // styled-components
+
 const QuestionListWrapper = styled.section`
   width: 100%;
   max-width: 720px;
-  margin: 0 auto 160px;
+  margin: 120px auto 160px;
   display: flex;
   flex-direction: column;
   gap: 12px;
