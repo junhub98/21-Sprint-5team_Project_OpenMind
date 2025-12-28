@@ -110,7 +110,7 @@ function QuestionCard({ question, subjectName }) {
             <img className={styles.profileImage} src={profileImage} alt="profile" />
             <div className={styles.questionLabel}>
               <div className={styles.metaLine}>
-                <span className={styles.nickName}>{subjectName}</span>
+                <span className={styles.nickName}>{question.subjectName}</span>
                 <span className={styles.answerTime}>{QuestionDate(question.answer.createdAt)}</span>
               </div>
               <p className={`${styles.answerContent} ${isRejected ? styles.rejected : ''}`}>

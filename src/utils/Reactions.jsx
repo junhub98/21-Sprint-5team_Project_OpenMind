@@ -1,5 +1,5 @@
 import styles from './Reactions.module.scss';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ThumbsUp from '../assets/PersonalImages/thumbsUp.svg?react';
 import ThumbsDown from '../assets/PersonalImages/thumbsDown.svg?react';
 import { dislikeQuestion, likeQuestion } from './getDataApi';
@@ -12,6 +12,16 @@ export default function Reactions({ question }) {
   const [dislikeCount, setDislikeCount] = useState(question.dislike || 0);
 
   const storageKey = `reaction-${question.id}`;
+
+  useEffect(() => {
+    const saved = localStorage.getItem(storageKey);
+    if (saved === 'like') {
+      setLiked(true);
+    }
+    if (saved === 'dislike') {
+      setDisliked(true);
+    }
+  }, [storageKey]);
 
   const handleLike = async () => {
     if (saving) return;

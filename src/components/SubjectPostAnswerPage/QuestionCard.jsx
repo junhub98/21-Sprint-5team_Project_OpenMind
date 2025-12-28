@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import QuestionReply from './QuestionReply';
+import styles from './QuestionCard.module.css';
 import KebabMenu from './KebabMenu';
 import Reactions from '../../utils/Reactions';
+import profileImage from '../../assets/PersonalImages/profileImage.svg';
+import { getSubjectById, parseSubjectName } from '../../utils/getDataApi';
 
 // styled-components
 const Card = styled.div`
@@ -49,39 +51,73 @@ const Hr = styled.hr`
   margin: 12px 0 0 0;
 `;
 
+function QuestionDate(dateString) {
+  if (!dateString) return '';
+  const diff = Date.now() - new Date(dateString).getTime();
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  if (days < 1) return '오늘';
+  if (days < 7) return `${days}일 전`;
+  const weeks = Math.floor(days / 7);
+  if (weeks < 5) return `${weeks}주 전`;
+  const months = Math.floor(days / 30);
+  return `${months}개월 전`;
+}
+
 // 메인컴포넌트
 function QuestionCard({ question, onDelete, onUpdateAnswer }) {
-  if (!question) return null;
+  const isAnswered = Boolean(question.answer);
+  const isRejected = question.answer?.isRejected === true;
+  const [subject, setSubject] = useState({});
+  const { name, tag } = parseSubjectName(subject.name) || '';
 
-  const isAnswered = Boolean(question?.answer);
-  const [isEditing, setIsEditing] = useState(!isAnswered);
-
-  const handleDelete = () => {
-    question?.id && onDelete(question.id);
-  };
-
-  const handleEdit = () => setIsEditing(true);
+  useEffect(() => {
+    async function loadSubject() {
+      const data = await getSubjectById(question.subjectId);
+      setSubject(data);
+    }
+    loadSubject();
+  }, []);
 
   return (
-    <Card>
-      <CardTop>
-        <Status $done={isAnswered}>{isAnswered ? '답변완료' : '미답변'}</Status>
-        <KebabMenu onEdit={handleEdit} onDelete={handleDelete} />
-      </CardTop>
+    <div className={styles.questionCard}>
+      <div className={styles.questionList}>
+        <div className={styles.answerStatus}>
+          <span className={!isAnswered ? styles.notAnswered : undefined}>
+            {isAnswered ? '답변 완료' : '미답변'}
+          </span>
+          <KebabMenu />
+        </div>
 
-      <Meta></Meta>
+        <div className={styles.questionItems}>
+          <div className={styles.question}>
+            <span className={styles.questionText}>질문</span>
+            <span className={styles.dot}>·</span>
+            <span className={styles.timeText}>{QuestionDate(question.createdAt)}</span>
+          </div>
+          <span className={styles.questionContent}>{question.content}</span>
+        </div>
 
-      <Title>{question?.title}</Title>
+        {isAnswered && (
+          <div className={styles.answerItems}>
+            <img className={styles.profileImage} src={profileImage} alt="profile" />
+            <div className={styles.questionLabel}>
+              <div className={styles.metaLine}>
+                <span className={styles.nickName}>{name}</span>
+                <span className={`${styles.nickName} ${styles.tag} `}>#{tag}</span>
+                <span className={styles.date}>{QuestionDate(question.answer.createdAt)}</span>
+              </div>
+              <p className={`${styles.answerContent} ${isRejected ? styles.rejected : ''}`}>
+                {isRejected ? '답변 거절' : question.answer.content}
+              </p>
+            </div>
+          </div>
+        )}
 
-      <QuestionReply
-        answer={question?.answer}
-        questionId={question.id}
-        isEditing={isEditing}
-        onUpdateAnswer={onUpdateAnswer}
-        onFinishEdit={() => setIsEditing(false)}
-      />
-      <Reactions question={question} />
-    </Card>
+        <hr />
+
+        <Reactions question={question} />
+      </div>
+    </div>
   );
 }
 
