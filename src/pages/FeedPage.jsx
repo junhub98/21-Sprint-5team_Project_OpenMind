@@ -6,6 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import CreateQuestionButton from '../components/PersonalPage/CreateQuestionButton/CreateQuestionButton';
 import styles from './FeedPage.module.css';
 import ModalCreateQuestion from '../utils/ModalCreateQuestion';
+import ProfileHeader from '../components/SubjectPostAnswerPage/ProfileHeader';
 
 export default function FeedPage() {
   const navigate = useNavigate();
@@ -80,7 +81,7 @@ export default function FeedPage() {
 
   return (
     <div className={styles.feedPage}>
-      <FeedHeader />
+      <ProfileHeader subjectId={subjectId} />
       <QuestionsList questions={questions} />
       <CreateQuestionButton onClick={() => setIsModalOpen(true)} />
       {isModalOpen && (
