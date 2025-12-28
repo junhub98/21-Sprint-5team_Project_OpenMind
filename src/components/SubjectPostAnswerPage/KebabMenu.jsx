@@ -77,7 +77,7 @@ function KebabMenu({ setIsEdit, onDelete, question }) {
         <MenuList>
           {question.answer && <MenuItem onClick={handleEditClick}>수정하기</MenuItem>}
           <MenuItem onClick={handleDeleteClick}>삭제하기 </MenuItem>
-          {!isRejected && !question.answer && (
+          {!question.answer?.isRejected && (
             <MenuItem onClick={handleRejectClick}>거절하기</MenuItem>
           )}
         </MenuList>

@@ -85,7 +85,7 @@ const QuestionListContainer = styled.div`
 const Count = styled.div`
   width: 184px
   height: 25px;
-  margin 0 auto;
+  margin: 0 auto;
 
   display: flex;
   align-items: center;
@@ -175,7 +175,7 @@ function QuestionList({ subjectId }) {
       .finally(() => setLoading(false));
   }, [subjectId]);
 
-  // 전체 삭제
+// 전체 삭제
   const handleDeleteSubject = async () => {
     if (!window.confirm('해당 피드를 삭제하시겠습니까?')) return;
 
@@ -195,7 +195,8 @@ function QuestionList({ subjectId }) {
 
     try {
       await deleteQuestion(questionId);
-      window.location.reload();
+      setQuestions((prev) => prev.filter(
+        (q) => q.id !==questionId)); // 상태 갱신
     } catch (error) {
       console.error('삭제 실패', error);
       alert('질문 삭제에 실패했습니다.');
