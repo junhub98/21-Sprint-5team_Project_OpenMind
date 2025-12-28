@@ -5,7 +5,7 @@ import SocialButtons from './ProfileSocialButtons';
 import Logo from '../../assets/SubjectPostAnswerPage/logo.png';
 import LogoOpenmind from '../../assets/SubjectPostAnswerPage/logoOpenmind.png';
 import Photo from '../../assets/SubjectPostAnswerPage/Photo.png';
-import { getSubjectById } from '../../utils/getDataApi';
+import { getSubjectById, parseSubjectName } from '../../utils/getDataApi';
 import media from '../../utils/media';
 
 // styled-components
@@ -90,29 +90,56 @@ const ProfileAvatar = styled.img`
   `}
 `;
 
-const ProfileName = styled.h3`
+const ProfileNameContainer = styled.div`
   margin-top: 10px;
-  height: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  ${media.mobile`
+    gap: 6px;
+  `}
+`;
+
+const ProfileName = styled.h3`
   font-size: 32px;
   font-weight: 400;
   line-height: 40px;
   letter-spacing: 0;
   text-align: center;
-  color: #000000 ${media.mobile`
-    top: 217px;
-    width: 133px;
-    height: 30px;
+  color: #000000;
+  margin: 0;
+
+  ${media.mobile`
     font-size: 23px;
-    font-weight: 400;
     line-height: 30px;
-    letter-spacing: 0;
-    color: #000000
-  `};
+  `}
+`;
+
+const ProfileTag = styled.span`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 14px;
+  border-radius: 20px;
+  background-color: var(--brown-20);
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--brown-40);
+  line-height: 1;
+
+  ${media.mobile`
+    padding: 4px 10px;
+    font-size: 14px;
+    border-radius: 15px;
+  `}
 `;
 
 const ProfileSocial = styled.div`
   position: absolute;
-  top: 329px;
+  top: 369px;
   left: 50%;
   transform: translateX(-50%);
   width: 144px;
@@ -122,7 +149,7 @@ const ProfileSocial = styled.div`
   justify-content: center;
 
   ${media.mobile`
-    top: 259px;
+    top: 299px;
     width: 144px;
     height: 40px;
   `}
@@ -157,6 +184,8 @@ function ProfileHeader({ subjectId }) {
     return <div> 프로필 정보 로딩중.</div>;
   }
 
+  const { name, tag } = parseSubjectName(subject?.name) || { name: subject?.name || '이름 없음', tag: null };
+
   return (
     <ProfileHeaderWrapper>
       <ProfileCover>
@@ -169,7 +198,10 @@ function ProfileHeader({ subjectId }) {
       <ProfileInfo>
         <ProfileAvatar src={subject?.imageSource || Photo} alt="프로필 사진" />
 
-        <ProfileName>{subject?.name || '이름 없음'}</ProfileName>
+        <ProfileNameContainer>
+          <ProfileName>{name}</ProfileName>
+          {tag && <ProfileTag>#{tag}</ProfileTag>}
+        </ProfileNameContainer>
       </ProfileInfo>
 
       <ProfileSocial>

@@ -101,7 +101,6 @@ function QuestionCard({ question, onDelete, subject }) {
             <div className={styles.questionLabel}>
               <div className={styles.metaLine}>
                 <span className={styles.nickName}>{name}</span>
-                {tag && <span className={`${styles.nickName} ${styles.tag} `}>#{tag}</span>}
                 <span className={styles.date}>{QuestionDate(question.answer.createdAt)}</span>
               </div>
               <p className={`${styles.answerContent} ${isRejected ? styles.rejected : ''}`}>

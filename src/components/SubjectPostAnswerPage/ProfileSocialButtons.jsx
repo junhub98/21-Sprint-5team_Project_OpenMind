@@ -42,7 +42,7 @@ const Toast = styled.div`
   border-radius: 8px;
   font-size: 14px;
   box-shadow: 0px 4px 4px rgba(0,0,0,0.25);
-  display: flex,
+  display: flex;
   align-items: center;
   justify-content: center;
   z-index: 9999;
