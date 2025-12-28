@@ -126,9 +126,9 @@ export default function ModalCreateQuestion({ setOnClose, subjectId }) {
     else setIsActive(false);
   };
 
-  const handleClick = () => {
+  const handleClick = async () => {
     if (textRef.current.value) {
-      createQuestion(subject.id, textRef.current.value);
+      await createQuestion(subject.id, textRef.current.value);
       setOnClose();
       window.location.reload();
     } else {
