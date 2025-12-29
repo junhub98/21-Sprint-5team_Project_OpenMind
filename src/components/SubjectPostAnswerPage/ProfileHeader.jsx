@@ -139,7 +139,7 @@ const ProfileTag = styled.span`
 
 const ProfileSocial = styled.div`
   position: absolute;
-  top: 369px;
+  top: 329px;
   left: 50%;
   transform: translateX(-50%);
   width: 144px;
