@@ -7,6 +7,7 @@
   background-color: #f5f1ee;
   border-radius: 16px;
   text-align: center;
+  position: relative;
 }
 
 .CreateQuestionCard p {
@@ -16,6 +17,11 @@
   display: flex;
   justify-content: center;
   gap: 6px;
+}
+.mailBox {
+  position: absolute;
+  top: 80px;
+  right: 280px;
 }
 
 /* 미디어 쿼리 */
@@ -28,5 +34,10 @@
 @media (max-width: 768px) {
   .CreateQuestionCard {
     width: 327px;
+  }
+  .mailBox {
+    position: absolute;
+    top: 80px;
+    right: 85px;
   }
 }

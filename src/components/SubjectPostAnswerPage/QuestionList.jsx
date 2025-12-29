@@ -83,7 +83,7 @@ const QuestionListContainer = styled.div`
 `;
 
 const Count = styled.div`
-  width: 184px
+  width: 184px;
   height: 25px;
   margin: 0 auto;
 
@@ -97,14 +97,14 @@ const Count = styled.div`
   letter-spacing: 0;
   color: #542f1a;
   text-align: center;
-  
+
   img {
     width: 24px;
     height: 24px;
     display: block;
     flex-shrink: 0;
   }
-  
+
   span {
     text-align: center;
   }
@@ -175,7 +175,7 @@ function QuestionList({ subjectId }) {
       .finally(() => setLoading(false));
   }, [subjectId]);
 
-// 전체 삭제
+  // 전체 삭제
   const handleDeleteSubject = async () => {
     if (!window.confirm('해당 피드를 삭제하시겠습니까?')) return;
 
@@ -195,8 +195,7 @@ function QuestionList({ subjectId }) {
 
     try {
       await deleteQuestion(questionId);
-      setQuestions((prev) => prev.filter(
-        (q) => q.id !==questionId)); // 상태 갱신
+      setQuestions((prev) => prev.filter((q) => q.id !== questionId)); // 상태 갱신
     } catch (error) {
       console.error('삭제 실패', error);
       alert('질문 삭제에 실패했습니다.');
