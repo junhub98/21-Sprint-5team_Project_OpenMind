@@ -138,18 +138,6 @@ hr {
   color: currentColor;
 }
 
-.likeActive {
-  color: #1877f2;
-  font-weight: 500;
-  font-size: 14px;
-}
-
-.dislikeActive {
-  color: #b93333;
-  font-weight: 600;
-  font-size: 14px;
-}
-
 /* 미디어 쿼리 */
 @media (max-width: 950px) {
   .questionCard {

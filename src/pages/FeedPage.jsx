@@ -12,7 +12,7 @@ export default function FeedPage() {
   const navigate = useNavigate();
   const { subjectId } = useParams();
 
-  const BATCH = 3;
+  const BATCH = 30;
 
   const [questions, setQuestions] = useState([]);
   const [subjectName, setSubjectName] = useState('익명');

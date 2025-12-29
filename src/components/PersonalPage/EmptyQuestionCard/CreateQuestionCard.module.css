@@ -7,6 +7,27 @@
   background-color: #f5f1ee;
   border-radius: 16px;
   text-align: center;
+  position: relative;
+}
+.backButton {
+  position: absolute;
+  top: -50px;
+  left: 0;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background-color: #542f1a;
+  color: #ffffff;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+}
+.backButton:hover {
+  opacity: 0.9;
+}
+
+.disabled {
+  opacity: 0.4;
+  pointer-events: none;
 }
 
 .CreateQuestionCard p {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styles from './QuestionCard.module.css';
 import profileImage from '../../../assets/PersonalImages/profileImage.svg';
 import ThumbsUp from '../../../assets/PersonalImages/thumbsUp.svg?react';
@@ -21,43 +21,20 @@ function QuestionCard({ question, subjectName }) {
   const isAnswered = Boolean(question.answer);
   const isRejected = question.answer?.isRejected === true;
 
-  const storageKey = `reaction-${question.id}`;
-
-  const [liked, setLiked] = useState(false);
-  const [disliked, setDisliked] = useState(false);
   const [likeCount, setLikeCount] = useState(question.like || 0);
   const [dislikeCount, setDislikeCount] = useState(question.dislike || 0);
   const [saving, setSaving] = useState(false);
 
-  useEffect(() => {
-    const saved = localStorage.getItem(storageKey);
-    if (saved === 'like') {
-      setLiked(true);
-    }
-    if (saved === 'dislike') {
-      setDisliked(true);
-    }
-  }, [storageKey]);
-
   const handleLike = async () => {
     if (saving) return;
-    if (liked) return;
 
     setSaving(true);
-    setLiked(true);
-    setLikeCount(likeCount + 1);
-
-    if (disliked) {
-      setDisliked(false);
-      setDislikeCount(dislikeCount - 1);
-    }
+    setLikeCount((prev) => prev + 1);
 
     try {
       await likeQuestion(question.id);
-      localStorage.setItem(storageKey, 'like');
     } catch (e) {
-      setLiked(false);
-      setLikeCount(likeCount);
+      setLikeCount((prev) => prev - 1);
     } finally {
       setSaving(false);
     }
@@ -65,23 +42,14 @@ function QuestionCard({ question, subjectName }) {
 
   const handleDislike = async () => {
     if (saving) return;
-    if (disliked) return;
 
     setSaving(true);
-    setDisliked(true);
-    setDislikeCount(dislikeCount + 1);
-
-    if (liked) {
-      setLiked(false);
-      setLikeCount(likeCount - 1);
-    }
+    setDislikeCount((prev) => prev + 1);
 
     try {
       await dislikeQuestion(question.id);
-      localStorage.setItem(storageKey, 'dislike');
     } catch (e) {
-      setDisliked(false);
-      setDislikeCount(dislikeCount);
+      setDislikeCount((prev) => prev - 1);
     } finally {
       setSaving(false);
     }
@@ -127,7 +95,7 @@ function QuestionCard({ question, subjectName }) {
             type="button"
             onClick={handleLike}
             disabled={saving}
-            className={`${styles.reactionButton} ${liked ? styles.likeActive : ''}`}
+            className={styles.reactionButton}
           >
             <ThumbsUp className={styles.icon} />
             좋아요 {likeCount}
@@ -137,7 +105,7 @@ function QuestionCard({ question, subjectName }) {
             type="button"
             onClick={handleDislike}
             disabled={saving}
-            className={`${styles.reactionButton} ${disliked ? styles.dislikeActive : ''}`}
+            className={styles.reactionButton}
           >
             <ThumbsDown className={styles.icon} />
             싫어요 {dislikeCount}
