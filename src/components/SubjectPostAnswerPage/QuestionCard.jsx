@@ -65,7 +65,7 @@ function QuestionDate(dateString) {
 }
 
 // 메인컴포넌트
-function QuestionCard({ question, onDelete, subject }) {
+function QuestionCard({ question, onDelete, subject, onReject }) {
   const isAnswered = Boolean(question.answer);
   const isRejected = question.answer?.isRejected === true;
 
@@ -79,7 +79,12 @@ function QuestionCard({ question, onDelete, subject }) {
           <span className={!isAnswered ? styles.notAnswered : undefined}>
             {isAnswered ? '답변 완료' : '미답변'}
           </span>
-          <KebabMenu question={question} onDelete={onDelete} setIsEdit={setIsEdit} />
+          <KebabMenu 
+            question={question} 
+            onDelete={onDelete} 
+            onReject={onReject}
+            setIsEdit={setIsEdit} 
+          />
         </div>
 
         <div className={styles.questionItems}>

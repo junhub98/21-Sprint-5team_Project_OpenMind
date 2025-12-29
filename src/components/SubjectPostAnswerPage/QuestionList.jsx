@@ -8,6 +8,7 @@ import {
   deleteSubject,
   getSubjectById,
   deleteQuestion,
+  rejectAnswer,
 } from '../../utils/getDataApi';
 import media from '../../utils/media';
 import { useNavigate } from 'react-router-dom';
@@ -206,6 +207,24 @@ function QuestionList({ subjectId }) {
     }
   };
 
+  // 답변 거절
+  const handleRejectOne = async (questionId) => {
+    if (!window.confirm('해당 질문을 거절하시겠습니까?')) return;
+
+    try {
+      const rejectedAnswer = await rejectAnswer(questionId);
+      setQuestions((prev) => 
+        prev.map((q) => 
+          q.id === questionId 
+          ? {...q, answer: rejectedAnswer } 
+          : q
+        )
+      ); 
+    } catch (error) {
+      alert('질문 삭제에 실패했습니다.');
+    }
+  }
+
   const hasQuestions = questions.length > 0;
 
   return (
@@ -238,7 +257,13 @@ function QuestionList({ subjectId }) {
           {hasQuestions && (
             <QuestionListBody>
               {questions.map((q) => (
-                <QuestionCard key={q?.id} question={q} onDelete={handleDeleteOne} subject={subject} />
+                <QuestionCard 
+                  key={q?.id} 
+                  question={q} 
+                  onDelete={handleDeleteOne} 
+                  subject={subject} 
+                  onReject={handleRejectOne}
+                />  
               ))}
             </QuestionListBody>
           )}        

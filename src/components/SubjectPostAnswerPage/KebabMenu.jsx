@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import KebabIcon from '../../assets/SubjectPostAnswerPage/Kebab.png';
-import { rejectAnswer } from '../../utils/getDataApi';
 
 // styled-components
 const MenuWrapper = styled.div`
@@ -41,10 +40,9 @@ const MenuItem = styled.li`
 `;
 
 // 메인 컴포넌트
-function KebabMenu({ setIsEdit, onDelete, question }) {
+function KebabMenu({ setIsEdit, onDelete, question, onReject }) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const isRejected = question?.answer?.isRejected;
 
   // 토글
   const handleToggleMenu = () => {
@@ -61,24 +59,32 @@ function KebabMenu({ setIsEdit, onDelete, question }) {
     setIsOpen(false);
   };
 
-  const handleRejectClick = async () => {
-    await rejectAnswer(question.id);
+  const handleRejectClick =  () => {
+    onReject(question.id);
     setIsOpen(false);
-    window.location.reload();
+    
   };
 
   return (
     <MenuWrapper>
-      <MenuButton onClick={handleToggleMenu}>
+      <MenuButton type="button" onClick={handleToggleMenu}>
         <img src={KebabIcon} alt="메뉴" />
       </MenuButton>
 
       {isOpen && (
         <MenuList>
-          {question.answer && <MenuItem onClick={handleEditClick}>수정하기</MenuItem>}
-          <MenuItem onClick={handleDeleteClick}>삭제하기 </MenuItem>
-          {!question.answer?.isRejected && (
-            <MenuItem onClick={handleRejectClick}>거절하기</MenuItem>
+          {question.answer && !question.answer.isRejected && (
+            <MenuItem onClick={handleEditClick}>
+              수정하기
+            </MenuItem>
+          )}
+            <MenuItem onClick={handleDeleteClick}>
+              삭제하기
+            </MenuItem>
+          {!question.answer && (
+            <MenuItem onClick={handleRejectClick}>
+              거절하기
+            </MenuItem>
           )}
         </MenuList>
       )}
