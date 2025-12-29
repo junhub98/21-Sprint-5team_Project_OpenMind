@@ -71,6 +71,12 @@ const ProfileInfo = styled.div`
   left: 50%;
   top: 129px;
   transform: translateX(-50%);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 100;
   text-align: center;
 
   ${media.mobile`
@@ -91,19 +97,23 @@ const ProfileAvatar = styled.img`
 `;
 
 const ProfileNameContainer = styled.div`
+  position: relative;
+  display: inline-block;
   margin-top: 10px;
-  display: flex;
-  flex-direction: column;
+  text-align: center;
   align-items: center;
-  justify-content: center;
   gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  text-align: center;  
 
   ${media.mobile`
     gap: 6px;
   `}
 `;
 
-const ProfileName = styled.h3`
+const ProfileName = styled.span`
+  display: inline;  
   font-size: 32px;
   font-weight: 400;
   line-height: 40px;
@@ -113,24 +123,33 @@ const ProfileName = styled.h3`
   margin: 0;
 
   ${media.mobile`
-    font-size: 23px;
+    font-size: 24px;
     line-height: 30px;
   `}
 `;
 
 const ProfileTag = styled.span`
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  transform: translateY(-50%);
+  margin-left: 8px;
+
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 6px 14px;
-  border-radius: 20px;
+  height: 40px;
+  padding: 4px 12px;
+  border-radius: 16px;
   background-color: var(--brown-20);
   font-size: 18px;
   font-weight: 400;
   color: var(--brown-40);
   line-height: 1;
+  white-space: nowrap;
 
   ${media.mobile`
+    height: 30px;
     padding: 4px 10px;
     font-size: 14px;
     border-radius: 15px;
