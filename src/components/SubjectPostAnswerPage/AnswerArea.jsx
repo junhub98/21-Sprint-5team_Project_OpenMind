@@ -95,7 +95,7 @@ const SubmitButton = styled.button`
   `}
 `;
 export default function AnswerArea({ question, subject, isEdit }) {
-  const { name, tag } = parseSubjectName(subject.name) || '';
+  const { name, tag } = parseSubjectName(subject?.name) || { name: '', tag: null };
   const [isActive, setIsActive] = useState(false);
   const textRef = useRef(null);
 

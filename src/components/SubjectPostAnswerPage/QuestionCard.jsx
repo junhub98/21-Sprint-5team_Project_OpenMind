@@ -70,7 +70,7 @@ function QuestionCard({ question, onDelete, subject }) {
   const isRejected = question.answer?.isRejected === true;
 
   const [isEdit, setIsEdit] = useState(false);
-  const { name, tag } = parseSubjectName(subject.name) || '';
+  const { name, tag } = parseSubjectName(subject?.name) || { name: '', tag: null };
 
   return (
     <div className={styles.questionCard}>

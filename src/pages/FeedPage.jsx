@@ -15,7 +15,7 @@ export default function FeedPage() {
   const BATCH = 3;
 
   const [questions, setQuestions] = useState([]);
-  const [subjectName, setSubjectName] = useState('익명');
+  const [subject, setSubject] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const offsetRef = useRef(0);
   const hasMoreRef = useRef(true);
@@ -24,6 +24,7 @@ export default function FeedPage() {
 
   const loadMore = useCallback(async () => {
     if (!subjectId) return;
+    if (!subject) return; // subject가 없으면 로드하지 않음
     if (!hasMoreRef.current) return;
     if (inFlightRef.current) return;
 
@@ -40,32 +41,41 @@ export default function FeedPage() {
 
     list.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-    setQuestions((prev) => [...prev, ...list.map((q) => ({ ...q, subjectName }))]);
+    setQuestions((prev) => [...prev, ...list.map((q) => ({ 
+      ...q, 
+      subjectName: subject.name || '익명',
+      subjectImageSource: subject.imageSource 
+    }))]);
     offsetRef.current += list.length;
     hasMoreRef.current = Boolean(res?.next);
 
     inFlightRef.current = false;
-  }, [subjectId, subjectName]);
+  }, [subjectId, subject]);
 
   useEffect(() => {
     if (!subjectId) return;
-    if (didInitRef.current) return;
-    didInitRef.current = true;
-
+    
     (async () => {
-      const subject = await getSubjectById(subjectId);
-      const name = subject?.name ?? '익명';
-      setSubjectName(name);
+      const subjectData = await getSubjectById(subjectId);
+      setSubject(subjectData);
 
       setQuestions([]);
       offsetRef.current = 0;
       hasMoreRef.current = true;
       inFlightRef.current = false;
-
-      await loadMore();
-      window.scrollTo({ top: 0, behavior: 'auto' });
+      didInitRef.current = false;
     })();
-  }, [subjectId, loadMore]);
+  }, [subjectId]);
+
+  // subject가 설정된 후 질문 로드
+  useEffect(() => {
+    if (!subject) return;
+    if (didInitRef.current) return;
+    didInitRef.current = true;
+    
+    loadMore();
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }, [subject, loadMore]);
 
   useEffect(() => {
     const onScroll = () => {

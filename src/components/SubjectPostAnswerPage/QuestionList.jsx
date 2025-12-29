@@ -161,12 +161,13 @@ function QuestionList({ subjectId }) {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!subjectId) return;
     async function loadSubject() {
       const data = await getSubjectById(subjectId);
       setSubject(data);
     }
     loadSubject();
-  }, []);
+  }, [subjectId]);
 
   // 질문 리스트 불러오기
   useEffect(() => {
