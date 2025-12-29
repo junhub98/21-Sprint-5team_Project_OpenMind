@@ -76,6 +76,7 @@ const QuestionListContainer = styled.div`
   flex-direction: column;
   gap: 12px;
   min-height: 220px;
+  position: relative;
 
   ${media.mobile`
     align-items: center;
@@ -106,7 +107,7 @@ const Count = styled.div`
   }
 
   span {
-    text-align: center;
+    white-space: nowrap;
   }
 
   ${media.mobile`
@@ -136,6 +137,8 @@ const EmptyIllustration = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  
   width: 100%;
   height: 330px;
   margin-top: 4px;
@@ -224,20 +227,20 @@ function QuestionList({ subjectId }) {
             </>
           )}
         </Count>
+        
+          {!hasQuestions && (
+            <EmptyIllustration>
+              <img src={Mailbox} alt="메일 상자" />
+            </EmptyIllustration>
+          )}
 
-        {!hasQuestions && (
-          <EmptyIllustration>
-            <img src={Mailbox} alt="메일 상자" />
-          </EmptyIllustration>
-        )}
-
-        {hasQuestions && (
-          <QuestionListBody>
-            {questions.map((q) => (
-              <QuestionCard key={q?.id} question={q} onDelete={handleDeleteOne} subject={subject} />
-            ))}
-          </QuestionListBody>
-        )}
+          {hasQuestions && (
+            <QuestionListBody>
+              {questions.map((q) => (
+                <QuestionCard key={q?.id} question={q} onDelete={handleDeleteOne} subject={subject} />
+              ))}
+            </QuestionListBody>
+          )}        
       </QuestionListContainer>
     </QuestionListWrapper>
   );
