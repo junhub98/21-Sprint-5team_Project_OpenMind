@@ -65,12 +65,17 @@ function QuestionDate(dateString) {
 }
 
 // 메인컴포넌트
-function QuestionCard({ question, onDelete, subject, onReject }) {
+function QuestionCard({ question, onDelete, subject, onReject, onAnswerSubmit }) {
   const isAnswered = Boolean(question.answer);
   const isRejected = question.answer?.isRejected === true;
 
   const [isEdit, setIsEdit] = useState(false);
   const { name, tag } = parseSubjectName(subject?.name) || { name: '', tag: null };
+
+  const handleAnswerDone = (answer) => {
+    onAnswerSubmit(question.id, answer);
+    setIsEdit(false);
+  };
 
   return (
     <div className={styles.questionCard}>
@@ -97,7 +102,13 @@ function QuestionCard({ question, onDelete, subject, onReject }) {
         </div>
 
         {(!isAnswered || isEdit) && (
-          <AnswerArea question={question} subject={subject} isEdit={isEdit} setIsEdit={setIsEdit} />
+          <AnswerArea 
+            question={question} 
+            subject={subject} 
+            isEdit={isEdit} 
+            onSubmitDone={handleAnswerDone}
+            
+          />
         )}
 
         {isAnswered && !isEdit && (

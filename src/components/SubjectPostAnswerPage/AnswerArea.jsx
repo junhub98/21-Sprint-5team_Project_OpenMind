@@ -94,7 +94,7 @@ const SubmitButton = styled.button`
     gap: 10px;
   `}
 `;
-export default function AnswerArea({ question, subject, isEdit }) {
+export default function AnswerArea({ question, subject, isEdit, onSubmitDone }) {
   const { name, tag } = parseSubjectName(subject?.name) || { name: '', tag: null };
   const [isActive, setIsActive] = useState(false);
   const textRef = useRef(null);
@@ -102,19 +102,18 @@ export default function AnswerArea({ question, subject, isEdit }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const content = textRef.current.value;
+    let answer;
     if (!isEdit) {
-      await createAnswer(question.id, content);
-      window.location.reload();
+      answer = await createAnswer(question.id, content);      
     } else {
-      await updateAnswer(question.answer.id, content);
-      window.location.reload();
+      answer = await updateAnswer(question.answer.id, content);      
     }
+    onSubmitDone(answer);
   };
 
   const handleChange = (e) => {
-    if (e.target.value.length > 0) {
-      setIsActive(true);
-    } else setIsActive(false);
+    setIsActive(e.target.value.length > 0);
+    
   };
   return (
     <Container>

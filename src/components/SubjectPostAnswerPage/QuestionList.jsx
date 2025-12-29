@@ -12,6 +12,7 @@ import {
 } from '../../utils/getDataApi';
 import media from '../../utils/media';
 import { useNavigate } from 'react-router-dom';
+
 // styled-components
 
 const QuestionListWrapper = styled.section`
@@ -180,6 +181,17 @@ function QuestionList({ subjectId }) {
       .finally(() => setLoading(false));
   }, [subjectId]);
 
+  // 답변 생성 / 수정
+  const handleAnswerUpdate = (questionId, answer) => {
+    setQuestions( (prev) => 
+      prev.map( (q) => 
+        q.id === questionId
+          ? {...q, answer} 
+          : q
+      )
+    )
+  }
+
   // 전체 삭제
   const handleDeleteSubject = async () => {
     if (!window.confirm('해당 피드를 삭제하시겠습니까?')) return;
@@ -263,6 +275,7 @@ function QuestionList({ subjectId }) {
                   onDelete={handleDeleteOne} 
                   subject={subject} 
                   onReject={handleRejectOne}
+                  onAnswerSubmit={handleAnswerUpdate}
                 />  
               ))}
             </QuestionListBody>
