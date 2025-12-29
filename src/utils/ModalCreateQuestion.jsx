@@ -102,7 +102,7 @@ const SubmitButton = styled.button`
   font-size: 16px;
   font-weight: 400;
 `;
-export default function ModalCreateQuestion({ setOnClose, subjectId }) {
+export default function ModalCreateQuestion({ setOnClose, subjectId, onQuestionAdded }) {
   const [isActive, setIsActive] = useState(false);
   const [subject, setSubject] = useState(null);
   const textRef = useRef(null);
@@ -128,9 +128,18 @@ export default function ModalCreateQuestion({ setOnClose, subjectId }) {
 
   const handleClick = async () => {
     if (textRef.current.value) {
-      await createQuestion(subject.id, textRef.current.value);
-      setOnClose();
-      window.location.reload();
+      try {
+        const newQuestion = await createQuestion(subject.id, textRef.current.value);
+        if (onQuestionAdded) {
+          onQuestionAdded(newQuestion);
+        }
+        setOnClose();
+        textRef.current.value = ''; // 입력 필드 초기화
+        setIsActive(false);
+      } catch (error) {
+        console.error('질문 생성 실패', error);
+        alert('질문 생성에 실패했습니다.');
+      }
     } else {
       alert('질문을 입력해주세요.');
     }

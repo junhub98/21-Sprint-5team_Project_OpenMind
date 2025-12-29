@@ -89,6 +89,15 @@ export default function FeedPage() {
     return () => window.removeEventListener('scroll', onScroll);
   }, [loadMore]);
 
+  // 질문 추가 핸들러
+  const handleQuestionAdded = (newQuestion) => {
+    setQuestions((prev) => [{
+      ...newQuestion,
+      subjectName: subject?.name || '익명',
+      subjectImageSource: subject?.imageSource
+    }, ...prev]);
+  };
+
   return (
     <div className={styles.feedPage}>
       <ProfileHeader subjectId={subjectId} />
@@ -99,6 +108,7 @@ export default function FeedPage() {
           isOpen={isModalOpen}
           setOnClose={() => setIsModalOpen(false)}
           subjectId={subjectId}
+          onQuestionAdded={handleQuestionAdded}
         />
       )}
     </div>
