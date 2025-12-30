@@ -8,6 +8,7 @@
   border-radius: 16px;
   text-align: center;
   position: relative;
+<<<<<<< HEAD
 }
 .backButton {
   position: absolute;
@@ -28,6 +29,8 @@
 .disabled {
   opacity: 0.4;
   pointer-events: none;
+=======
+>>>>>>> fc8b0e183b8cf1c7c6ff7d05ecb2307542611f59
 }
 
 .CreateQuestionCard p {
@@ -37,6 +40,11 @@
   display: flex;
   justify-content: center;
   gap: 6px;
+}
+.mailBox {
+  position: absolute;
+  top: 80px;
+  right: 280px;
 }
 
 /* 미디어 쿼리 */
@@ -49,5 +57,10 @@
 @media (max-width: 768px) {
   .CreateQuestionCard {
     width: 327px;
+  }
+  .mailBox {
+    position: absolute;
+    top: 80px;
+    right: 85px;
   }
 }

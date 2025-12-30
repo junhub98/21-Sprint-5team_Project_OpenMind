@@ -25,7 +25,10 @@ export default function Reactions({ question }) {
 
   const handleLike = async () => {
     if (saving) return;
-    if (liked) return;
+    if (disliked || liked) {
+      alert('리액션은 변경할 수 없습니다.');
+      return;
+    }
 
     setSaving(true);
     setLiked(true);
@@ -49,7 +52,10 @@ export default function Reactions({ question }) {
 
   const handleDislike = async () => {
     if (saving) return;
-    if (disliked) return;
+    if (disliked || liked) {
+      alert('리액션은 변경할 수 없습니다.');
+      return;
+    }
 
     setSaving(true);
     setDisliked(true);

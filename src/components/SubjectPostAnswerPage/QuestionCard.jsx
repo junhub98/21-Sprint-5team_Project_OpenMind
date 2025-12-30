@@ -4,7 +4,8 @@ import styles from './QuestionCard.module.css';
 import KebabMenu from './KebabMenu';
 import Reactions from '../../utils/Reactions';
 import profileImage from '../../assets/PersonalImages/profileImage.svg';
-import { getSubjectById, parseSubjectName } from '../../utils/getDataApi';
+import { parseSubjectName } from '../../utils/getDataApi';
+import AnswerArea from './AnswerArea';
 
 // styled-components
 const Card = styled.div`
@@ -64,19 +65,17 @@ function QuestionDate(dateString) {
 }
 
 // 메인컴포넌트
-function QuestionCard({ question, onDelete, onUpdateAnswer }) {
+function QuestionCard({ question, onDelete, subject, onReject, onAnswerSubmit }) {
   const isAnswered = Boolean(question.answer);
   const isRejected = question.answer?.isRejected === true;
-  const [subject, setSubject] = useState({});
-  const { name, tag } = parseSubjectName(subject.name) || '';
 
-  useEffect(() => {
-    async function loadSubject() {
-      const data = await getSubjectById(question.subjectId);
-      setSubject(data);
-    }
-    loadSubject();
-  }, []);
+  const [isEdit, setIsEdit] = useState(false);
+  const { name, tag } = parseSubjectName(subject?.name) || { name: '', tag: null };
+
+  const handleAnswerDone = (answer) => {
+    onAnswerSubmit(question.id, answer);
+    setIsEdit(false);
+  };
 
   return (
     <div className={styles.questionCard}>
@@ -85,7 +84,12 @@ function QuestionCard({ question, onDelete, onUpdateAnswer }) {
           <span className={!isAnswered ? styles.notAnswered : undefined}>
             {isAnswered ? '답변 완료' : '미답변'}
           </span>
-          <KebabMenu />
+          <KebabMenu 
+            question={question} 
+            onDelete={onDelete} 
+            onReject={onReject}
+            setIsEdit={setIsEdit} 
+          />
         </div>
 
         <div className={styles.questionItems}>
@@ -97,13 +101,22 @@ function QuestionCard({ question, onDelete, onUpdateAnswer }) {
           <span className={styles.questionContent}>{question.content}</span>
         </div>
 
-        {isAnswered && (
+        {(!isAnswered || isEdit) && (
+          <AnswerArea 
+            question={question} 
+            subject={subject} 
+            isEdit={isEdit} 
+            onSubmitDone={handleAnswerDone}
+            
+          />
+        )}
+
+        {isAnswered && !isEdit && (
           <div className={styles.answerItems}>
-            <img className={styles.profileImage} src={profileImage} alt="profile" />
+            <img className={styles.profileImage} src={subject.imageSource} alt="profile" />
             <div className={styles.questionLabel}>
               <div className={styles.metaLine}>
                 <span className={styles.nickName}>{name}</span>
-                <span className={`${styles.nickName} ${styles.tag} `}>#{tag}</span>
                 <span className={styles.date}>{QuestionDate(question.answer.createdAt)}</span>
               </div>
               <p className={`${styles.answerContent} ${isRejected ? styles.rejected : ''}`}>

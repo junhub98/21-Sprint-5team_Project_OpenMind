@@ -1,4 +1,4 @@
-/*소셜 네트워크 서비스 버튼 */
+
 import ReactDom from 'react-dom';
 import { useState, memo, useEffect } from 'react';
 import styled from 'styled-components';
@@ -8,6 +8,12 @@ import ShareFacebook from '../../assets/SubjectPostAnswerPage/ShareFacebookIcon.
 import media from '../../utils/media';
 
 // styled-components
+const ButtonGroup = styled.div`
+  display:flex;
+  align-items: center;
+  gap: 8px;
+`
+
 const ImageButton = styled.button`
   background: none;
   border: none;
@@ -42,7 +48,7 @@ const Toast = styled.div`
   border-radius: 8px;
   font-size: 14px;
   box-shadow: 0px 4px 4px rgba(0,0,0,0.25);
-  display: flex,
+  display: flex;
   align-items: center;
   justify-content: center;
   z-index: 9999;
@@ -62,7 +68,6 @@ const ToastText = styled.span`
   text-align: center;
   white-space:nowrap;
 `;
-// 컴포넌트 분리 (리렌더링 범위 관리) React.memo 사용
 // 링크 복사하기
 const LinkCopyButton = memo(function LinkCopyButton() {
   const [showToast, setShowToast] = useState(false);
@@ -191,11 +196,11 @@ const FacebookButton = memo(function FacebookButton() {
 // 메인 컴포넌트
 function SocialButtons() {
   return (
-    <>
+    <ButtonGroup>
       <LinkCopyButton />
       <KakaoButton />
       <FacebookButton />
-    </>
+    </ButtonGroup>
   );
 }
 
