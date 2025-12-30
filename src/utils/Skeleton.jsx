@@ -1,4 +1,3 @@
-
 import styled, { keyframes } from 'styled-components';
 
 //스켈레톤 에니메이션
