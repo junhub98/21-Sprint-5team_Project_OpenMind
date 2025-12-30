@@ -1,5 +1,5 @@
 import styled, { keyframes } from 'styled-components';
-import messagesIC from '../../assets/SubjectsListPage/Messages.png';
+import messagesIC from '../../assets/SubjectsListPage/messages.png';
 import media from '../../utils/media';
 import { memo } from 'react';
 import { Link } from 'react-router-dom';

@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import SubjectsListPageNav from '../components/SubjectListPage/SubjectsListPageNav';
+import SubjectListPageNav from '../components/SubjectListPage/SubjectListPageNav';
 import SortMenu from '../components/SubjectListPage/SortMenu';
-import SubjectsList from '../components/SubjectListPage/SubjectsList';
+import SubjectList from '../components/SubjectListPage/SubjectList';
 import { getSubjectsList } from '../utils/getDataApi';
 import useSortParam from '../hooks/useSortParam';
 import usePaginationParam from '../hooks/usePaginationParam';
@@ -63,7 +63,7 @@ const EndMessage = styled.span`
 //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ    react-component   ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 
-export default function SubjectsListPage() {
+export default function SubjectListPage() {
   const [isScrollLoading, setIsScrollLoading] = useState(false);
   const [scrollPage, setScrollPage] = useState(1);
   const [hasNextScroll, setHasNextScroll] = useState(true);
@@ -155,7 +155,7 @@ export default function SubjectsListPage() {
   const scrollRef = useIntersectionObserver(scrollArgs);
   return (
     <div>
-      <SubjectsListPageNav
+      <SubjectListPageNav
         setIsScrollMode={setIsScrollMode}
         setScrollPage={setScrollPage}
         setScrollPageParams={setScrollPageParams}
@@ -168,7 +168,7 @@ export default function SubjectsListPage() {
           {!isScrollMode && <SortMenu />}
         </SortBox>
 
-        <SubjectsList subjects={subjects} isLoading={isLoading} pageSize={pageSize} />
+        <SubjectList subjects={subjects} isLoading={isLoading} pageSize={pageSize} />
 
         {!isScrollMode && <Pagination currentPage={currentPage} totalPages={totalPages} />}
 

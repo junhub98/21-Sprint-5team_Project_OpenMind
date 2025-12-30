@@ -66,7 +66,7 @@ const Arrow = styled.img`
   `}
 `;
 
-const SubjectsListPageNav = memo(function SubjectsListPageNav({
+const SubjectListPageNav = memo(function SubjectsListPageNav({
   setIsScrollMode,
   setScrollPage,
   setScrollPageParams,
@@ -99,4 +99,4 @@ const SubjectsListPageNav = memo(function SubjectsListPageNav({
   );
 });
 
-export default SubjectsListPageNav;
+export default SubjectListPageNav;

@@ -40,7 +40,7 @@ const Container = styled.div`
   }
 `;
 
-export default function SubjectsList({ subjects, isLoading, pageSize }) {
+export default function SubjectList({ subjects, isLoading, pageSize }) {
   return (
     <Container>
       {isLoading
