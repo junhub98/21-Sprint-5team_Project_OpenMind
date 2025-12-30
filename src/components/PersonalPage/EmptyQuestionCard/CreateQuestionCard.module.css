@@ -8,7 +8,6 @@
   border-radius: 16px;
   text-align: center;
   position: relative;
-<<<<<<< HEAD
 }
 .backButton {
   position: absolute;
@@ -29,8 +28,6 @@
 .disabled {
   opacity: 0.4;
   pointer-events: none;
-=======
->>>>>>> fc8b0e183b8cf1c7c6ff7d05ecb2307542611f59
 }
 
 .CreateQuestionCard p {

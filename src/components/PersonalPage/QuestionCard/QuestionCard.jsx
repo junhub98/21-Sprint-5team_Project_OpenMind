@@ -20,7 +20,10 @@ function QuestionDate(dateString) {
 function QuestionCard({ question, subjectName }) {
   const isAnswered = Boolean(question.answer);
   const isRejected = question.answer?.isRejected === true;
-  const { name } = parseSubjectName(question.subjectName || subjectName) || { name: question.subjectName || subjectName || '익명', tag: null };
+  const { name } = parseSubjectName(question.subjectName || subjectName) || {
+    name: question.subjectName || subjectName || '익명',
+    tag: null,
+  };
 
   const [likeCount, setLikeCount] = useState(question.like || 0);
   const [dislikeCount, setDislikeCount] = useState(question.dislike || 0);
@@ -76,7 +79,11 @@ function QuestionCard({ question, subjectName }) {
 
         {isAnswered && (
           <div className={styles.answerItems}>
-            <img className={styles.profileImage} src={question.subjectImageSource || profileImage} alt="profile" />
+            <img
+              className={styles.profileImage}
+              src={question.subjectImageSource || profileImage}
+              alt="profile"
+            />
             <div className={styles.questionLabel}>
               <div className={styles.metaLine}>
                 <span className={styles.nickName}>{name}</span>
@@ -91,7 +98,6 @@ function QuestionCard({ question, subjectName }) {
 
         <hr />
 
-<<<<<<< HEAD
         <div className={styles.reactionContainer}>
           <button
             type="button"
@@ -113,9 +119,6 @@ function QuestionCard({ question, subjectName }) {
             싫어요 {dislikeCount}
           </button>
         </div>
-=======
-        <Reactions question={question} />
->>>>>>> fc8b0e183b8cf1c7c6ff7d05ecb2307542611f59
       </div>
     </div>
   );
