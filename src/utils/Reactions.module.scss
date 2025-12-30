@@ -6,31 +6,49 @@
 }
 
 .reactionButton {
-  display: flex;
-  align-items: center;
-  text-align: center;
   background: none;
   border: none;
   cursor: pointer;
-  color: #8c8c8c;
+  padding: 0;
+}
+
+.content {
+  display: inline-flex;
+  align-items: center;
   gap: 6px;
+  color: #8c8c8c;
+  transform-origin: center;
 }
 
 .icon {
   width: 16px;
   height: 16px;
   fill: currentColor;
-  color: currentColor;
 }
 
 .likeActive {
   color: #1877f2;
-  font-weight: 500;
-  font-size: 14px;
 }
 
 .dislikeActive {
   color: #b93333;
-  font-weight: 600;
-  font-size: 14px;
+}
+
+.shake {
+  animation: tap 0.18s ease-out;
+}
+
+@keyframes tap {
+  0% {
+    transform: translateX(0);
+  }
+  30% {
+    transform: translateX(-3px);
+  }
+  60% {
+    transform: translateX(3px);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }

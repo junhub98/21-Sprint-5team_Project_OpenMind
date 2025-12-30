@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styles from './QuestionCard.module.css';
 import profileImage from '../../../assets/PersonalImages/profileImage.svg';
-import ThumbsUp from '../../../assets/PersonalImages/thumbsUp.svg?react';
-import ThumbsDown from '../../../assets/PersonalImages/thumbsDown.svg?react';
-import { likeQuestion, dislikeQuestion, parseSubjectName } from '../../../utils/getDataApi';
+import { parseSubjectName } from '../../../utils/getDataApi';
 import Reactions from '../../../utils/Reactions';
+
 function QuestionDate(dateString) {
   if (!dateString) return '';
   const diff = Date.now() - new Date(dateString).getTime();
@@ -23,40 +22,6 @@ function QuestionCard({ question, subjectName }) {
   const { name } = parseSubjectName(question.subjectName || subjectName) || {
     name: question.subjectName || subjectName || '익명',
     tag: null,
-  };
-
-  const [likeCount, setLikeCount] = useState(question.like || 0);
-  const [dislikeCount, setDislikeCount] = useState(question.dislike || 0);
-  const [saving, setSaving] = useState(false);
-
-  const handleLike = async () => {
-    if (saving) return;
-
-    setSaving(true);
-    setLikeCount((prev) => prev + 1);
-
-    try {
-      await likeQuestion(question.id);
-    } catch (e) {
-      setLikeCount((prev) => prev - 1);
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const handleDislike = async () => {
-    if (saving) return;
-
-    setSaving(true);
-    setDislikeCount((prev) => prev + 1);
-
-    try {
-      await dislikeQuestion(question.id);
-    } catch (e) {
-      setDislikeCount((prev) => prev - 1);
-    } finally {
-      setSaving(false);
-    }
   };
 
   return (
@@ -98,27 +63,7 @@ function QuestionCard({ question, subjectName }) {
 
         <hr />
 
-        <div className={styles.reactionContainer}>
-          <button
-            type="button"
-            onClick={handleLike}
-            disabled={saving}
-            className={styles.reactionButton}
-          >
-            <ThumbsUp className={styles.icon} />
-            좋아요 {likeCount}
-          </button>
-
-          <button
-            type="button"
-            onClick={handleDislike}
-            disabled={saving}
-            className={styles.reactionButton}
-          >
-            <ThumbsDown className={styles.icon} />
-            싫어요 {dislikeCount}
-          </button>
-        </div>
+        <Reactions question={question} />
       </div>
     </div>
   );
