@@ -165,7 +165,7 @@ export default function SubjectsListPage() {
       <Container>
         <SortBox>
           <TitleSpan> 누구에게 질문할까요? </TitleSpan>
-          <SortMenu />
+          {!isScrollMode && <SortMenu />}
         </SortBox>
 
         <SubjectsList subjects={subjects} isLoading={isLoading} pageSize={pageSize} />
