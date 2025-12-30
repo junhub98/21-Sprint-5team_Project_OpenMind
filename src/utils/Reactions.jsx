@@ -1,50 +1,30 @@
 import styles from './Reactions.module.scss';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import ThumbsUp from '../assets/PersonalImages/thumbsUp.svg?react';
 import ThumbsDown from '../assets/PersonalImages/thumbsDown.svg?react';
 import { dislikeQuestion, likeQuestion } from './getDataApi';
 
 export default function Reactions({ question }) {
   const [saving, setSaving] = useState(false);
-  const [liked, setLiked] = useState(false);
-  const [disliked, setDisliked] = useState(false);
   const [likeCount, setLikeCount] = useState(question.like || 0);
   const [dislikeCount, setDislikeCount] = useState(question.dislike || 0);
 
-  const storageKey = `reaction-${question.id}`;
-
-  useEffect(() => {
-    const saved = localStorage.getItem(storageKey);
-    if (saved === 'like') {
-      setLiked(true);
-    }
-    if (saved === 'dislike') {
-      setDisliked(true);
-    }
-  }, [storageKey]);
+  const [likeShake, setLikeShake] = useState(false);
+  const [dislikeShake, setDislikeShake] = useState(false);
 
   const handleLike = async () => {
     if (saving) return;
-    if (disliked || liked) {
-      alert('리액션은 변경할 수 없습니다.');
-      return;
-    }
+
+    setLikeShake(true);
+    setTimeout(() => setLikeShake(false), 200);
 
     setSaving(true);
-    setLiked(true);
-    setLikeCount(likeCount + 1);
-
-    if (disliked) {
-      setDisliked(false);
-      setDislikeCount(dislikeCount - 1);
-    }
+    setLikeCount((prev) => prev + 1);
 
     try {
       await likeQuestion(question.id);
-      localStorage.setItem(storageKey, 'like');
-    } catch (e) {
-      setLiked(false);
-      setLikeCount(likeCount);
+    } catch {
+      setLikeCount((prev) => Math.max(0, prev - 1));
     } finally {
       setSaving(false);
     }
@@ -52,26 +32,17 @@ export default function Reactions({ question }) {
 
   const handleDislike = async () => {
     if (saving) return;
-    if (disliked || liked) {
-      alert('리액션은 변경할 수 없습니다.');
-      return;
-    }
+
+    setDislikeShake(true);
+    setTimeout(() => setDislikeShake(false), 200);
 
     setSaving(true);
-    setDisliked(true);
-    setDislikeCount(dislikeCount + 1);
-
-    if (liked) {
-      setLiked(false);
-      setLikeCount(likeCount - 1);
-    }
+    setDislikeCount((prev) => prev + 1);
 
     try {
       await dislikeQuestion(question.id);
-      localStorage.setItem(storageKey, 'dislike');
-    } catch (e) {
-      setDisliked(false);
-      setDislikeCount(dislikeCount);
+    } catch {
+      setDislikeCount((prev) => Math.max(0, prev - 1));
     } finally {
       setSaving(false);
     }
@@ -83,20 +54,32 @@ export default function Reactions({ question }) {
         type="button"
         onClick={handleLike}
         disabled={saving}
-        className={`${styles.reactionButton} ${liked ? styles.likeActive : ''}`}
+        className={styles.reactionButton}
       >
-        <ThumbsUp className={styles.icon} />
-        좋아요 {likeCount}
+        <span
+          className={`${styles.content} ${likeShake ? styles.shake : ''} ${
+            likeShake ? styles.likeActive : ''
+          }`}
+        >
+          <ThumbsUp className={styles.icon} />
+          좋아요 {likeCount}
+        </span>
       </button>
 
       <button
         type="button"
         onClick={handleDislike}
         disabled={saving}
-        className={`${styles.reactionButton} ${disliked ? styles.dislikeActive : ''}`}
+        className={styles.reactionButton}
       >
-        <ThumbsDown className={styles.icon} />
-        싫어요 {dislikeCount}
+        <span
+          className={`${styles.content} ${dislikeShake ? styles.shake : ''} ${
+            dislikeShake ? styles.dislikeActive : ''
+          }`}
+        >
+          <ThumbsDown className={styles.icon} />
+          싫어요 {dislikeCount}
+        </span>
       </button>
     </div>
   );

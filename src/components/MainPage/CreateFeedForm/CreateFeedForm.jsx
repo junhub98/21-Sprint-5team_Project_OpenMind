@@ -20,7 +20,24 @@ import {
 } from './CreateFeedForm.styles';
 
 // 태그 리스트 (필요에 따라 수정 가능)
-const TAG_LIST = ['마케팅', '영업', '운영', '기타', '취미', '일상', '여행'];
+const TAG_LIST = [
+  'ENTP',
+  'ENTJ',
+  'ENFP',
+  'ENFJ',
+  'ESTP',
+  'ESFP',
+  'ESTJ',
+  'ESFJ',
+  'INTP',
+  'INTJ',
+  'INFP',
+  'INFJ',
+  'ISTP',
+  'ISTJ',
+  'ISFP',
+  'ISFJ',
+];
 
 export default function CreateFeedForm() {
   const nameInputRef = useRef(null);
@@ -121,7 +138,7 @@ export default function CreateFeedForm() {
         <NameInput ref={nameInputRef} id="name" type="text" placeholder="이름을 입력해주세요" />
         <TagButtonWrapper>
           <TagButton type="button" data-tag-button onClick={handleTagButtonClick}>
-            태그
+            MBTI
           </TagButton>
           <TagDropdown ref={tagDropdownRef} style={{ display: 'none' }}>
             <TagList>
