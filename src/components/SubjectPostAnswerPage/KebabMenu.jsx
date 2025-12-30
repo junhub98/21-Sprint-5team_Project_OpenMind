@@ -1,9 +1,8 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import KebabIcon from '../../assets/SubjectPostAnswerPage/Kebab.png';
 
-
-// styled-components 
+// styled-components
 const MenuWrapper = styled.div`
   position: relative;
   display: inline-block;
@@ -22,55 +21,71 @@ const MenuList = styled.ul`
   background: #fff;
   border: 1px solid #e5d8cc;
   border-radius: 12px;
-  padding: 8px 0;
-  display: flex;
-  flex-direction: column;
+
   gap: 4px;
   z-index: 10;
 `;
 
 const MenuItem = styled.li`
-  padding: 6px 12px;
+  padding: 6px 6px;
+  width: 80px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
   &:hover {
     background-color: #f0f0f0;
   }
 `;
 
-function KebabMenu({ onEdit, onDelete, onReject }) {
+// 메인 컴포넌트
+function KebabMenu({ setIsEdit, onDelete, question, onReject }) {
   const [isOpen, setIsOpen] = useState(false);
 
+
+  // 토글
   const handleToggleMenu = () => {
-    setIsOpen(prev => !prev);
+    setIsOpen((prev) => !prev);
   };
 
   const handleEditClick = () => {
-    onEdit();
+    setIsEdit(true);
     setIsOpen(false);
   };
 
   const handleDeleteClick = () => {
-    onDelete();
+    onDelete(question.id);
     setIsOpen(false);
   };
 
-  const handleRejectClick = () => {
-    if (!onReject) return;
-    onReject();
+  const handleRejectClick =  () => {
+    onReject(question.id);
     setIsOpen(false);
+    
   };
 
   return (
     <MenuWrapper>
-      <MenuButton onClick={handleToggleMenu}>
+      <MenuButton type="button" onClick={handleToggleMenu}>
         <img src={KebabIcon} alt="메뉴" />
       </MenuButton>
 
       {isOpen && (
         <MenuList>
-          <MenuItem onClick={handleEditClick}>수정</MenuItem>
-          <MenuItem onClick={handleDeleteClick}>삭제</MenuItem>
-          <MenuItem onClick={handleRejectClick}>거절</MenuItem>
+          {question.answer && !question.answer.isRejected && (
+            <MenuItem onClick={handleEditClick}>
+              수정하기
+            </MenuItem>
+          )}
+            <MenuItem onClick={handleDeleteClick}>
+              삭제하기
+            </MenuItem>
+          {!question.answer && (
+            <MenuItem onClick={handleRejectClick}>
+              거절하기
+            </MenuItem>
+          )}
         </MenuList>
       )}
     </MenuWrapper>

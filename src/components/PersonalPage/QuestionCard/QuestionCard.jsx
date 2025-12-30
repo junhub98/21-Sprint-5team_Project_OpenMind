@@ -1,9 +1,10 @@
-import styles from './QuestionCard.module.css';
 import React, { useState } from 'react';
+import styles from './QuestionCard.module.css';
 import profileImage from '../../../assets/PersonalImages/profileImage.svg';
 import ThumbsUp from '../../../assets/PersonalImages/thumbsUp.svg?react';
 import ThumbsDown from '../../../assets/PersonalImages/thumbsDown.svg?react';
-
+import { likeQuestion, dislikeQuestion, parseSubjectName } from '../../../utils/getDataApi';
+import Reactions from '../../../utils/Reactions';
 function QuestionDate(dateString) {
   if (!dateString) return '';
   const diff = Date.now() - new Date(dateString).getTime();
@@ -18,40 +19,43 @@ function QuestionDate(dateString) {
 
 function QuestionCard({ question, subjectName }) {
   const isAnswered = Boolean(question.answer);
-  const [liked, setLiked] = useState(false);
-  const [disliked, setDisliked] = useState(false);
+  const isRejected = question.answer?.isRejected === true;
+  const { name } = parseSubjectName(question.subjectName || subjectName) || {
+    name: question.subjectName || subjectName || '익명',
+    tag: null,
+  };
+
   const [likeCount, setLikeCount] = useState(question.like || 0);
   const [dislikeCount, setDislikeCount] = useState(question.dislike || 0);
+  const [saving, setSaving] = useState(false);
 
-  const handleLike = () => {
-    if (liked) {
-      setLiked(false);
-      setLikeCount((prev) => prev - 1);
-      return;
-    }
+  const handleLike = async () => {
+    if (saving) return;
 
-    setLiked(true);
+    setSaving(true);
     setLikeCount((prev) => prev + 1);
 
-    if (disliked) {
-      setDisliked(false);
-      setDislikeCount((prev) => prev - 1);
+    try {
+      await likeQuestion(question.id);
+    } catch (e) {
+      setLikeCount((prev) => prev - 1);
+    } finally {
+      setSaving(false);
     }
   };
 
-  const handleDislike = () => {
-    if (disliked) {
-      setDisliked(false);
-      setDislikeCount((prev) => prev - 1);
-      return;
-    }
+  const handleDislike = async () => {
+    if (saving) return;
 
-    setDisliked(true);
+    setSaving(true);
     setDislikeCount((prev) => prev + 1);
 
-    if (liked) {
-      setLiked(false);
-      setLikeCount((prev) => prev - 1);
+    try {
+      await dislikeQuestion(question.id);
+    } catch (e) {
+      setDislikeCount((prev) => prev - 1);
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -73,21 +77,24 @@ function QuestionCard({ question, subjectName }) {
           <span className={styles.questionContent}>{question.content}</span>
         </div>
 
-        <div className={styles.answerItems}>
-          <img className={styles.profileImage} src={profileImage} alt="profile" />
-
-          <div className={styles.questionLabel}>
-            <div className={styles.metaLine}>
-              <span className={styles.nickName}>{subjectName}</span>
-
-              {isAnswered && (
+        {isAnswered && (
+          <div className={styles.answerItems}>
+            <img
+              className={styles.profileImage}
+              src={question.subjectImageSource || profileImage}
+              alt="profile"
+            />
+            <div className={styles.questionLabel}>
+              <div className={styles.metaLine}>
+                <span className={styles.nickName}>{name}</span>
                 <span className={styles.answerTime}>{QuestionDate(question.answer.createdAt)}</span>
-              )}
+              </div>
+              <p className={`${styles.answerContent} ${isRejected ? styles.rejected : ''}`}>
+                {isRejected ? '답변 거절' : question.answer.content}
+              </p>
             </div>
-
-            {isAnswered && <p className={styles.answerContent}>{question.answer.content}</p>}
           </div>
-        </div>
+        )}
 
         <hr />
 
@@ -95,7 +102,8 @@ function QuestionCard({ question, subjectName }) {
           <button
             type="button"
             onClick={handleLike}
-            className={`${styles.reactionButton} ${liked ? styles.likeActive : ''}`}
+            disabled={saving}
+            className={styles.reactionButton}
           >
             <ThumbsUp className={styles.icon} />
             좋아요 {likeCount}
@@ -104,7 +112,8 @@ function QuestionCard({ question, subjectName }) {
           <button
             type="button"
             onClick={handleDislike}
-            className={`${styles.reactionButton} ${disliked ? styles.dislikeActive : ''}`}
+            disabled={saving}
+            className={styles.reactionButton}
           >
             <ThumbsDown className={styles.icon} />
             싫어요 {dislikeCount}

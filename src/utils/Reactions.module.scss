@@ -1,0 +1,36 @@
+.reactionContainer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 10px 0;
+}
+
+.reactionButton {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #8c8c8c;
+  gap: 6px;
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+  color: currentColor;
+}
+
+.likeActive {
+  color: #1877f2;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.dislikeActive {
+  color: #b93333;
+  font-weight: 600;
+  font-size: 14px;
+}

@@ -6,15 +6,16 @@ import { useNavigate, useParams } from 'react-router-dom';
 import CreateQuestionButton from '../components/PersonalPage/CreateQuestionButton/CreateQuestionButton';
 import styles from './FeedPage.module.css';
 import ModalCreateQuestion from '../utils/ModalCreateQuestion';
+import ProfileHeader from '../components/SubjectPostAnswerPage/ProfileHeader';
 
 export default function FeedPage() {
   const navigate = useNavigate();
   const { subjectId } = useParams();
 
-  const BATCH = 3;
+  const BATCH = 30;
 
   const [questions, setQuestions] = useState([]);
-  const [subjectName, setSubjectName] = useState('익명');
+  const [subject, setSubject] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const offsetRef = useRef(0);
   const hasMoreRef = useRef(true);
@@ -23,6 +24,7 @@ export default function FeedPage() {
 
   const loadMore = useCallback(async () => {
     if (!subjectId) return;
+    if (!subject) return; // subject가 없으면 로드하지 않음
     if (!hasMoreRef.current) return;
     if (inFlightRef.current) return;
 
@@ -39,32 +41,41 @@ export default function FeedPage() {
 
     list.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-    setQuestions((prev) => [...prev, ...list.map((q) => ({ ...q, subjectName }))]);
+    setQuestions((prev) => [...prev, ...list.map((q) => ({ 
+      ...q, 
+      subjectName: subject.name || '익명',
+      subjectImageSource: subject.imageSource 
+    }))]);
     offsetRef.current += list.length;
     hasMoreRef.current = Boolean(res?.next);
 
     inFlightRef.current = false;
-  }, [subjectId, subjectName]);
+  }, [subjectId, subject]);
 
   useEffect(() => {
     if (!subjectId) return;
-    if (didInitRef.current) return;
-    didInitRef.current = true;
-
+    
     (async () => {
-      const subject = await getSubjectById(subjectId);
-      const name = subject?.name ?? '익명';
-      setSubjectName(name);
+      const subjectData = await getSubjectById(subjectId);
+      setSubject(subjectData);
 
       setQuestions([]);
       offsetRef.current = 0;
       hasMoreRef.current = true;
       inFlightRef.current = false;
-
-      await loadMore();
-      window.scrollTo({ top: 0, behavior: 'auto' });
+      didInitRef.current = false;
     })();
-  }, [subjectId, loadMore]);
+  }, [subjectId]);
+
+  // subject가 설정된 후 질문 로드
+  useEffect(() => {
+    if (!subject) return;
+    if (didInitRef.current) return;
+    didInitRef.current = true;
+    
+    loadMore();
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }, [subject, loadMore]);
 
   useEffect(() => {
     const onScroll = () => {
@@ -78,9 +89,18 @@ export default function FeedPage() {
     return () => window.removeEventListener('scroll', onScroll);
   }, [loadMore]);
 
+  // 질문 추가 핸들러
+  const handleQuestionAdded = (newQuestion) => {
+    setQuestions((prev) => [{
+      ...newQuestion,
+      subjectName: subject?.name || '익명',
+      subjectImageSource: subject?.imageSource
+    }, ...prev]);
+  };
+
   return (
     <div className={styles.feedPage}>
-      <FeedHeader />
+      <ProfileHeader subjectId={subjectId} />
       <QuestionsList questions={questions} />
       <CreateQuestionButton onClick={() => setIsModalOpen(true)} />
       {isModalOpen && (
@@ -88,6 +108,7 @@ export default function FeedPage() {
           isOpen={isModalOpen}
           setOnClose={() => setIsModalOpen(false)}
           subjectId={subjectId}
+          onQuestionAdded={handleQuestionAdded}
         />
       )}
     </div>

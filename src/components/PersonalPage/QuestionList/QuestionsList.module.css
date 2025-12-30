@@ -5,12 +5,33 @@
   height: auto;
   background-color: #f5f1ee;
   padding: 16px;
-  margin: 250px auto 0;
+  margin: 200px auto 0;
   margin-bottom: 150px;
   text-align: center;
   border: 1px solid #c7bbb5;
   border-radius: 16px;
   gap: 12px;
+  position: relative;
+}
+.backButton {
+  position: absolute;
+  top: -50px;
+  left: 0;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background-color: #542f1a;
+  color: #ffffff;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+}
+.backButton:hover {
+  opacity: 0.9;
+}
+
+.disabled {
+  opacity: 0.4;
+  pointer-events: none;
 }
 
 .countTextSection {

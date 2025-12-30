@@ -3,16 +3,31 @@ import styled from 'styled-components';
 import QuestionCard from './QuestionCard';
 import Messages from '../../assets/SubjectPostAnswerPage/Messages.png';
 import Mailbox from '../../assets/SubjectPostAnswerPage/Mailbox.png';
-import { getQuestionsList, deleteAnswer } from '../../utils/getDataApi';
+import {
+  getQuestionsList,
+  deleteSubject,
+  getSubjectById,
+  deleteQuestion,
+  rejectAnswer,
+} from '../../utils/getDataApi';
+import media from '../../utils/media';
+import { useNavigate } from 'react-router-dom';
 
 // styled-components
+
 const QuestionListWrapper = styled.section`
+  top: 423px;
   width: 100%;
-  max-width: 720px;
-  margin: 0 auto 160px;
+  max-width: 716px;
+  margin: 120px auto 160px;
   display: flex;
   flex-direction: column;
   gap: 12px;
+
+  ${media.mobile`
+    width: 327px;
+    top: 353px; 
+  `}
 `;
 
 const QuestionListTop = styled.div`
@@ -25,20 +40,33 @@ const DeleteAllButton = styled.button`
   background-color: #542f1a;
   color: #ffffff;
   border: none;
-  padding: 8px 16px;
+  padding: 12px 24px;
   border-radius: 999px;
+  width: 100px;
+  height: 35px;
   font-size: 14px;
+  font-weight: 400;
+  line-height: 25px;
+  letter-spacing: 0;
+
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   transition: opacity 0.2s;
 
   &:hover {
     opacity: 0.9;
   }
 
-  &.disabled {
-    opacity: 0.4;
-    pointer-events: none;
-  }
+  ${media.mobile`
+    width: 70px;
+    height: 25px;
+    padding: 0;
+    font-size: 10px;
+  `}
 `;
 
 const QuestionListContainer = styled.div`
@@ -50,21 +78,54 @@ const QuestionListContainer = styled.div`
   flex-direction: column;
   gap: 12px;
   min-height: 220px;
+  position: relative;
+
+  ${media.mobile`
+    align-items: center;
+  `}
 `;
 
 const Count = styled.div`
-  height: 40px;
+  width: 184px;
+  height: 25px;
+  margin: 0 auto;
+
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 2px;
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 25px;
+  letter-spacing: 0;
   color: #542f1a;
   text-align: center;
+
   img {
+    width: 24px;
+    height: 24px;
     display: block;
+    flex-shrink: 0;
   }
+
+  span {
+    white-space: nowrap;
+  }
+
+  ${media.mobile`
+    width: 170px;
+    height: 24px;
+    font-size: 18px;
+    line-height: 1;
+    white-space: nowrap;
+    
+
+    img {
+      width: 22px;
+      height: 22px;
+      display: block;
+    }
+  `}
 `;
 
 const QuestionListBody = styled.div`
@@ -75,19 +136,40 @@ const QuestionListBody = styled.div`
 
 const EmptyIllustration = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  height: 100px;
+  align-items: center;
+
+  
+  width: 100%;
+  height: 330px;
   margin-top: 4px;
+  padding: 16px 24px 16px 24px;
 
   img {
     display: block;
+    width: 150px;
+    height: 154px;
+    top: 534px;
   }
 `;
 
-// 메인 컴포넌트 
+// 메인 컴포넌트
 function QuestionList({ subjectId }) {
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [subject, setSubject] = useState({});
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!subjectId) return;
+    async function loadSubject() {
+      const data = await getSubjectById(subjectId);
+      setSubject(data);
+    }
+    loadSubject();
+  }, [subjectId]);
 
   // 질문 리스트 불러오기
   useEffect(() => {
@@ -99,59 +181,68 @@ function QuestionList({ subjectId }) {
       .finally(() => setLoading(false));
   }, [subjectId]);
 
-  // 전체 삭제 
-  const handleDeleteAll = async () => {
-    if (!window.confirm('모든 질문을 삭제하시겠습니까?')) return;
-    
-    try {
-      const targets = questions.filter(q => q.answer);
-      await Promise.all(
-        targets.map( (q) => deleteAnswer(q.answer.id))    
-      );
-      setQuestions([]);
-    } catch (error) {
-        console.error('전체 질문 삭제', error)
-        alert('전체 질문 삭제에 실패했습니다.');
-    } 
-  };
-
-    // 개별 삭제
-  const handleDeleteOne = async (id) => {
-    const target = questions.find(q => q.id === id);
-    if (!target) return;
-    if (!window.confirm('해당 질문을 삭제하시겠습니까?')) return;
-
-      try {
-        if (target.answer?.id) await deleteAnswer(target.answer.id);
-          setQuestions(prev => prev.filter(q => q.id !== id));
-      } catch (error) {
-          console.error('삭제 실패', error);
-          alert('질문 삭제에 실패했습니다.');
-      } 
-  };
-  
-  // 개별 답변 업데이트
-  const handleUpdateAnswer = (questionId, payload) => {
-    setQuestions(prev => 
-      prev.map(q => 
-        q.id !== questionId
-          ? { ...q, answer: payload?.answer ?? q.answer ?? null }
+  // 답변 생성 / 수정
+  const handleAnswerUpdate = (questionId, answer) => {
+    setQuestions( (prev) => 
+      prev.map( (q) => 
+        q.id === questionId
+          ? {...q, answer} 
           : q
       )
-    );
+    )
+  }
+
+  // 전체 삭제
+  const handleDeleteSubject = async () => {
+    if (!window.confirm('해당 피드를 삭제하시겠습니까?')) return;
+
+    try {
+      await deleteSubject(subjectId);
+      localStorage.setItem('subjectId', '');
+      navigate('/');
+    } catch (error) {
+      console.error('피드 삭제', error);
+      alert('피드 삭제에 실패했습니다.');
+    }
   };
+
+  // 개별 삭제
+  const handleDeleteOne = async (questionId) => {
+    if (!window.confirm('해당 질문을 삭제하시겠습니까?')) return;
+
+    try {
+      await deleteQuestion(questionId);
+      setQuestions((prev) => prev.filter((q) => q.id !== questionId)); // 상태 갱신
+    } catch (error) {
+      console.error('삭제 실패', error);
+      alert('질문 삭제에 실패했습니다.');
+    }
+  };
+
+  // 답변 거절
+  const handleRejectOne = async (questionId) => {
+    if (!window.confirm('해당 질문을 거절하시겠습니까?')) return;
+
+    try {
+      const rejectedAnswer = await rejectAnswer(questionId);
+      setQuestions((prev) => 
+        prev.map((q) => 
+          q.id === questionId 
+          ? {...q, answer: rejectedAnswer } 
+          : q
+        )
+      ); 
+    } catch (error) {
+      alert('질문 삭제에 실패했습니다.');
+    }
+  }
 
   const hasQuestions = questions.length > 0;
 
   return (
     <QuestionListWrapper>
       <QuestionListTop>
-        <DeleteAllButton
-          className={!hasQuestions ? 'disabled' : ''}
-          onClick={hasQuestions ? handleDeleteAll : null}
-        >
-          전체 삭제하기
-        </DeleteAllButton>
+        <DeleteAllButton onClick={handleDeleteSubject}>삭제하기</DeleteAllButton>
       </QuestionListTop>
 
       <QuestionListContainer>
@@ -162,28 +253,33 @@ function QuestionList({ subjectId }) {
               <span>{questions.length}개의 질문이 있습니다</span>
             </>
           ) : (
-            <span>아직 질문이 없습니다</span>
+            <>
+              <img src={Messages} alt="질문 아이콘" />
+              <span>아직 질문이 없습니다</span>
+            </>
           )}
         </Count>
+        
+          {!hasQuestions && (
+            <EmptyIllustration>
+              <img src={Mailbox} alt="메일 상자" />
+            </EmptyIllustration>
+          )}
 
-        {!hasQuestions && (
-          <EmptyIllustration>
-            <img src={Mailbox} alt="메일 상자" />
-          </EmptyIllustration>
-        )}
-
-        {hasQuestions && (
-          <QuestionListBody>
-            {questions.map((q) => (
-              <QuestionCard
-                key={q?.id}
-                question={q}
-                onDelete={handleDeleteOne}
-                onUpdateAnswer={handleUpdateAnswer}
-              />
-            ) )}
-          </QuestionListBody>
-        )}
+          {hasQuestions && (
+            <QuestionListBody>
+              {questions.map((q) => (
+                <QuestionCard 
+                  key={q?.id} 
+                  question={q} 
+                  onDelete={handleDeleteOne} 
+                  subject={subject} 
+                  onReject={handleRejectOne}
+                  onAnswerSubmit={handleAnswerUpdate}
+                />  
+              ))}
+            </QuestionListBody>
+          )}        
       </QuestionListContainer>
     </QuestionListWrapper>
   );

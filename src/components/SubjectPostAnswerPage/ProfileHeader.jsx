@@ -5,9 +5,10 @@ import SocialButtons from './ProfileSocialButtons';
 import Logo from '../../assets/SubjectPostAnswerPage/logo.png';
 import LogoOpenmind from '../../assets/SubjectPostAnswerPage/logoOpenmind.png';
 import Photo from '../../assets/SubjectPostAnswerPage/Photo.png';
-import { getSubjectById } from '../../utils/getDataApi';
+import { getSubjectById, parseSubjectName } from '../../utils/getDataApi';
+import media from '../../utils/media';
 
-// styled-components 
+// styled-components
 const ProfileHeaderWrapper = styled.section`
   width: 100%;
   position: relative;
@@ -24,9 +25,25 @@ const ProfileCover = styled.div`
 
 const CoverIllustration = styled.img`
   position: absolute;
-  width: 1200px;
-  max-width: none;
-  object-fit: contain;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 234px;
+
+  object-fit: cover;
+
+  ${media.tablet`
+    width: 100%;
+    height: 234px;
+  `}
+
+  ${media.mobile`
+    width: 906px;
+    height: 177px;
+    left: 50%;
+    transform: translateX(-50%);
+    top:0;
+  `}
 `;
 
 const CoverLogoLink = styled(Link)`
@@ -35,17 +52,36 @@ const CoverLogoLink = styled(Link)`
 
 const CoverLogo = styled.img`
   position: absolute;
-  top: 30px;
+  top: 50px;
+  left: 50%;
+  width: 170px;
+  height: 67px;
   transform: translateX(-50%);
   display: inline-block;
+
+  ${media.mobile`
+    top: 40px;
+    width: 124px;
+    height: 49px;
+  `}
 `;
 
 const ProfileInfo = styled.div`
   position: absolute;
   left: 50%;
-  top: 110px;
+  top: 129px;
   transform: translateX(-50%);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 100;
   text-align: center;
+
+  ${media.mobile`
+    top: 101px;
+  `}
 `;
 
 const ProfileAvatar = styled.img`
@@ -53,22 +89,93 @@ const ProfileAvatar = styled.img`
   height: 136px;
   border-radius: 50%;
   object-fit: cover;
+
+  ${media.mobile`
+    width: 104px;
+    height: 104px;
+  `}
 `;
 
-const ProfileName = styled.h3`
-  margin-top: 12px;
-  font-size: 20px;
-  font-weight: 600;
+const ProfileNameContainer = styled.div`
+  position: relative;
+  display: inline-block;
+  margin-top: 10px;
+  text-align: center;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  text-align: center;  
+
+  ${media.mobile`
+    gap: 6px;
+  `}
+`;
+
+const ProfileName = styled.span`
+  display: inline;  
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 40px;
+  letter-spacing: 0;
+  text-align: center;
+  color: #000000;
+  margin: 0;
+
+  ${media.mobile`
+    font-size: 24px;
+    line-height: 30px;
+  `}
+`;
+
+const ProfileTag = styled.span`
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  transform: translateY(-50%);
+  margin-left: 8px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  padding: 4px 12px;
+  border-radius: 16px;
+  background-color: var(--brown-20);
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--brown-40);
+  line-height: 1;
+  white-space: nowrap;
+
+  ${media.mobile`
+    height: 30px;
+    padding: 4px 10px;
+    font-size: 14px;
+    border-radius: 15px;
+  `}
 `;
 
 const ProfileSocial = styled.div`
-  margin-top: 24px;
+  position: absolute;
+  top: 329px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 144px;
+  height: 40px;
+
   display: flex;
   justify-content: center;
+
+  ${media.mobile`
+    top: 299px;
+    width: 144px;
+    height: 40px;
+  `}
 `;
 
 // 메인컴포넌트 프로필 그림, 사진 등등
-function ProfileHeader( {subjectId}) {
+function ProfileHeader({ subjectId }) {
   const [subject, setSubject] = useState(null);
   const [error, setError] = useState(false);
 
@@ -82,20 +189,21 @@ function ProfileHeader( {subjectId}) {
       } catch (error) {
         console.error('프로필 불러오기 실패', error);
         setError(true);
-      } 
+      }
     }
 
     fetchsubject();
   }, [subjectId]);
 
-  if(error) {
+  if (error) {
     return <div> 프로필 정보를 불러올수 없습니다.</div>;
   }
 
-  if(!subject) {
+  if (!subject) {
     return <div> 프로필 정보 로딩중.</div>;
   }
 
+  const { name, tag } = parseSubjectName(subject?.name) || { name: subject?.name || '이름 없음', tag: null };
 
   return (
     <ProfileHeaderWrapper>
@@ -107,14 +215,12 @@ function ProfileHeader( {subjectId}) {
       </ProfileCover>
 
       <ProfileInfo>
-        <ProfileAvatar 
-          src={subject?.imageSource || Photo} 
-          alt='프로필 사진'
-        />
-          
-        <ProfileName>
-          {subject?.name || '이름 없음'}
-        </ProfileName>
+        <ProfileAvatar src={subject?.imageSource || Photo} alt="프로필 사진" />
+
+        <ProfileNameContainer>
+          <ProfileName>{name}</ProfileName>
+          {tag && <ProfileTag>#{tag}</ProfileTag>}
+        </ProfileNameContainer>
       </ProfileInfo>
 
       <ProfileSocial>
