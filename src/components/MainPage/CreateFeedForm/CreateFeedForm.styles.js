@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import media from '../../utils/media';
+import media from '../../../utils/media';
 
 export const Form = styled.form`
   width: 420px;
@@ -62,6 +62,9 @@ export const TagButtonWrapper = styled.div`
 `;
 
 export const TagButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 6px 12px;
   border-radius: 6px;
   border: 1px solid var(--brown-20);
@@ -224,5 +227,3 @@ export const SubmitButton = styled.button`
     font-size: 13px;
   `}
 `;
-
-

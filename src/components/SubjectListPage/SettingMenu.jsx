@@ -114,10 +114,6 @@ export default function SettingMenu({
               Scroll 모드
               <Toggle isScrollMode={isScrollMode} callback={handleClick} />
             </SettingOption>
-            <SettingOption>
-              Dark 모드
-              <Toggle callback={() => {}} />
-            </SettingOption>
           </ul>
         </SettingBox>
       )}

@@ -84,12 +84,14 @@ const handleLike = () => {
 
   const handleDislike = () => {
     if(!isAnswered) return;
-
+      //만약 답변이 없다면 return
     if (disliked) {
+      // 이미 싫어요가 눌려있으면 취소
       setDisliked(false);
       setDislikeCount((prev) => prev - 1);
       return;
     } else {
+      // 싫어요 활성화
       setDisliked(true);
       setDislikeCount((prev) => prev + 1);
 

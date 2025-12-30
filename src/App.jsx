@@ -1,10 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import MainPage from './pages/MainPage';
 import FeedPage from './pages/FeedPage';
-import CreateQuestion from './pages/CreateQuestion';
-
 import SubjectsListPage from './pages/SubjectsListPage';
-
 import SubjectsPostPage from './pages/SubjectsPostPage';
 
 function App() {

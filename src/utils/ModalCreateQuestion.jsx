@@ -1,8 +1,9 @@
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
-import { useRef, useState } from 'react';
-import closeIc from '../assets/close.png';
-import { createQuestion } from './getDataApi';
+import { useEffect, useRef, useState } from 'react';
+import closeIc from '../assets/PersonalImages/close.png';
+import { createQuestion, getSubjectById, parseSubjectName } from './getDataApi';
+import messages from '../assets/PersonalImages/messages.png';
 
 const Overlay = styled.div`
   position: fixed;
@@ -11,6 +12,7 @@ const Overlay = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 9999;
 `;
 
 const Content = styled.div`
@@ -30,19 +32,48 @@ const Header = styled.div`
   align-items: center;
 `;
 const Title = styled.span`
+  display: flex;
+  align-items: center;
   font-size: 24px;
-
+  gap: 0 5px;
   margin-bottom: 40px;
 `;
 
 const UserProfile = styled.span`
+  display: flex;
+  align-items: center;
+  gap: 0 5px;
   font-family: 'pretendard';
-  font-size: 16px;
+  font-size: 18px;
+  font-weight: 400;
 `;
 
+const NickName = styled.span`
+  font-size: 16px;
+`;
 const UserImg = styled.img`
+  border-radius: 14px;
   width: 28px;
   height: 28px;
+`;
+
+const TagBox = styled.span`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 3px;
+  height: 25px;
+  background-color: var(--brown-20);
+  border: none;
+  border-radius: 12.5px;
+  font-family: 'pretendard';
+  font-size: 16px;
+  font-weight: 400;
+  padding: 1px 12px 0 12px;
+`;
+
+const CloseBtn = styled.img`
+  cursor: pointer;
 `;
 
 const QuestionText = styled.textarea`
@@ -52,41 +83,84 @@ const QuestionText = styled.textarea`
   background-color: var(--gray-20);
   border: none;
   border-radius: 8px;
+  font-family: 'pretendard';
+  font-size: 16px;
+  font-weight: 400;
+  padding: 16px 16px;
+  resize: none;
 `;
 
 const SubmitButton = styled.button`
   width: 532px;
   height: 46px;
   border: none;
+  color: var(--gray-10);
   border-radius: 8px;
-  background-color: ${({ $active }) => ($active ? 'var(--brown-30)' : 'var(--brown-40)')};
+  background-color: ${({ $active }) => ($active ? 'var(--brown-40)' : 'var(--brown-30)')};
+  margin-top: 5px;
+  font-family: 'pretendard';
+  font-size: 16px;
+  font-weight: 400;
 `;
-export default function Modal({ open, onClose, subject }) {
-  if (!open) return null;
-
+export default function ModalCreateQuestion({ setOnClose, subjectId, onQuestionAdded }) {
   const [isActive, setIsActive] = useState(false);
+  const [subject, setSubject] = useState(null);
   const textRef = useRef(null);
+
+  const { name, tag } = parseSubjectName(subject?.name) || { name: '', tag: '' };
+
+  useEffect(() => {
+    async function loadsubject() {
+      try {
+        const data = await getSubjectById(subjectId);
+        setSubject(data);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    loadsubject();
+  }, [subjectId]);
 
   const handleChange = () => {
     if (textRef.current.value.length > 0) setIsActive(true);
     else setIsActive(false);
   };
 
-  const handleClick = () => {
-    if (textRef.current.value) createQuestion(subject.id, textRef.current.value);
-    onClose();
+  const handleClick = async () => {
+    if (textRef.current.value) {
+      try {
+        const newQuestion = await createQuestion(subject.id, textRef.current.value);
+        if (onQuestionAdded) {
+          onQuestionAdded(newQuestion);
+        }
+        setOnClose();
+        textRef.current.value = ''; // 입력 필드 초기화
+        setIsActive(false);
+      } catch (error) {
+        console.error('질문 생성 실패', error);
+        alert('질문 생성에 실패했습니다.');
+      }
+    } else {
+      alert('질문을 입력해주세요.');
+    }
   };
 
   return createPortal(
-    <Overlay onClick={onClose}>
+    <Overlay onClick={setOnClose}>
       <Content onClick={(e) => e.stopPropagation()}>
         <Header>
-          <Title>질문을 작성하세요</Title>
-          <img src={closeIc} onClick={onClose} alt="닫기 버튼" />
+          <Title>
+            <img src={messages} />
+            질문을 작성하세요
+          </Title>
+          <CloseBtn src={closeIc} onClick={setOnClose} alt="닫기 버튼" />
         </Header>
+
         <UserProfile>
-          <UserImg src={subject.image} alt="유저 프로필사진" />
-          {subject.name}
+          To.
+          <UserImg src={subject?.imageSource} alt="유저 프로필사진" />
+          <NickName>{name}</NickName>
+          {tag && <TagBox>#{tag}</TagBox>}
         </UserProfile>
 
         <QuestionText onChange={handleChange} placeholder="질문을 입력해주세요" ref={textRef} />

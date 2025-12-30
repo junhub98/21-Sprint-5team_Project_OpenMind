@@ -35,6 +35,8 @@ export async function createSubject(name, tag = null) {
 }
 
 export function parseSubjectName(subjectName) {
+  if (!subjectName) return;
+
   const parts = subjectName.split('#tag:');
   if (parts.length === 2) {
     return { name: parts[0], tag: parts[1] };
@@ -42,33 +44,58 @@ export function parseSubjectName(subjectName) {
   return { name: subjectName, tag: null };
 }
 
+// 질문 조회
+export async function getQuestionById(questionId) {
+  const response = await axios.get(`/questions/${questionId}/`);
+  return response.data;
+}
 
 // 답변 생성하기
 export async function createAnswer(questionId, content) {
-  const response = 
-    await axios.post(`/questions/${questionId}/answers/`, { content });
-    
-    return response.data;
+  const response = await axios.post(`/questions/${questionId}/answers/`, {
+    content,
+    isRejected: false,
+  });
+
+  return response.data;
 }
 
 // 삭제하기
-export async function deleteAnswer(answerId) {
-  await axios.delete(`/answers/${answerId}/`);
+export async function deleteQuestion(questionId) {
+  await axios.delete(`/questions/${questionId}/`);
 }
 
+export async function deleteSubject(subjectId) {
+  await axios.delete(`/subjects/${subjectId}/`);
+}
 // 수정하기 (PUT 보다 PATCH가 안전)
 export async function updateAnswer(answerId, newContent) {
-  const response = 
-    await axios.patch(`/answers/${answerId}/`, { content: newContent });
-    
-    return response.data;
+  const response = await axios.patch(`/answers/${answerId}/`, { content: newContent });
+
+  return response.data;
 }
 
-// 거절하기 
-export async function rejectAnswer(answerId) {
-  const response = await axios.patch(`/answers/${answerId}/`, {
+// 거절하기
+export async function rejectAnswer(questionId) {
+  const response = await axios.post(`/questions/${questionId}/answers/`, {
     content: '답변을 거절했습니다.',
     isRejected: true,
   });
   return response.data;
 }
+
+export async function createQuestion(subjectId, content) {
+  const response = await axios.post(`/subjects/${subjectId}/questions/`, { content: content });
+  return response.data;
+}
+
+// 좋아요/싫어요 기능
+export async function reactionQuestion(questionId, reactionType) {
+  const response = await axios.post(`/questions/${questionId}/reaction/`, {
+    type: reactionType,
+  });
+  return response.data;
+}
+export const likeQuestion = (questionId) => reactionQuestion(questionId, 'like');
+
+export const dislikeQuestion = (questionId) => reactionQuestion(questionId, 'dislike');
