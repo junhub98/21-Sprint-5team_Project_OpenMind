@@ -1,4 +1,3 @@
-
 import ReactDom from 'react-dom';
 import { useState, memo, useEffect } from 'react';
 import styled from 'styled-components';
@@ -9,10 +8,10 @@ import media from '../../utils/media';
 
 // styled-components
 const ButtonGroup = styled.div`
-  display:flex;
+  display: flex;
   align-items: center;
   gap: 8px;
-`
+`;
 
 const ImageButton = styled.button`
   background: none;
@@ -47,7 +46,7 @@ const Toast = styled.div`
   color: #ffffff;
   border-radius: 8px;
   font-size: 14px;
-  box-shadow: 0px 4px 4px rgba(0,0,0,0.25);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -60,13 +59,13 @@ const Toast = styled.div`
 `;
 
 const ToastText = styled.span`
-  color: #FFFFFF;
+  color: #ffffff;
   font-size: 14px;
   font-weight: 500;
   line-height: 18px;
   letter-spacing: 0;
   text-align: center;
-  white-space:nowrap;
+  white-space: nowrap;
 `;
 // 링크 복사하기
 const LinkCopyButton = memo(function LinkCopyButton() {
@@ -91,14 +90,13 @@ const LinkCopyButton = memo(function LinkCopyButton() {
       <ImageButton onClick={handleCopyLinkClick}>
         <img src={ShareLink} alt="링크복사" />
       </ImageButton>
-      {showToast && 
+      {showToast &&
         ReactDom.createPortal(
           <Toast>
             <ToastText>URL이 복사되었습니다</ToastText>
           </Toast>,
-        document.body
-        )
-      }
+          document.body,
+        )}
     </>
   );
 });
@@ -113,7 +111,6 @@ const KakaoButton = memo(function KakaoButton() {
     if (window.Kakao) {
       if (!window.Kakao.isInitialized()) {
         window.Kakao.init(KAKAO_JS_KEY);
-        console.log('Kakao initialized (existing)');
       }
       return;
     }

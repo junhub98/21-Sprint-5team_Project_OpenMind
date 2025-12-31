@@ -86,7 +86,7 @@ const SubjectListPageNav = memo(function SubjectsListPageNav({
         <LogoImg src={logoImg} alt="오픈마인드 로고 이미지" />
       </Link>
       <Button onClick={handleClick}>
-        답변하러가기
+        답변하러 가기
         <Arrow src={arrowRight} alt="화살표 이미지" />
       </Button>
       <SettingMenu

@@ -109,6 +109,11 @@ export default function CreateFeedForm() {
   const handleCreateFeed = async (event) => {
     event.preventDefault();
 
+    if (localStorage.getItem('subjectId')) {
+      alert('기존 피드를 삭제하고 새 피드를 만들어주세요.');
+      return;
+    }
+
     const trimmedName = nameInputRef.current?.value.trim() || '';
     if (!trimmedName) {
       alert('이름을 입력해 주세요.');
