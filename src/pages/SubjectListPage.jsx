@@ -160,6 +160,7 @@ export default function SubjectListPage() {
         setScrollPage={setScrollPage}
         setScrollPageParams={setScrollPageParams}
         isScrollMode={isScrollMode}
+        setHasNextScroll={setHasNextScroll}
       />
 
       <Container>

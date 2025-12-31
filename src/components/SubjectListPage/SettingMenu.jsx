@@ -72,6 +72,7 @@ export default function SettingMenu({
   isScrollMode,
   setScrollPage,
   setScrollPageParams,
+  setHasNextScroll,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const settingBoxRef = useRef(null);
@@ -81,6 +82,7 @@ export default function SettingMenu({
     setIsScrollMode((prev) => !prev);
     setScrollPage(1);
     setScrollPageParams([]);
+    setHasNextScroll(true);
   };
 
   useEffect(() => {
