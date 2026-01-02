@@ -103,14 +103,14 @@ const LinkCopyButton = memo(function LinkCopyButton() {
 
 // 카카오톡 공유하기
 
-const KAKAO_JS_KEY = '비공개Key';
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const KakaoButton = memo(function KakaoButton() {
   useEffect(() => {
     // 이미 로드돼 있으면 바로 init
     if (window.Kakao) {
       if (!window.Kakao.isInitialized()) {
-        window.Kakao.init(KAKAO_JS_KEY);
+        window.Kakao.init(apiUrl);
       }
       return;
     }
@@ -122,7 +122,7 @@ const KakaoButton = memo(function KakaoButton() {
     // SDK 로딩 완료시 init
     script.onload = () => {
       if (!window.Kakao.isInitialized()) {
-        window.Kakao.init(KAKAO_JS_KEY);
+        window.Kakao.init(apiUrl);
       }
     };
 
