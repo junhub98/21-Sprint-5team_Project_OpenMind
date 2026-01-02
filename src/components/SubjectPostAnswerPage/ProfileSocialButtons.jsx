@@ -103,7 +103,7 @@ const LinkCopyButton = memo(function LinkCopyButton() {
 
 // 카카오톡 공유하기
 
-const apiUrl = import.meta.env.VITE_API_URL;
+const apiUrl = 'b135abcb6252f77e0ea32025ae44c171';
 
 const KakaoButton = memo(function KakaoButton() {
   useEffect(() => {
